@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-link">
+                <img src="imagens/Logo.webp" alt="Logo da Apasbac" class="logo-img">
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="quemsomos.html">quem somos?</a></li>
+                    <li><a href="queroadotar.html">quero adotar</a></li>
+                    <li><a href="queroservoluntario.html">quero ser voluntário</a></li>
+                </ul>
+            </nav>
+
+            <a href="doeeajude.html" class="btn-donate">DOE E AJUDE</a>
+
+            <div class="user-actions">
+                <a href="entrar.html">entrar</a>
+                <a href="cadastrarse.html">cadastre-se</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        
+    <div class="signup-container">
+        <div class="signup-card">
+            <header class="signup-header">
+                <img src="imagens/Logo.webp" alt="Logo da Empresa" class="logo">
+                <h1>Crie sua Conta</h1>
+                <p>É rápido e fácil. Vamos começar!</p>
+            </header>
+
+            <form class="signup-form">
+                <div class="input-group">
+                    <label for="full-name">Nome Completo</label>
+                    <input type="text" id="full-name" name="full_name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Crie uma Senha</label>
+                    <input type="password" id="password" name="password" required>
+                    <small class="password-hint">Use no mínimo 8 caracteres.</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm-password">Confirme sua Senha</label>
+                    <input type="password" id="confirm-password" name="confirm_password" required>
+                </div>
+
+                <div class="terms-agreement">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">
+                        Eu li e concordo com os <a href="#">Termos de Serviço</a> e a <a href="#">Política de Privacidade</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="signup-button">Cadastrar</button>
+            </form>
+
+            <footer class="signup-footer">
+                <p>Já tem uma conta? <a href="#">Faça login</a></p>
+            </footer>
+        </div>
+    </div>
+    </main>
+    
+      <footer class="site-footer">
+        <div class="footer-content-wrapper">
+            <!-- Colunas de navegação -->
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3>ADOTE</h3>
+                    <a href="queroadotar.html">quero adotar</a>
+                    <a href="queroadotar.html">ver mais animais</a>
+                </div>
+                <div class="footer-column">
+                    <h3>COLABORE</h3>
+                    <a href="doeeajude.html">Doe e ajude</a>
+                    <a href="queroservoluntario.html">Seja voluntário</a>
+                </div>
+                <div class="footer-column">
+                    <h3>SOBRE A APASBAC</h3>
+                    <a href="quemsomos.html">quem somos?</a>
+                </div>
+                <div class="footer-column">
+                    <h3>PERFIL</h3>
+                    <a href="entrar.html">entrar</a>
+                    <a href="cadastrarse.html">cadastre-se</a>
+                </div>
+                <div class="footer-column">
+                    <h3>POR QUE ADOTAR?</h3>
+                    <a href="#">Mude uma vida-adote</a>
+                </div>
+            </div>
+
+            <!-- Seção inferior do rodapé -->
+            <div class="footer-bottom">
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                </div>
+                <div class="footer-logo">
+                    <!-- O logo original do site foi utilizado aqui -->
+                    <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
+                </div>
+                    <p class="copyright-text">Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script/script.js"></script>
+</body>
+
+</html>

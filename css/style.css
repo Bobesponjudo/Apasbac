@@ -1,0 +1,1253 @@
+body, h1, h2, h3, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ece4e4;
+    color: #953e3e; 
+}
+
+.main-header {
+    width: 100%;
+    padding: 0px 0;
+    border-bottom: 1px solid #c2bebe;
+    background-color: #ffffe6;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo-img {
+    height: 100%;
+    max-height: 100px;
+    width: auto;
+    display: block;
+}
+
+.logo-svg {
+    width: 160px; 
+    height: auto;
+}
+
+.logo-animal {
+    fill: #953e3e; 
+}
+
+.logo-text-amigo {
+    font-size: 30px;
+    font-weight: 700;
+    fill: #f52323;
+}
+
+.logo-text-slogan {
+    font-size: 11px;
+    font-weight: 600;
+    fill: #953e3e; 
+}
+
+
+.main-nav ul {
+    display: flex;
+    list-style-type: none;
+    gap: 30px; 
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: #fcf2f2;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 5px 0;
+    transition: color 0.3s;
+    background-color: #df4b4b;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.main-nav a:hover {
+    color: #ffffff; 
+    background-color: #953e3e;
+}
+
+.btn-donate {
+    background-color: #953e3e;
+    color: #ffffff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.btn-donate:hover {
+    background-color: #e46c6c; 
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.user-actions a {
+    text-decoration: none;
+    color: #953e3e;
+    font-weight: 600;
+    font-size: 16px;
+    transition: color 0.3s;
+    background-color: #ece4e4;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.user-actions a:hover {
+    color: #f52323;
+}
+  
+        .carousel-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 15px 10px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        
+        .carousel-slide {
+            display: flex;
+            width: 100%;
+            height: 400px;
+        }
+        
+        .carousel-slide img {
+            min-width: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ca4141;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .carousel-text h1 {
+            color: #502c2c;
+            font-size: 2.5em;
+            margin: 0;
+        }
+        
+        .carousel-text h2, .carousel-text h3 {
+            margin: 10px 0;
+        }
+        
+        .carousel-nav {
+            text-align: center;
+            padding: 15px 0;
+        }
+        
+        .carousel-nav button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background: #ccc;
+            margin: 0 5px;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .carousel-nav button.active {
+            background: #333;
+        }
+        
+        #prevBtn, #nextBtn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 18px;
+            z-index: 10;
+        }
+        
+        #prevBtn {
+            left: 10px;
+        }
+        
+        #nextBtn {
+            right: 10px;
+        }
+        .actions-section {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2.5rem 0;
+    background-color: #f4f7e8;
+}
+
+.action-btn {
+    padding: 1rem 2.5rem;
+    border: 2px solid #8b3333;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.action-btn.primary {
+    background-color: #8b3333;
+    color: white;
+}
+
+.action-btn.primary:hover {
+    background-color: #692424;
+    transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+    background-color: white;
+    color: #8b3333;
+}
+
+.action-btn.secondary:hover {
+    background-color: #e9e4ed;
+    transform: translateY(-2px);
+}
+
+.intro-section {
+    text-align: center;
+    padding: 2rem 2rem 4rem 2rem;
+    background-color: #fff;
+}
+
+.intro-section h1 {
+    color: #9b3a3a;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.intro-section p {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+main .h1{
+    text-align: center;
+    font-family: cursive;
+    background-color: #f4f7e8;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.btn-donate {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-donate i {
+    margin-right: 8px; 
+}
+main .amigos{
+    margin-top: 30px;
+    margin-left: 100px;
+    font-family: cursive;
+    margin-bottom: 30px;
+}
+.container-pets {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card-pet {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.card-pet:hover {
+    transform: translateY(-5px);
+}
+
+.card-pet img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.info-pet {
+    padding: 16px;
+}
+
+.info-pet h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.info-pet p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+.info-pet button{
+    background-color: #ca4141;
+    border: 1px solid #692424;
+    margin-top: 15px;
+    padding: 7px;
+    border-radius: 5px;
+    color: #f8f0f0;
+    font-size: 12pt;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    transition: 1.5s;
+}
+.info-pet button:hover{
+    background-color: #953e3e;
+    color: white;
+    transition: 1.5s;
+}
+
+.btn-pesquisar {
+    background-color: #ffffff;
+    border: 1px solid #9b3e3e;
+    color: #9b3a3a;
+    padding: 12px 28px;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-pesquisar:hover {
+    background-color: #f9f9f9;
+    transform: translateY(-2px);
+}
+
+.btn-pesquisar:active {
+    transform: translateY(0);
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 20px 0;
+}
+.secao-adotar {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.secao-adotar h2 {
+    font-size: 2.5em;
+    color: #9b3a3a; /* Cor roxa do título */
+    margin-bottom: 40px;
+    background-color: #f4f7e8;
+    padding: 10px;
+    margin-top: -15px;
+}
+
+.container-caixas {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Espaçamento entre as caixas */
+    flex-wrap: wrap; /* Permite que as caixas quebrem para a linha de baixo em telas menores */
+}
+
+.caixa {
+    background-color: #ffffff;
+    border: 2px solid #f04242; /* Borda amarela */
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 350px; /* Largura máxima para cada caixa */
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Sombra suave */
+    margin-bottom: 30px;
+}
+
+.caixa p {
+    margin: 0;
+    color: #333;
+    font-size: 1em;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Estilos principais do rodapé */
+.site-footer {
+    background-color: #9b3a3a; /* Cor roxa exata da imagem */
+    color: #ffffff;
+    padding: 60px 20px 40px;
+}
+
+.footer-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Layout das colunas com links */
+.footer-columns {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Permite que as colunas quebrem em telas menores */
+    gap: 30px; /* Espaçamento entre as colunas */
+    margin-bottom: 50px;
+}
+
+.footer-column {
+    flex: 1; /* Faz com que as colunas dividam o espaço igualmente */
+    min-width: 180px; /* Largura mínima para cada coluna antes de quebrar a linha */
+}
+
+.footer-column h3 {
+    font-size: 1em; /* 16px */
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.footer-column a {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 0.875em; /* 14px */
+    transition: opacity 0.3s ease;
+}
+
+.footer-column a:hover {
+    opacity: 0.7; /* Efeito visual ao passar o mouse */
+}
+
+/* Seção inferior (redes sociais, logo, copyright) */
+.footer-bottom {
+    text-align: center;
+}
+
+.social-icons {
+    margin-bottom: 3px;
+}
+
+.social-icons a {
+    font-size: 2em; /* 32px - Tamanho dos ícones */
+    margin: 0 5px;
+    transition: opacity 0.3s ease;
+}
+
+.social-icons a:hover {
+    opacity: 0.7;
+}
+
+.footer-logo img {
+    max-width: 160px; /* Tamanho do logo */
+    margin-bottom: 3px;
+}
+
+.copyright-text {
+    margin: 0;
+    font-size: 0.8em; /* 12.8px */
+    color: rgba(255, 255, 255, 0.8);
+}
+.main-content {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.content-container {
+    background-color: #ffffff; /* Fundo branco para a área de texto */
+    padding: 50px 70px; /* Espaçamento interno (vertical e horizontal) */
+    max-width: 800px; /* Largura máxima do conteúdo */
+    width: 100%;
+    box-shadow: 10px 15px 6px rgba(0, 0, 0, 0.05); /* Sombra suave */
+    border-radius: 8px; /* Bordas levemente arredondadas */
+    box-sizing: border-box; /* Garante que padding não afete a largura total */
+    border: 1px solid #9b3e3e;
+    margin-left: 280px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* Estilo para o título principal (H1) */
+.page-title {
+    color: #953e3e; /* Cor roxa do título */
+    font-size: 2.5em; /* Tamanho da fonte (40px) */
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* Estilo para o subtítulo (H2) */
+.sub-title {
+    color: #953e3e; /* Cor roxa do subtítulo */
+    font-size: 1.75em; /* Tamanho da fonte (28px) */
+    font-weight: 600;
+    margin-top: 50px; /* Espaçamento acima do subtítulo */
+    margin-bottom: 25px;
+    text-decoration: underline;
+}
+
+.content-container p{
+    font-size: 1em; /* Tamanho da fonte (16px) */
+    margin-bottom: 20px;
+    color: #000;
+    text-align: justify;
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+}
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.main-title {
+    color: #722a2a; /* Roxo principal */
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* Formulário de filtros */
+.search-filters {
+    background-color: #fff;
+    padding: 35px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    margin-bottom: 30px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    align-items: center;
+}
+
+/* Estilo customizado para os selects */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    font-size: 0.7em;
+    color: #888;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Permite clicar no select através da seta */
+}
+
+select, .name-input {
+    width: 100%;
+    padding: 12px 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95em;
+    background-color: #f7f7f7;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.name-input::placeholder {
+    color: #888;
+}
+
+.search-button {
+    background-color: #722a2a;
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-left: 30px;
+}
+
+.search-button:hover {
+    background-color: #5d2121; /* Tom de roxo mais escuro */
+}
+/* Contêiner principal do formulário */
+.form-container {
+    background-color: #ffffff;
+    width: 93%;
+    padding: 30px 40px;
+    border: 1px solid #9b3a3a;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabeçalho do formulário */
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header h1 {
+    color: #9b3a3a; /* Roxo principal */
+    font-size: 2.2em;
+    margin: 0 0 10px;
+}
+
+.form-header p {
+    font-size: 1.1em;
+    color: #666;
+}
+
+/* Estilo das seções (fieldset) */
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 25px;
+}
+
+legend {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #9b3a3a;
+    margin-bottom: 20px;
+    width: 100%;
+    border-bottom: 2px solid #9b3a3a;
+    padding-bottom: 10px;
+}
+
+/* Grupo de inputs e labels */
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    box-sizing: border-box; /* Garante que padding não afete a largura */
+    transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+    border-color: #722a2a;
+    outline: none;
+}
+
+textarea {
+    resize: vertical; /* Permite redimensionar apenas na vertical */
+}
+
+/* Estilo para grupos de checkbox e radio */
+.checkbox-group label, .radio-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.checkbox-group input, .radio-group input {
+    margin-right: 10px;
+    accent-color: #722a2a; /* Cor da seleção */
+}
+
+/* Botão de envio */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #722a2a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #5d2121; /* Tom mais escuro de roxo */
+    transform: translateY(-2px);
+}
+.donation-page {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    margin-top: 40px;
+    margin-bottom: 40px;
+    border: 1px solid #722a2a;
+    border-radius: 5px;
+}
+
+/* Header */
+.donation-header {
+    background: linear-gradient(rgba(114, 42, 42, 0.8), rgba(114, 42, 42, 0.8)), url('') no-repeat center center;
+    background-size: cover;
+    color: white;
+    padding: 60px 30px;
+    text-align: center;
+}
+
+.header-content h1 {
+    font-size: 2.8em;
+    font-weight: 800;
+    margin: 0 0 15px;
+}
+
+.header-content p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Conteúdo Principal */
+.donation-main {
+    padding: 40px 30px;
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    text-align: center;
+    color: #722a2a;
+    font-size: 2em;
+    margin-bottom: 30px;
+}
+
+/* Seção de Seleção de Valor */
+.donation-type-switcher {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    background-color: #e9ecef;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.switch-btn {
+    background: none;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.switch-btn.active {
+    background-color: #722a2a;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.amount-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.amount-btn {
+    background-color: #fff;
+    border: 2px solid #ced4da;
+    color: #495057;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.amount-btn:hover {
+    border-color: #722a2a;
+    color: #722a2a;
+}
+
+.amount-btn.active {
+    background-color: #722a2a;
+    color: white;
+    border-color: #722a2a;
+}
+
+.custom-amount {
+    text-align: center;
+}
+.custom-amount label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+.custom-amount input {
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+/* Formulário de Pagamento */
+.payment-form fieldset {
+    border: none;
+    padding: 0;
+    margin-bottom: 25px;
+}
+.payment-form legend {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 15px;
+}
+.payment-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.payment-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+.payment-methods {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.method-btn {
+    flex-grow: 1;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+.method-btn.active {
+    background-color: #e9ecef;
+    border-color: #722a2a;
+}
+.method-btn i {
+    margin-right: 8px;
+}
+
+.card-details {
+    display: flex;
+    gap: 15px;
+}
+.card-details > div {
+    flex: 1;
+}
+
+.submit-donation-btn {
+    width: 100%;
+    background-color: #a72828;
+    color: white;
+    font-size: 1.3em;
+    font-weight: 800;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.submit-donation-btn:hover {
+    background-color: #882121;
+}
+/* Contêiner principal */
+.login-container {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Card de login */
+.login-card {
+    background-color: #ffffff;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    border-radius: 5px;
+    border: 1px solid #9b3a3a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabeçalho do card */
+.login-header {
+    text-align: center;
+    margin-bottom: 25px;
+    background-color: #f0ecec;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.logo {
+    width: 60px;
+    margin-bottom: 15px;
+}
+
+.login-header h1 {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 5px;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 0.95em;
+    margin: 0;
+}
+
+/* Grupos de input */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #722a2a; /* Cor de destaque roxa */
+    box-shadow: 0 0 0 3px rgba(88, 42, 114, 0.1);
+}
+
+/* Opções do formulário (Lembrar-me e Esqueci senha) */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.9em;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #555;
+}
+
+.remember-me input {
+    margin-right: 8px;
+    accent-color: #722a2a;
+}
+
+.forgot-password {
+    color: #722a2a;
+    text-decoration: none;
+    font-weight: 500;
+}
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Botão principal de login */
+.login-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #722a2a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.login-button:hover {
+    background-color: #5d2121; /* Tom mais escuro */
+    transform: translateY(-2px);
+}
+
+/* Separador "ou" */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    margin: 25px 0;
+}
+.separator span {
+    padding: 0 15px;
+}
+.separator::before, .separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Botões de login social */
+.social-login {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.social-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+.social-btn i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.social-btn.google:hover {
+    border-color: #db3737;
+}
+.social-btn.facebook:hover {
+    border-color: #b24242;
+}
+/* Rodapé do card */
+.login-footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: #555;
+}
+.login-footer a {
+    color: #722a2a;
+    text-decoration: none;
+    font-weight: 600;
+}
+.login-footer a:hover {
+    text-decoration: underline;
+}
+/* Contêiner principal */
+.signup-container {
+    width: 100%;
+}
+
+/* Card de cadastro */
+.signup-card {
+    background-color: #ffffff;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    border: 1px solid #9b3a3a;
+}
+
+/* Cabeçalho do card */
+.signup-header {
+    text-align: center;
+    margin-bottom: 25px;
+    background-color: #f0ecec;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.logo {
+    width: 60px;
+    margin-bottom: 15px;
+}
+
+.signup-header h1 {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 5px;
+}
+
+.signup-header p {
+    color: #666;
+    font-size: 0.95em;
+    margin: 0;
+}
+
+/* Grupos de input */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #722a2a; /* Cor de destaque roxa */
+    box-shadow: 0 0 0 3px rgba(88, 42, 114, 0.1);
+}
+
+.password-hint {
+    font-size: 0.8em;
+    color: #777;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Termos e Condições */
+.terms-agreement {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    font-size: 0.85em;
+    color: #555;
+}
+
+.terms-agreement input[type="checkbox"] {
+    margin-top: 4px;
+    margin-right: 10px;
+    accent-color: #722a2a;
+}
+
+.terms-agreement a {
+    color: #722a2a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.terms-agreement a:hover {
+    text-decoration: underline;
+}
+
+/* Botão principal de cadastro */
+.signup-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #722a2a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.signup-button:hover {
+    background-color: #5d2121; /* Tom mais escuro */
+    transform: translateY(-2px);
+}
+
+/* Rodapé do card */
+.signup-footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+.signup-footer a {
+    color: #722a2a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
