@@ -14,7 +14,7 @@ body {
     width: 100%;
     padding: 0px 0;
     border-bottom: 1px solid #c2bebe;
-    background-color: #ffffe6;
+    background-color: #fffff9;
 }
 
 .header-container {
@@ -205,7 +205,7 @@ body {
     justify-content: center;
     gap: 1.5rem;
     padding: 2.5rem 0;
-    background-color: #f4f7e8;
+    background-color: #fffff9;
 }
 
 .action-btn {
@@ -261,7 +261,7 @@ body {
 main .h1{
     text-align: center;
     font-family: cursive;
-    background-color: #f4f7e8;
+    background-color: #fdfff4;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -380,7 +380,7 @@ main .amigos{
     font-size: 2.5em;
     color: #9b3a3a; /* Cor roxa do título */
     margin-bottom: 40px;
-    background-color: #f4f7e8;
+    background-color: #fffff9;
     padding: 10px;
     margin-top: -15px;
 }
@@ -506,7 +506,7 @@ a {
     border-radius: 8px; /* Bordas levemente arredondadas */
     box-sizing: border-box; /* Garante que padding não afete a largura total */
     border: 1px solid #9b3e3e;
-    margin-left: 280px;
+    margin-left: 550px;
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -621,11 +621,12 @@ select, .name-input {
 /* Contêiner principal do formulário */
 .form-container {
     background-color: #ffffff;
-    width: 93%;
+    width: 65%;
     padding: 30px 40px;
     border: 1px solid #9b3a3a;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin-left: 180px;
 }
 
 /* Cabeçalho do formulário */
@@ -742,7 +743,7 @@ textarea {
 
 /* Header */
 .donation-header {
-    background: linear-gradient(rgba(114, 42, 42, 0.8), rgba(114, 42, 42, 0.8)), url('') no-repeat center center;
+    background: #9b3a3a;
     background-size: cover;
     color: white;
     padding: 60px 30px;
@@ -1029,7 +1030,7 @@ h2 {
 .login-button {
     width: 100%;
     padding: 14px;
-    background-color: #722a2a;
+    background-color: #9b3a3a;
     color: white;
     border: none;
     border-radius: 8px;
@@ -1218,7 +1219,7 @@ h2 {
 .signup-button {
     width: 100%;
     padding: 14px;
-    background-color: #722a2a;
+    background-color: #9b3a3a;
     color: white;
     border: none;
     border-radius: 8px;
