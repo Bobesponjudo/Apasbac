@@ -1,4 +1,4 @@
-// ============ CARROSSEL ============
+
 const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.nav-dot');
 const prevBtn = document.getElementById('prevBtn');
@@ -29,7 +29,7 @@ if (slides.length > 0) {
 
     function resetTimer() {
         clearInterval(autoTimer);
-        autoTimer = setInterval(nextSlide, 5000);
+        autoTimer = setInterval(nextSlide, 9000);
     }
 
     if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
@@ -40,9 +40,8 @@ if (slides.length > 0) {
     });
 
     showSlide(0);
-    autoTimer = setInterval(nextSlide, 5000);
+    autoTimer = setInterval(nextSlide, 9000);
 
-    // Swipe support
     let touchStartX = 0;
     const carousel = document.querySelector('.carousel-container');
     if (carousel) {
@@ -54,7 +53,6 @@ if (slides.length > 0) {
     }
 }
 
-// ============ DOAÇÕES ============
 const amountBtns = document.querySelectorAll('.amount-btn');
 const customInput = document.getElementById('custom-value');
 
@@ -94,7 +92,6 @@ methodBtns.forEach(btn => {
     });
 });
 
-// ============ ANIMAÇÃO DE ENTRADA ============
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -110,7 +107,7 @@ document.querySelectorAll('.card-pet, .caixa').forEach(el => {
     el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(el);
 });
-// ============ BANCO DE DADOS DOS PETS ============
+
 const petsData = {
     'theo-augusto': {
         nome: "Théo Augusto",
@@ -147,14 +144,12 @@ const petsData = {
 };
 
 function carregarDadosDoPet() {
-    // Pega o ID do pet na URL (ex: maisinformacoes.html?pet=thor)
     const params = new URLSearchParams(window.location.search);
     const petId = params.get('pet');
 
     if (petId && petsData[petId]) {
         const pet = petsData[petId];
         
-        // Preenche os campos da página
         document.getElementById('pet-name').innerText = pet.nome;
         document.getElementById('pet-img').src = pet.img;
         document.getElementById('pet-gender').innerText = pet.genero;
@@ -163,7 +158,6 @@ function carregarDadosDoPet() {
         document.getElementById('pet-desc').innerText = pet.desc;
         document.title = `Conheça o ${pet.nome} - Apasbac`;
     } else {
-        // Se não encontrar o pet, redireciona para a lista
         if (window.location.pathname.includes('maisinformacoes.html')) {
             document.body.innerHTML = "<h1>Pet não encontrado! Redirecionando...</h1>";
             setTimeout(() => window.location.href = 'queroadotar.html', 2000);
