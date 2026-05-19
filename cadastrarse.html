@@ -33,7 +33,7 @@
             <a href="doeeajude.html" class="btn-donate">DOE E AJUDE</a>
 
             <div class="user-actions">
-                <a href="entrar.html"><i class="fas fa-user"></i></a>
+                <a href="entrar.html">Entrar</a>
                 <a href="cadastrarse.html">Cadastre-se</a>
             </div>
         </div>
@@ -48,37 +48,50 @@
                 <p>É rápido e fácil. Vamos começar!</p>
             </header>
 
-            <form class="signup-form">
-                <div class="input-group">
-                    <label for="full-name">Nome Completo</label>
-                    <input type="text" id="full-name" name="full_name" required>
-                </div>
+            <!-- Substitua o form dentro da div signup-card por este -->
+<form class="signup-form" id="registerForm">
+    <div class="input-group">
+        <label for="full-name">Nome Completo</label>
+        <input type="text" id="full-name" name="full_name" required>
+    </div>
 
-                <div class="input-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
+    <div class="input-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required>
+    </div>
 
-                <div class="input-group">
-                    <label for="password">Crie uma Senha</label>
-                    <input type="password" id="password" name="password" required>
-                    <small class="password-hint">Use no mínimo 8 caracteres.</small>
-                </div>
+    <!-- NOVOS CAMPOS EXIGIDOS PELA API -->
+    <div class="input-group">
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" name="phone" placeholder="+55 44 99999-9999" required>
+    </div>
 
-                <div class="input-group">
-                    <label for="confirm-password">Confirme sua Senha</label>
-                    <input type="password" id="confirm-password" name="confirm_password" required>
-                </div>
+    <div class="input-group">
+        <label for="cpf">CPF (somente números)</label>
+        <input type="text" id="cpf" name="cpf" maxlength="11" required>
+    </div>
+    <!-- FIM DOS NOVOS CAMPOS -->
 
-                <div class="terms-agreement">
-                    <input type="checkbox" id="terms" name="terms" required>
-                    <label for="terms">
-                        Eu li e concordo com os <a href="#">Termos de Serviço</a> e a <a href="#">Política de Privacidade</a>.
-                    </label>
-                </div>
+    <div class="input-group">
+        <label for="password">Crie uma Senha</label>
+        <input type="password" id="password" name="password" required>
+        <small class="password-hint">Mínimo 8 caracteres, 1 maiúscula e 1 número.</small>
+    </div>
 
-                <button type="submit" class="signup-button">Cadastrar</button>
-            </form>
+    <div class="input-group">
+        <label for="confirm-password">Confirme sua Senha</label>
+        <input type="password" id="confirm-password" name="confirm_password" required>
+    </div>
+
+    <div class="terms-agreement">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">
+            Eu li e concordo com os <a href="#">Termos de Serviço</a>.
+        </label>
+    </div>
+
+    <button type="submit" class="signup-button">Cadastrar</button>
+</form>
 
             <footer class="signup-footer">
                 <p>Já tem uma conta? <a href="#">Faça login</a></p>

@@ -1,3 +1,4 @@
+const API_BASE_URL = "https://apasbac-api.vercel.app/api/v1"; // Substitua pela URL real
 
 const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.nav-dot');
@@ -29,7 +30,7 @@ if (slides.length > 0) {
 
     function resetTimer() {
         clearInterval(autoTimer);
-        autoTimer = setInterval(nextSlide, 9000);
+        autoTimer = setInterval(nextSlide, 5000);
     }
 
     if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
@@ -40,8 +41,9 @@ if (slides.length > 0) {
     });
 
     showSlide(0);
-    autoTimer = setInterval(nextSlide, 9000);
+    autoTimer = setInterval(nextSlide, 5000);
 
+    // Swipe support
     let touchStartX = 0;
     const carousel = document.querySelector('.carousel-container');
     if (carousel) {
@@ -53,6 +55,7 @@ if (slides.length > 0) {
     }
 }
 
+// ============ DOAÇÕES ============
 const amountBtns = document.querySelectorAll('.amount-btn');
 const customInput = document.getElementById('custom-value');
 
@@ -92,6 +95,7 @@ methodBtns.forEach(btn => {
     });
 });
 
+// ============ ANIMAÇÃO DE ENTRADA ============
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -107,7 +111,7 @@ document.querySelectorAll('.card-pet, .caixa').forEach(el => {
     el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(el);
 });
-
+// ============ BANCO DE DADOS DOS PETS ============
 const petsData = {
     'theo-augusto': {
         nome: "Théo Augusto",
@@ -143,24 +147,223 @@ const petsData = {
     }
 };
 
-function carregarDadosDoPet() {
-    const params = new URLSearchParams(window.location.search);
-    const petId = params.get('pet');
-
-    if (petId && petsData[petId]) {
-        const pet = petsData[petId];
+async function listarAnimais() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/animals`);
+        const animals = await response.json();
         
-        document.getElementById('pet-name').innerText = pet.nome;
-        document.getElementById('pet-img').src = pet.img;
-        document.getElementById('pet-gender').innerText = pet.genero;
-        document.getElementById('pet-age').innerText = pet.idade;
-        document.getElementById('pet-size').innerText = pet.porte;
-        document.getElementById('pet-desc').innerText = pet.desc;
-        document.title = `Conheça o ${pet.nome} - Apasbac`;
-    } else {
-        if (window.location.pathname.includes('maisinformacoes.html')) {
-            document.body.innerHTML = "<h1>Pet não encontrado! Redirecionando...</h1>";
-            setTimeout(() => window.location.href = 'queroadotar.html', 2000);
-        }
+        const container = document.querySelector('.container-pets');
+        container.innerHTML = ""; // Limpa os estáticos
+
+        animals.forEach(pet => {
+            container.innerHTML += `
+                <div class="card-pet">
+                    <img src="${pet.imageUrl || 'imagens/placeholder.jpg'}" alt="${pet.name}">
+                    <div class="info-pet">
+                        <h2>${pet.name}</h2>
+                        <p><strong>Gênero:</strong> ${pet.sex === 'MALE' ? 'Macho' : 'Fêmea'}</p>
+                        <p><strong>Porte:</strong> ${pet.size}</p>
+                        <a href="maisinformacoes.html?id=${pet.id}"><button><strong>Mais informações</strong></button></a>
+                    </div>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Erro ao buscar animais:", error);
     }
 }
+
+async function carregarAnimaisDaAPI() {
+    const container = document.getElementById('lista-animais');
+    if (!container) return;
+
+    try {
+        container.innerHTML = "<p>Carregando nossos amiguinhos...</p>";
+
+        const response = await fetch(`${API_BASE_URL}/animals`);
+        if (!response.ok) throw new Error("Erro ao buscar animais");
+
+        const respostaCompleta = await response.json();
+
+        // AQUI ESTÁ O SEGREDO: 
+        // A lista real de animais está dentro de respostaCompleta.data.data
+        const animais = respostaCompleta.data.data;
+
+        // Verificamos se animais é realmente uma lista antes de continuar
+        if (!animais || !Array.isArray(animais)) {
+            container.innerHTML = "<p>Nenhum animal encontrado no momento.</p>";
+            return;
+        }
+
+        container.innerHTML = "";
+
+        animais.forEach(pet => {
+            const genero = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
+            
+            // Usando a primeira foto do array que vem na sua API
+            const foto = (pet.photos && pet.photos.length > 0) 
+                         ? pet.photos[0] 
+                         : 'imagens/Logo.webp';
+
+            const card = `
+                <div class="card-pet">
+                    <img src="${foto}" alt="${pet.name}">
+                    <div class="info-pet">
+                        <h2>${pet.name}</h2>
+                        <p><strong>Gênero:</strong> ${genero}</p>
+                        <p><strong>Raça:</strong> ${pet.breed}</p>
+                        <a href="maisinformacoes.html?id=${pet.id}">
+                            <button><strong>Mais informações</strong></button>
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
+    } catch (error) {
+        console.error("Erro detalhado:", error);
+        container.innerHTML = "<p>Erro ao carregar animais. Verifique o console.</p>";
+    }
+}
+
+// 3. Chamar a função quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth(); // Sua função de autenticação
+    carregarAnimaisDaAPI(); // Busca os animais da API
+});
+
+const registerForm = document.getElementById('registerForm');
+if (registerForm) {
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const payload = {
+            fullName: document.getElementById('full-name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            cpf: document.getElementById('cpf').value,
+            password: document.getElementById('password').value,
+            confirmPassword: document.getElementById('confirm-password').value
+        };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert("Cadastro realizado com sucesso! Faça seu login.");
+                window.location.href = 'entrar.html';
+            } else {
+                const data = await response.json();
+                alert("Erro: " + (data.message || "Verifique os dados."));
+            }
+        } catch (error) {
+            alert("Não foi possível conectar ao servidor.");
+        }
+    });
+}
+
+// --- 2. FUNÇÃO DE LOGIN ---
+const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // Salva o token VIP no navegador
+                localStorage.setItem('accessToken', data.accessToken);
+                localStorage.setItem('userName', email); // Opcional: salvar algo para mostrar na tela
+                
+                window.location.href = 'index.html';
+            } else {
+                alert("E-mail ou senha incorretos.");
+            }
+        } catch (error) {
+            alert("Erro ao conectar com a API.");
+        }
+    });
+}
+
+// --- 3. CONTROLE DE INTERFACE (LOGADO vs DESLOGADO) ---
+function checkAuth() {
+    const token = localStorage.getItem('accessToken');
+    const userActions = document.querySelector('.user-actions');
+
+    if (token && userActions) {
+        // Se estiver logado, muda o menu
+        userActions.innerHTML = `
+            <span style="color: #8b1a1a; font-weight: 600; margin-right: 10px;">Olá!</span>
+            <a href="#" id="logoutBtn" style="background: #5c0f0f;">Sair</a>
+        `;
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        });
+    }
+}
+
+async function carregarDadosDoPet() {
+    const params = new URLSearchParams(window.location.search);
+    const petId = params.get('id'); // Agora pegamos o ID numérico
+
+    if (!petId) return;
+
+    try {
+        // Usando o endpoint público de detalhes que está no seu Swagger
+        const response = await fetch(`${API_BASE_URL}/animals/public/${petId}`);
+        
+        if (!response.ok) {
+            window.location.href = 'queroadotar.html';
+            return;
+        }
+
+        const pet = await response.json();
+
+        // Preenche o HTML com os dados reais da API
+        document.getElementById('pet-name').innerText = pet.name;
+        document.getElementById('pet-img').src = (pet.photos && pet.photos.length > 0) ? pet.photos[0] : 'imagens/Logo.webp';
+        document.getElementById('pet-gender').innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
+        document.getElementById('pet-age').innerText = pet.age || "Não informada";
+        document.getElementById('pet-size').innerText = pet.size;
+        document.getElementById('pet-desc').innerText = pet.description;
+        
+        document.title = `Conheça o ${pet.name} - Apasbac`;
+
+    } catch (error) {
+        console.error("Erro ao carregar detalhes:", error);
+    }
+}
+
+async function enviarFormularioMonitoramento(dados) {
+    const token = localStorage.getItem('accessToken');
+
+    const response = await fetch(`${API_BASE_URL}/monitoring`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Aqui vai o token de login
+        },
+        body: JSON.stringify(dados)
+    });
+}
+// Executa assim que a página carrega
+document.addEventListener('DOMContentLoaded', checkAuth);
+
