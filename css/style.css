@@ -46,9 +46,11 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--cream-dark);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--primary);
   border-radius: 3px;
@@ -56,7 +58,7 @@ body {
 
 .main-header {
   width: 100%;
-  background: #fae8b8 !important; 
+  background: #fae8b8 !important;
   border-bottom: 2px solid #dec8b0;
   position: sticky;
   top: 0;
@@ -66,7 +68,7 @@ body {
 }
 
 .header-container {
-  background-color: transparent !important; 
+  background-color: transparent !important;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 40px;
@@ -88,8 +90,8 @@ body {
   text-decoration: none !important;
   font-weight: 600 !important;
   font-size: 0.88rem !important;
-  color: #8b1a1a !important; 
-  background: transparent !important; 
+  color: #8b1a1a !important;
+  background: transparent !important;
   padding: 10px 18px !important;
   border-radius: 999px !important;
   transition: all 0.3s ease !important;
@@ -97,7 +99,7 @@ body {
 }
 
 .main-nav a:hover {
-  background: rgba(139, 26, 26, 0.08) !important; 
+  background: rgba(139, 26, 26, 0.08) !important;
   color: #f7eded !important;
   transform: translateY(-1px);
 }
@@ -161,6 +163,7 @@ main .h1 {
   position: relative;
   overflow: hidden;
 }
+
 main .h1::before {
   content: "";
   position: absolute;
@@ -171,6 +174,7 @@ main .h1::before {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
 }
+
 main .h1::after {
   content: "";
   position: absolute;
@@ -181,6 +185,7 @@ main .h1::after {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 50%;
 }
+
 main .h1 h1 {
   font-family: "Playfair Display", serif;
   font-size: clamp(2.2rem, 5vw, 3.2rem);
@@ -191,15 +196,24 @@ main .h1 h1 {
   z-index: 1;
   line-height: 1.2;
 }
+
 main .h1 h1 i {
   color: var(--accent-light);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }
+
 .faixa-inicial {
   display: flex;
   justify-content: center;
@@ -207,6 +221,7 @@ main .h1 h1 i {
   padding: 32px 20px;
   background: var(--cream-card);
 }
+
 .faixa-inicial img {
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
@@ -218,6 +233,7 @@ main .h1 h1 i {
   padding: 0%;
   display: block;
 }
+
 .actions-section {
   display: flex;
   justify-content: center;
@@ -239,21 +255,25 @@ main .h1 h1 i {
   transition: all var(--transition);
   letter-spacing: 0.02em;
 }
+
 .action-btn.primary {
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
   color: white;
   border: none;
   box-shadow: 0 4px 16px rgba(139, 26, 26, 0.3);
 }
+
 .action-btn.primary:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 28px rgba(139, 26, 26, 0.4);
 }
+
 .action-btn.secondary {
   background: transparent;
   color: var(--primary);
   border: 2px solid var(--primary);
 }
+
 .action-btn.secondary:hover {
   background: rgba(139, 26, 26, 0.06);
   transform: translateY(-3px);
@@ -270,6 +290,7 @@ main .amigos {
   position: relative;
   overflow: hidden;
 }
+
 main .amigos::before {
   content: "";
   position: absolute;
@@ -280,6 +301,7 @@ main .amigos::before {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
 }
+
 main .amigos::after {
   content: "";
   position: absolute;
@@ -290,6 +312,7 @@ main .amigos::after {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 50%;
 }
+
 main .amigos h1 {
   font-family: "Playfair Display", serif;
   font-size: clamp(1.8rem, 4vw, 2.8rem);
@@ -299,6 +322,7 @@ main .amigos h1 {
   z-index: 1;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
+
 main .amigos h1::after {
   content: "";
   display: block;
@@ -331,6 +355,7 @@ main .amigos h1::after {
   cursor: pointer;
   position: relative;
 }
+
 .card-pet::before {
   content: "";
   position: absolute;
@@ -340,11 +365,13 @@ main .amigos h1::after {
   height: 4px;
   background: linear-gradient(90deg, var(--primary), var(--accent));
 }
+
 .card-pet:hover {
   transform: translateY(-10px) scale(1.02);
   box-shadow: var(--shadow-lg);
   border-color: var(--primary-light);
 }
+
 .card-pet img {
   width: 100%;
   height: 200px;
@@ -352,6 +379,7 @@ main .amigos h1::after {
   display: block;
   transition: transform 0.5s ease;
 }
+
 .card-pet:hover img {
   transform: scale(1.05);
 }
@@ -359,17 +387,20 @@ main .amigos h1::after {
 .info-pet {
   padding: 18px 20px 20px;
 }
+
 .info-pet h2 {
   font-family: "Playfair Display", serif;
   font-size: 1.15rem;
   color: var(--text-dark);
   margin-bottom: 6px;
 }
+
 .info-pet p {
   font-size: 0.85rem;
   color: var(--text-light);
   margin: 3px 0;
 }
+
 .info-pet p strong {
   color: var(--text-mid);
 }
@@ -377,6 +408,7 @@ main .amigos h1::after {
 .info-pet a {
   text-decoration: none;
 }
+
 .info-pet button {
   margin-top: 14px;
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
@@ -392,6 +424,7 @@ main .amigos h1::after {
   transition: all var(--transition);
   box-shadow: 0 3px 12px rgba(139, 26, 26, 0.25);
 }
+
 .info-pet button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 26, 26, 0.35);
@@ -408,6 +441,7 @@ main .amigos h1::after {
   max-width: 600px;
   box-shadow: var(--shadow-sm);
 }
+
 .btn-pesquisar {
   background: var(--white);
   border: 2px solid var(--primary);
@@ -421,6 +455,7 @@ main .amigos h1::after {
   border-radius: var(--radius-pill);
   transition: all var(--transition);
 }
+
 .btn-pesquisar:hover {
   background: var(--primary);
   color: white;
@@ -429,17 +464,16 @@ main .amigos h1::after {
 }
 
 .intro-modern {
-  background: linear-gradient(
-    135deg,
-    var(--primary-dark) 0%,
-    var(--primary) 100%
-  ) !important;
+  background: linear-gradient(135deg,
+      var(--primary-dark) 0%,
+      var(--primary) 100%) !important;
   margin-top: 48px;
   text-align: center;
   padding: 80px 40px !important;
   position: relative;
   overflow: hidden;
 }
+
 .intro-modern::before {
   content: "";
   position: absolute;
@@ -450,6 +484,7 @@ main .amigos h1::after {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
 }
+
 .intro-modern::after {
   content: "";
   position: absolute;
@@ -460,6 +495,7 @@ main .amigos h1::after {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 50%;
 }
+
 .intro-modern h1 {
   font-family: "Playfair Display", serif !important;
   font-size: clamp(2rem, 4vw, 3.2rem) !important;
@@ -467,9 +503,11 @@ main .amigos h1::after {
   line-height: 1.2;
   margin-bottom: 20px !important;
 }
+
 .intro-modern h1 span {
   color: var(--accent-light) !important;
 }
+
 .intro-modern p {
   color: rgba(255, 255, 255, 0.8) !important;
   font-size: 1.05rem !important;
@@ -484,6 +522,7 @@ main .amigos h1::after {
   margin-top: 0;
   padding-top: 56px;
 }
+
 .footer-content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
@@ -497,6 +536,7 @@ main .amigos h1::after {
   padding-bottom: 40px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 .footer-column {
   display: flex;
   flex-direction: column;
@@ -504,6 +544,7 @@ main .amigos h1::after {
   flex: 1;
   min-width: 130px;
 }
+
 .footer-column h3 {
   font-size: 0.72rem;
   font-weight: 700;
@@ -512,12 +553,14 @@ main .amigos h1::after {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
+
 .footer-column a {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.88rem;
   transition: color var(--transition);
 }
+
 .footer-column a:hover {
   color: var(--white);
 }
@@ -530,10 +573,12 @@ main .amigos h1::after {
   gap: 20px;
   flex-wrap: wrap;
 }
+
 .social-icons {
   display: flex;
   gap: 12px;
 }
+
 .social-icons a {
   width: 38px;
   height: 38px;
@@ -547,17 +592,20 @@ main .amigos h1::after {
   font-size: 0.9rem;
   transition: all var(--transition);
 }
+
 .social-icons a:hover {
   background: var(--primary);
   border-color: var(--primary);
   color: white;
   transform: translateY(-2px);
 }
+
 .footer-logo img {
   height: 72px;
   width: auto;
   opacity: 0.85;
 }
+
 .copyright-text {
   font-size: 0.78rem;
   color: rgba(255, 255, 255, 0.35);
@@ -574,6 +622,7 @@ main .amigos h1::after {
   padding: 60px;
   border: 1px solid var(--border);
 }
+
 .page-title {
   font-family: "Playfair Display", serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
@@ -589,6 +638,7 @@ main .amigos h1::after {
   z-index: 1;
   width: 100vw;
 }
+
 .page-title::before {
   content: "";
   position: absolute;
@@ -599,6 +649,7 @@ main .amigos h1::after {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
 }
+
 .page-title::after {
   content: "";
   position: absolute;
@@ -609,6 +660,7 @@ main .amigos h1::after {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 50%;
 }
+
 .content-container p {
   color: var(--text-mid);
   line-height: 1.85;
@@ -616,6 +668,7 @@ main .amigos h1::after {
   font-size: 0.98rem;
   margin-top: 24px;
 }
+
 .sub-title {
   font-family: "Playfair Display", serif;
   font-size: 1.5rem;
@@ -629,6 +682,7 @@ main .amigos h1::after {
   margin: 0 auto;
   padding: 48px 40px;
 }
+
 .main-title {
   font-family: "Playfair Display", serif;
   font-size: clamp(1.8rem, 5vw, 3.2rem);
@@ -645,6 +699,7 @@ main .amigos h1::after {
   z-index: 1;
   width: 100vw;
 }
+
 .main-title::before {
   content: "";
   position: absolute;
@@ -655,6 +710,7 @@ main .amigos h1::after {
   background: rgba(255, 255, 255, 0.04);
   border-radius: 50%;
 }
+
 .main-title::after {
   content: "";
   position: absolute;
@@ -675,6 +731,7 @@ main .amigos h1::after {
   border: 1px solid var(--border);
   margin-bottom: 40px;
 }
+
 .filter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -685,6 +742,7 @@ main .amigos h1::after {
 .select-wrapper {
   position: relative;
 }
+
 .select-wrapper::after {
   content: "▾";
   position: absolute;
@@ -695,6 +753,7 @@ main .amigos h1::after {
   pointer-events: none;
   font-size: 0.85rem;
 }
+
 .select-wrapper select,
 .name-input,
 .search-button {
@@ -712,6 +771,7 @@ main .amigos h1::after {
     box-shadow var(--transition);
   cursor: pointer;
 }
+
 .select-wrapper select:focus,
 .name-input:focus {
   outline: none;
@@ -719,9 +779,11 @@ main .amigos h1::after {
   box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.08);
   background: var(--white);
 }
+
 .name-input {
   background: var(--cream);
 }
+
 .search-button {
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
   color: white;
@@ -734,6 +796,7 @@ main .amigos h1::after {
   transition: all var(--transition);
   box-shadow: 0 4px 14px rgba(139, 26, 26, 0.28);
 }
+
 .search-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(139, 26, 26, 0.38);
@@ -748,22 +811,26 @@ main .amigos h1::after {
   border: 1px solid var(--border);
   overflow: hidden;
 }
+
 .form-header {
   background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   padding: 48px 52px 40px;
   color: white;
 }
+
 .form-header h1.main-title {
   color: white;
   text-align: left;
   margin-bottom: 12px;
   font-size: clamp(1.6rem, 3vw, 2.2rem);
 }
+
 .form-header h1.main-title::after {
   background: var(--accent);
   left: 0;
   transform: none;
 }
+
 .form-header p {
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.95rem;
@@ -772,12 +839,14 @@ main .amigos h1::after {
 .volunteer-form {
   padding: 48px 52px;
 }
+
 .volunteer-form fieldset {
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   padding: 28px 32px;
   margin-bottom: 28px;
 }
+
 .volunteer-form legend {
   font-family: "Playfair Display", serif;
   font-size: 1.1rem;
@@ -785,9 +854,11 @@ main .amigos h1::after {
   font-weight: 700;
   padding: 0 10px;
 }
+
 .volunteer-form .input-group {
   margin-bottom: 20px;
 }
+
 .volunteer-form .input-group label {
   display: block;
   margin-bottom: 7px;
@@ -795,6 +866,7 @@ main .amigos h1::after {
   font-weight: 500;
   color: var(--text-mid);
 }
+
 .volunteer-form input[type="text"],
 .volunteer-form input[type="email"],
 .volunteer-form input[type="tel"],
@@ -813,6 +885,7 @@ main .amigos h1::after {
     border-color var(--transition),
     box-shadow var(--transition);
 }
+
 .volunteer-form input:focus,
 .volunteer-form select:focus,
 .volunteer-form textarea:focus {
@@ -821,6 +894,7 @@ main .amigos h1::after {
   box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.08);
   background: var(--white);
 }
+
 .volunteer-form textarea {
   resize: vertical;
   min-height: 120px;
@@ -832,6 +906,7 @@ main .amigos h1::after {
   flex-direction: column;
   gap: 10px;
 }
+
 .checkbox-group label,
 .radio-group label {
   display: flex;
@@ -841,6 +916,7 @@ main .amigos h1::after {
   color: var(--text-mid);
   cursor: pointer;
 }
+
 .checkbox-group input,
 .radio-group input {
   accent-color: var(--primary);
@@ -852,11 +928,9 @@ main .amigos h1::after {
 .submit-btn {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(
-    135deg,
-    var(--primary-light),
-    var(--primary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--primary-light),
+      var(--primary-dark));
   color: white;
   border: none;
   border-radius: var(--radius-pill);
@@ -868,6 +942,7 @@ main .amigos h1::after {
   transition: all var(--transition);
   box-shadow: 0 6px 24px rgba(139, 26, 26, 0.35);
 }
+
 .submit-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 32px rgba(139, 26, 26, 0.45);
@@ -882,11 +957,9 @@ main .amigos h1::after {
   min-height: calc(100vh - 92px);
   padding: 40px 20px;
   background:
-    radial-gradient(
-      ellipse at 60% 30%,
+    radial-gradient(ellipse at 60% 30%,
       rgba(139, 26, 26, 0.09) 0%,
-      transparent 70%
-    ),
+      transparent 70%),
     var(--cream);
 }
 
@@ -907,6 +980,7 @@ main .amigos h1::after {
   text-align: center;
   padding: 36px 40px 32px;
 }
+
 .login-header .logo,
 .signup-header .logo {
   width: 88px;
@@ -916,6 +990,7 @@ main .amigos h1::after {
   filter: brightness(0) invert(1);
   opacity: 0.92;
 }
+
 .login-header h1,
 .signup-header h1 {
   font-family: "Playfair Display", serif;
@@ -923,6 +998,7 @@ main .amigos h1::after {
   color: white;
   margin-bottom: 6px;
 }
+
 .login-header p,
 .signup-header p {
   color: rgba(255, 255, 255, 0.7);
@@ -937,6 +1013,7 @@ main .amigos h1::after {
 .input-group {
   margin-bottom: 20px;
 }
+
 .input-group label {
   display: block;
   margin-bottom: 7px;
@@ -944,6 +1021,7 @@ main .amigos h1::after {
   font-weight: 500;
   color: var(--text-mid);
 }
+
 .input-group input {
   width: 100%;
   padding: 12px 16px;
@@ -955,12 +1033,14 @@ main .amigos h1::after {
   color: var(--text-dark);
   transition: all var(--transition);
 }
+
 .input-group input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.08);
   background: var(--white);
 }
+
 .password-hint {
   font-size: 0.78rem;
   color: var(--text-light);
@@ -975,6 +1055,7 @@ main .amigos h1::after {
   margin-bottom: 24px;
   font-size: 0.85rem;
 }
+
 .remember-me {
   display: flex;
   align-items: center;
@@ -982,15 +1063,18 @@ main .amigos h1::after {
   cursor: pointer;
   color: var(--text-mid);
 }
+
 .remember-me input {
   accent-color: var(--primary);
 }
+
 .forgot-password {
   color: var(--primary);
   text-decoration: none;
   font-weight: 500;
   transition: color var(--transition);
 }
+
 .forgot-password:hover {
   color: var(--primary-dark);
   text-decoration: underline;
@@ -1012,6 +1096,7 @@ main .amigos h1::after {
   box-shadow: 0 4px 16px rgba(139, 26, 26, 0.3);
   letter-spacing: 0.04em;
 }
+
 .login-button:hover,
 .signup-button:hover {
   transform: translateY(-2px);
@@ -1027,9 +1112,11 @@ main .amigos h1::after {
   margin: 20px 40px;
   font-size: 0.82rem;
 }
+
 .separator span {
   padding: 0 14px;
 }
+
 .separator::before,
 .separator::after {
   content: "";
@@ -1042,6 +1129,7 @@ main .amigos h1::after {
   gap: 12px;
   padding: 0 40px 24px;
 }
+
 .social-btn {
   flex: 1;
   padding: 11px;
@@ -1059,11 +1147,13 @@ main .amigos h1::after {
   background: var(--white);
   color: var(--text-mid);
 }
+
 .social-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
   background: rgba(139, 26, 26, 0.04);
 }
+
 .social-btn i {
   font-size: 1rem;
 }
@@ -1077,12 +1167,14 @@ main .amigos h1::after {
   border-top: 1px solid var(--border);
   margin-top: 4px;
 }
+
 .login-footer a,
 .signup-footer a {
   color: var(--primary);
   text-decoration: none;
   font-weight: 600;
 }
+
 .login-footer a:hover,
 .signup-footer a:hover {
   text-decoration: underline;
@@ -1096,16 +1188,19 @@ main .amigos h1::after {
   font-size: 0.82rem;
   color: var(--text-mid);
 }
+
 .terms-agreement input[type="checkbox"] {
   accent-color: var(--primary);
   margin-top: 2px;
   flex-shrink: 0;
 }
+
 .terms-agreement a {
   color: var(--primary);
   text-decoration: none;
   font-weight: 600;
 }
+
 .terms-agreement a:hover {
   text-decoration: underline;
 }
@@ -1115,18 +1210,17 @@ main .amigos h1::after {
 }
 
 .donation-header {
-  background: linear-gradient(
-    135deg,
-    var(--primary-dark) 0%,
-    var(--primary) 50%,
-    var(--primary-light) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--primary-dark) 0%,
+      var(--primary) 50%,
+      var(--primary-light) 100%);
   color: white;
   padding: 80px 40px;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
+
 .donation-header::before {
   content: "";
   position: absolute;
@@ -1137,18 +1231,21 @@ main .amigos h1::after {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 50%;
 }
+
 .header-content {
   position: relative;
   z-index: 1;
   max-width: 640px;
   margin: 0 auto;
 }
+
 .donation-header h1 {
   font-family: "Playfair Display", serif;
   font-size: clamp(2rem, 4vw, 3.2rem);
   line-height: 1.2;
   margin-bottom: 16px;
 }
+
 .donation-header p {
   font-size: 1.05rem;
   opacity: 0.85;
@@ -1172,6 +1269,7 @@ main .amigos h1::after {
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
 }
+
 .donation-selection h2 {
   font-family: "Playfair Display", serif;
   font-size: 1.4rem;
@@ -1187,6 +1285,7 @@ main .amigos h1::after {
   border-radius: var(--radius-pill);
   padding: 4px;
 }
+
 .switch-btn {
   flex: 1;
   padding: 10px;
@@ -1200,6 +1299,7 @@ main .amigos h1::after {
   cursor: pointer;
   transition: all var(--transition);
 }
+
 .switch-btn.active {
   background: var(--primary);
   color: white;
@@ -1212,6 +1312,7 @@ main .amigos h1::after {
   gap: 12px;
   margin-bottom: 20px;
 }
+
 .amount-btn {
   padding: 14px;
   border: 2px solid var(--border);
@@ -1224,11 +1325,13 @@ main .amigos h1::after {
   cursor: pointer;
   transition: all var(--transition);
 }
+
 .amount-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
   background: rgba(139, 26, 26, 0.04);
 }
+
 .amount-btn.active {
   border-color: var(--primary);
   background: var(--primary);
@@ -1239,6 +1342,7 @@ main .amigos h1::after {
 .custom-amount {
   margin-top: 16px;
 }
+
 .custom-amount label {
   display: block;
   font-size: 0.85rem;
@@ -1246,6 +1350,7 @@ main .amigos h1::after {
   color: var(--text-mid);
   margin-bottom: 8px;
 }
+
 .custom-amount input {
   width: 100%;
   padding: 12px 16px;
@@ -1257,6 +1362,7 @@ main .amigos h1::after {
   color: var(--text-dark);
   transition: all var(--transition);
 }
+
 .custom-amount input:focus {
   outline: none;
   border-color: var(--primary);
@@ -1271,17 +1377,20 @@ main .amigos h1::after {
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
 }
+
 .payment-form-section h2 {
   font-family: "Playfair Display", serif;
   font-size: 1.4rem;
   color: var(--primary);
   margin-bottom: 24px;
 }
+
 .payment-form fieldset {
   border: none;
   padding: 0;
   margin-bottom: 24px;
 }
+
 .payment-form legend {
   font-size: 0.8rem;
   font-weight: 700;
@@ -1290,6 +1399,7 @@ main .amigos h1::after {
   color: var(--text-light);
   margin-bottom: 14px;
 }
+
 .payment-form label {
   display: block;
   margin-bottom: 7px;
@@ -1297,6 +1407,7 @@ main .amigos h1::after {
   font-weight: 500;
   color: var(--text-mid);
 }
+
 .payment-form input {
   width: 100%;
   padding: 12px 16px;
@@ -1309,17 +1420,20 @@ main .amigos h1::after {
   margin-bottom: 14px;
   transition: all var(--transition);
 }
+
 .payment-form input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.08);
   background: var(--white);
 }
+
 .payment-methods {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
+
 .method-btn {
   flex: 1;
   background: var(--cream);
@@ -1337,26 +1451,28 @@ main .amigos h1::after {
   justify-content: center;
   gap: 6px;
 }
+
 .method-btn.active,
 .method-btn:hover {
   border-color: var(--primary);
   color: var(--primary);
   background: rgba(139, 26, 26, 0.05);
 }
+
 .card-details {
   display: flex;
   gap: 14px;
 }
-.card-details > div {
+
+.card-details>div {
   flex: 1;
 }
+
 .submit-donation-btn {
   width: 100%;
-  background: linear-gradient(
-    135deg,
-    var(--primary-light),
-    var(--primary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--primary-light),
+      var(--primary-dark));
   color: white;
   font-size: 1rem;
   font-weight: 700;
@@ -1370,6 +1486,7 @@ main .amigos h1::after {
   box-shadow: 0 6px 24px rgba(139, 26, 26, 0.35);
   margin-top: 8px;
 }
+
 .submit-donation-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 32px rgba(139, 26, 26, 0.45);
@@ -1380,6 +1497,7 @@ main .amigos h1::after {
   padding: 60px 20px;
   background: var(--cream-card);
 }
+
 .secao-adotar h2 {
   font-family: "Playfair Display", serif;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -1388,12 +1506,14 @@ main .amigos h1::after {
   background: transparent;
   padding: 0;
 }
+
 .container-caixas {
   display: flex;
   justify-content: center;
   gap: 28px;
   flex-wrap: wrap;
 }
+
 .caixa {
   background: var(--white);
   border: 1.5px solid var(--border);
@@ -1407,6 +1527,7 @@ main .amigos h1::after {
   transition: all var(--transition);
   box-shadow: var(--shadow-sm);
 }
+
 .caixa:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-md);
@@ -1418,26 +1539,33 @@ main .amigos h1::after {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .card-pet {
   animation: fadeInUp 0.5s ease both;
 }
+
 .card-pet:nth-child(1) {
   animation-delay: 0.05s;
 }
+
 .card-pet:nth-child(2) {
   animation-delay: 0.1s;
 }
+
 .card-pet:nth-child(3) {
   animation-delay: 0.15s;
 }
+
 .card-pet:nth-child(4) {
   animation-delay: 0.2s;
 }
+
 .card-pet:nth-child(5) {
   animation-delay: 0.25s;
 }
@@ -1446,84 +1574,106 @@ main .amigos h1::after {
   .donation-main {
     grid-template-columns: 1fr;
   }
+
   .header-container {
     padding: 0 20px;
     gap: 16px;
   }
+
   .main-nav ul {
     gap: 2px;
   }
+
   .main-nav a {
     font-size: 0.8rem;
     padding: 7px 10px;
   }
+
   .container-pets {
     padding: 0 20px;
   }
+
   .volunteer-form {
     padding: 28px;
   }
+
   .form-header {
     padding: 36px 28px 30px;
   }
+
   .content-container {
     padding: 40px 28px;
     margin: 40px 20px;
   }
 }
+
 @media (max-width: 640px) {
   .main-nav {
     display: none;
   }
+
   .header-container {
     gap: 12px;
   }
+
   .btn-donate {
     padding: 9px 16px;
     font-size: 0.8rem;
   }
+
   .actions-section {
     flex-direction: column;
     align-items: center;
   }
+
   .footer-columns {
     flex-direction: column;
     gap: 24px;
   }
+
   .footer-bottom {
     flex-direction: column;
     text-align: center;
   }
+
   .copyright-text {
     text-align: center;
   }
+
   .login-form,
   .signup-form {
     padding: 24px 28px 16px;
   }
+
   .login-header,
   .signup-header {
     padding: 28px 28px 24px;
   }
+
   .separator,
   .social-login {
     padding-left: 28px;
     padding-right: 28px;
   }
+
   .login-footer,
   .signup-footer {
     padding: 16px 28px 24px;
   }
+
   .donation-main {
     padding: 0 20px;
     margin: 32px auto;
   }
+
   .filter-grid {
     grid-template-columns: 1fr 1fr;
   }
+
   .volunteer-form {
     padding: 24px 20px;
   }
+
   .volunteer-form fieldset {
     padding: 20px;
   }
@@ -1619,10 +1769,13 @@ main .amigos h1::after {
   .pet-details-card {
     flex-direction: column;
   }
+
   .pet-image-side {
     min-height: 300px;
   }
 }
+
+
 
 *,
 *::before,
@@ -1671,6 +1824,7 @@ body {
   z-index: 1000;
   box-shadow: var(--shadow-sm);
 }
+
 .header-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -1680,11 +1834,13 @@ body {
   align-items: center;
   gap: 32px;
 }
+
 .logo-img {
   height: 78px;
   width: auto;
   transition: var(--transition);
 }
+
 .logo-img:hover {
   transform: scale(1.05);
 }
@@ -1692,11 +1848,13 @@ body {
 .main-nav {
   margin-left: auto;
 }
+
 .main-nav ul {
   display: flex;
   list-style: none;
   gap: 4px;
 }
+
 .main-nav a {
   text-decoration: none;
   color: var(--text-mid);
@@ -1705,6 +1863,7 @@ body {
   border-radius: var(--radius-sm);
   transition: var(--transition);
 }
+
 .main-nav a:hover {
   color: var(--primary);
   background: rgba(139, 26, 26, 0.06);
@@ -1748,11 +1907,9 @@ body {
 }
 
 .form-info-side {
-  background: linear-gradient(
-    135deg,
-    var(--primary-dark) 0%,
-    var(--primary) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--primary-dark) 0%,
+      var(--primary) 100%);
   padding: 60px 45px;
   color: white;
   display: flex;
@@ -1779,6 +1936,7 @@ body {
   line-height: 1.1;
   margin-bottom: 20px;
 }
+
 .side-title span {
   color: var(--accent-light);
 }
@@ -1787,6 +1945,7 @@ body {
   list-style: none;
   margin-top: 40px;
 }
+
 .benefit-list li {
   margin-bottom: 18px;
   display: flex;
@@ -1794,6 +1953,7 @@ body {
   gap: 15px;
   font-size: 0.95rem;
 }
+
 .benefit-list i {
   color: var(--accent-light);
   font-size: 1.1rem;
@@ -1844,6 +2004,7 @@ body {
 .input-group {
   margin-bottom: 20px;
 }
+
 .input-group label {
   display: block;
   font-size: 0.85rem;
@@ -1897,8 +2058,8 @@ body {
   color: var(--text-mid);
 }
 
-.tag-item input:checked + span,
-.pill-item input:checked + span {
+.tag-item input:checked+span,
+.pill-item input:checked+span {
   background: var(--primary);
   color: white;
   border-color: var(--primary);
@@ -1936,22 +2097,26 @@ body {
   color: white;
   padding: 60px 0 30px;
 }
+
 .footer-content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 40px;
 }
+
 .footer-columns {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 30px;
 }
+
 .footer-column h3 {
   color: var(--accent);
   font-size: 0.8rem;
   margin-bottom: 20px;
 }
+
 .footer-column a {
   display: block;
   color: #ccc;
@@ -1959,6 +2124,7 @@ body {
   margin-bottom: 10px;
   font-size: 0.9rem;
 }
+
 .footer-bottom {
   display: flex;
   align-items: center;
@@ -1967,6 +2133,7 @@ body {
   padding-top: 20px;
   border-top: 1px solid #333;
 }
+
 .social-icons a {
   color: white;
   font-size: 1.2rem;
@@ -1977,11 +2144,13 @@ body {
   .form-wrapper {
     grid-template-columns: 1fr;
   }
+
   .form-info-side {
     padding: 40px;
     align-items: center;
     text-align: center;
   }
+
   .side-image-deco {
     display: none;
   }
@@ -1991,12 +2160,15 @@ body {
   .input-grid {
     grid-template-columns: 1fr;
   }
+
   .form-container-modern {
     padding: 30px 20px;
   }
+
   .header-container {
     padding: 0 20px;
   }
+
   .main-nav {
     display: none;
   }
@@ -2042,11 +2214,12 @@ body {
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(139, 26, 26, 0.2) !important;
 }
+
 .marquee-container {
   width: 100%;
   overflow: hidden;
-  background: #FFF5E1 !important; 
-  padding: 30px 0; 
+  background: #FFF5E1 !important;
+  padding: 30px 0;
   position: relative;
   border-top: 1px solid #dec8b0;
   border-bottom: 1px solid #dec8b0;
@@ -2071,13 +2244,487 @@ body {
 }
 
 .marquee-item img:hover {
-  transform: scale(1.03); 
+  transform: scale(1.03);
 }
+
 @keyframes scroll-infinito {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+  transition: transform var(--transition);
+}
+
+.menu-toggle:hover {
+  transform: scale(1.08);
+}
+
+/* Breakpoint para Celulares e Tablets (telas de até 768px) */
+@media (max-width: 768px) {
+
+  /* Configuração do cabeçalho para servir de grid */
+  .main-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fae8b8 !important;
+    /* Mantém o fundo sólido */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Organiza o cabeçalho em grid expansível */
+  .header-container {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 80px;
+    /* Linha inicial do topo (Logo e botão) */
+    align-items: center;
+    padding: 0 20px !important;
+    height: auto !important;
+    /* Permite expansão vertical natural */
+    max-height: 80px;
+    /* Altura padrão quando fechado */
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  /* Posiciona o Logo na primeira linha */
+  .logo-link {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .logo-img {
+    height: 56px !important;
+  }
+
+  /* Posiciona o botão hambúrguer no lado oposto na primeira linha */
+  .menu-toggle {
+    display: block !important;
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  /* Mantém itens ocultados por padrão */
+  .main-nav,
+  .btn-donate,
+  .user-actions {
+    display: none !important;
+  }
+
+  /* ESTADO DE MENU ABERTO (Quando o cabeçalho ganha a classe .menu-open) */
+  .main-header.menu-open .header-container {
+    max-height: 600px;
+    /* Limite de altura máxima expandida */
+  }
+
+  /* Exibe e posiciona a lista de páginas */
+  .main-header.menu-open .main-nav {
+    display: flex !important;
+    grid-column: 1 / span 3;
+    grid-row: 2;
+    width: 100%;
+    margin-top: 10px;
+    background: transparent !important;
+  }
+
+  .main-header.menu-open .main-nav ul {
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100%;
+    align-items: center !important;
+  }
+
+  .main-header.menu-open .main-nav a {
+    width: 90% !important;
+    text-align: center;
+    padding: 10px 20px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Exibe e posiciona o botão de doação */
+  .main-header.menu-open .btn-donate {
+    display: inline-flex !important;
+    grid-column: 1 / span 3;
+    grid-row: 3;
+    width: 90%;
+    margin: 10px auto 0 !important;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 11px !important;
+  }
+
+  /* Exibe e posiciona os botões de entrar/cadastrar */
+  .main-header.menu-open .user-actions {
+    display: flex !important;
+    grid-column: 1 / span 3;
+    grid-row: 4;
+    width: 90%;
+    margin: 16px auto 20px !important;
+    /* Margem inferior de segurança */
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .main-header.menu-open .user-actions a {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 10px 14px;
+  }
+
+  /* Ajustes extras de usabilidade para celular */
+  .marquee-item img {
+    height: 160px !important;
+  }
+
+  .intro-modern {
+    padding: 40px 16px !important;
+  }
+
+  .intro-modern h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .content-container {
+    padding: 30px 20px !important;
+    margin: 30px 15px !important;
+  }
+}
+
+/* ==========================================================================
+   FAIXA DE TOPO PADRONIZADA (MODELO DA PÁGINA INICIAL)
+   ========================================================================== */
+.faixa-topo {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  border-radius: 0;
+  margin: 0 auto;
+  max-width: 100%;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Círculo decorativo superior direito */
+.faixa-topo::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Círculo decorativo inferior esquerdo */
+.faixa-topo::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  left: -40px;
+  width: 280px;
+  height: 280px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.faixa-topo h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--white);
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.faixa-topo h1 i {
+  color: var(--accent-light);
+}
+
+.faixa-topo p {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 1.05rem !important;
+  max-width: 640px;
+  margin: 16px auto 0 !important;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .faixa-topo {
+    padding: 60px 16px;
+  }
+}
+
+/* ==========================================================================
+   ESTILOS DO FORMULÁRIO DE VOLUNTÁRIO MODERNIZADO
+   ========================================================================== */
+.form-container {
+  background: var(--white) !important;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.volunteer-form-modern {
+  padding: 50px 60px;
+  background: #fffcf7; /* Fundo creme suave muito agradável */
+}
+
+.form-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.35rem;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 8px;
+}
+
+.section-title i {
+  color: var(--accent);
+}
+
+.field-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+
+/* Estrutura de grid para os campos de texto */
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.input-group.full-width {
+  grid-column: span 2;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-mid);
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  color: var(--text-dark);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  transition: all var(--transition);
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(139, 26, 26, 0.08);
+}
+
+/* Grupo de botões estilo Tags e Pills */
+.tag-selection-group,
+.radio-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Oculta o checkbox e o radio nativo do navegador */
+.tag-item input,
+.pill-item input {
+  display: none !important;
+}
+
+/* Elemento visual do botão simulado */
+.tag-item span,
+.pill-item span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #faecd8; /* Fundo bege compatível */
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.tag-item span i {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Efeito ao Clicar / Selecionar (Active) */
+.tag-item input:checked + span,
+.pill-item input:checked + span {
+  background: var(--primary) !important;
+  color: white !important;
+  border-color: var(--primary) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 26, 26, 0.25);
+}
+
+.tag-item input:checked + span i {
+  color: var(--accent-light);
+}
+
+/* Botão de Envio com Efeito Moderno */
+.submit-btn-modern {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  transition: all var(--transition);
+  box-shadow: 0 6px 20px rgba(139, 26, 26, 0.25);
+}
+
+.submit-btn-modern:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 30px rgba(139, 26, 26, 0.35);
+}
+
+.submit-btn-modern i {
+  font-size: 0.95rem;
+  transition: transform var(--transition);
+}
+
+.submit-btn-modern:hover i {
+  transform: translateX(4px);
+}
+
+/* Adaptação Responsiva para Celulares */
+@media (max-width: 768px) {
+  .volunteer-form-modern {
+    padding: 30px 20px;
+  }
+  .input-grid {
+    grid-template-columns: 1fr; /* Transforma em coluna única no celular */
+  }
+  .input-group.full-width {
+    grid-column: span 1;
+  }
+}
+
+/* ==========================================================================
+   CARD DE CONFIRMAÇÃO DE ENVIO COM SUCESSO
+   ========================================================================== */
+.success-container {
+  text-align: center;
+  padding: 60px 40px;
+  background: #f4faf6; /* Fundo verde ecológico extremamente sutil */
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.success-icon {
+  font-size: 4.5rem;
+  color: #27ae60; /* Verde folha de sucesso */
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.success-container h2 {
+  font-family: "Playfair Display", serif;
+  color: var(--text-dark);
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.success-container p {
+  color: var(--text-mid);
+  font-size: 1rem;
+  max-width: 480px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.success-back-btn {
+  margin-top: 10px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all var(--transition);
+  box-shadow: 0 4px 12px rgba(139, 26, 26, 0.2);
+}
+
+.success-back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(139, 26, 26, 0.35);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }

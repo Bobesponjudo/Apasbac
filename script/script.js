@@ -364,6 +364,108 @@ async function enviarFormularioMonitoramento(dados) {
         body: JSON.stringify(dados)
     });
 }
-// Executa assim que a página carrega
+
+// ============ ADAPTAÇÃO PARA MENU HAMBÚRGUER (CELULAR) ============
+
+// ============ ADAPTAÇÃO PARA MENU HAMBÚRGUER (DROPDOWN) ============
+
+function iniciarMenuHamburguer() {
+    const mainHeader = document.querySelector('.main-header');
+    const headerContainer = document.querySelector('.header-container');
+    if (!mainHeader || !headerContainer) return;
+
+    // Cria o botão hambúrguer dinamicamente se ele não existir
+    if (!document.querySelector('.menu-toggle')) {
+        const menuToggle = document.createElement('button');
+        menuToggle.classList.add('menu-toggle');
+        menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
+
+        headerContainer.appendChild(menuToggle);
+
+        menuToggle.addEventListener('click', () => {
+            const isOpen = mainHeader.classList.toggle('menu-open');
+            
+            // Alterna o ícone do botão
+            if (isOpen) {
+                menuToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            } else {
+                menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+        });
+    }
+}
+
+// Inicializador de carregamento
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth(); 
+    carregarAnimaisDaAPI(); 
+    iniciarMenuHamburguer(); 
+});
+
+// ============ ENVIO DO FORMULÁRIO DE VOLUNTÁRIOS VIA AJAX ============
+
+function configurarEnvioFormulario() {
+    const form = document.querySelector('.volunteer-form-modern');
+    const container = document.querySelector('.form-container');
+    if (!form || !container) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Impede o navegador de recarregar ou redirecionar a página
+
+        const submitBtn = form.querySelector('.submit-btn-modern');
+        const originalBtnHtml = submitBtn.innerHTML;
+
+        // Desativa o botão de envio para evitar cliques duplos e adiciona um spinner de carregamento
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Enviando...</span> <i class="fas fa-spinner fa-spin"></i>';
+
+        const formData = new FormData(form);
+        const actionUrl = form.getAttribute('action');
+
+        try {
+            const response = await fetch(actionUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Substitui o formulário por um card de sucesso com animação suave
+                container.innerHTML = `
+                    <div class="success-container">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2>Enviado com Sucesso!</h2>
+                        <p>Agradecemos imensamente pelo seu interesse em ajudar a <strong>Apasbac</strong>. Recebemos sua inscrição de voluntário e entraremos em contato em breve através do e-mail ou telefone informados.</p>
+                        <a href="index.html" class="success-back-btn">Voltar para o Início</a>
+                    </div>
+                `;
+                // Rola a página suavemente até o topo da caixa de sucesso
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                throw new Error('Falha no envio');
+            }
+        } catch (error) {
+            alert('Ocorreu um erro ao enviar seu formulário. Por favor, verifique sua conexão e tente novamente.');
+            
+            // Restaura o estado do botão original em caso de falha
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+        }
+    });
+}
+
+// Inicializador de carregamento consolidado
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth(); 
+    carregarAnimaisDaAPI(); 
+    iniciarMenuHamburguer(); 
+    configurarEnvioFormulario(); // Ativa a interceptação de envio seguro do formulário
+});
+
 document.addEventListener('DOMContentLoaded', checkAuth);
 

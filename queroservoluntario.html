@@ -39,83 +39,122 @@
         </div>
     </header>
     
-    <main class="page-container">
+    <main>
+        <div class="faixa-topo">
+            <h1>Torne-se um Voluntário</h1>
+            <p>Preencha o formulário abaixo para se candidatar como voluntário e nos ajudar a cuidar dos animais.</p>
+        </div>
         <div class="form-container">
-            <div class="form-header">
-                <h1 class="main-title">Torne-se um Voluntário</h1>
-                <p>Preencha o formulário abaixo para se candidatar como voluntário e nos ajudar a cuidar dos animais.</p>
+    <form action="https://formsubmit.co/apasbac.assis@gmail.com" method="POST" class="volunteer-form-modern">
+        
+        <!-- Seção 1: Informações Pessoais -->
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-user-friends"></i> 1. Informações Pessoais</h2>
+            <p class="field-desc">Preencha com seus dados básicos para podermos entrar em contato.</p>
+            
+            <div class="input-grid">
+                <div class="input-group full-width">
+                    <label for="full-name">Nome Completo *</label>
+                    <input type="text" id="full-name" name="full_name" required placeholder="Digite seu nome completo">
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com">
+                </div>
+                
+                <div class="input-group">
+                    <label for="phone">Telefone (com DDD) *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(XX) XXXXX-XXXX" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="birth-date">Data de Nascimento</label>
+                    <input type="date" id="birth-date" name="birth_date">
+                </div>
+
+                <div class="input-group">
+                    <label for="experience">Experiência com voluntariado?</label>
+                    <select id="experience" name="experience">
+                        <option value="">Selecione...</option>
+                        <option value="yes">Sim, já fui voluntário</option>
+                        <option value="no">Não, é minha primeira vez</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 2: Interesses e Disponibilidade -->
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-heart"></i> 2. Interesses & Disponibilidade</h2>
+            <p class="field-desc">Selecione as áreas que você gostaria de atuar e quanto tempo tem disponível.</p>
+
+            <div class="input-group">
+                <label>Em quais áreas você quer ajudar? (Selecione quantas quiser) *</label>
+                <div class="tag-selection-group">
+                    <label class="tag-item">
+                        <input type="checkbox" name="interests[]" value="events">
+                        <span><i class="fas fa-calendar-alt"></i> Organização de Eventos</span>
+                    </label>
+                    <label class="tag-item">
+                        <input type="checkbox" name="interests[]" value="animals">
+                        <span><i class="fas fa-paw"></i> Cuidado com Animais</span>
+                    </label>
+                    <label class="tag-item">
+                        <input type="checkbox" name="interests[]" value="marketing">
+                        <span><i class="fas fa-bullhorn"></i> Divulgação e Redes</span>
+                    </label>
+                    <label class="tag-item">
+                        <input type="checkbox" name="interests[]" value="admin">
+                        <span><i class="fas fa-folder-open"></i> Tarefas Administrativas</span>
+                    </label>
+                    <label class="tag-item">
+                        <input type="checkbox" name="interests[]" value="vet">
+                        <span><i class="fas fa-stethoscope"></i> Auxílio Veterinário</span>
+                    </label>
+                </div>
             </div>
 
-            <form action="#" method="POST" class="volunteer-form">
-                <!-- Seção de Informações Pessoais -->
-                <fieldset>
-                    <legend>Informações Pessoais</legend>
-                    <div class="input-group">
-                        <label for="full-name">Nome Completo *</label>
-                        <input type="text" id="full-name" name="full_name" required placeholder="Digite seu nome completo">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="email">E-mail *</label>
-                        <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="phone">Telefone (com DDD) *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="(XX) XXXXX-XXXX" required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="birth-date">Data de Nascimento</label>
-                        <input type="date" id="birth-date" name="birth_date">
-                    </div>
-                </fieldset>
-
-                <!-- Seção de Interesses e Habilidades -->
-                <fieldset>
-                    <legend>Interesses e Disponibilidade</legend>
-                    <div class="input-group">
-                        <label>Quais áreas mais lhe interessam? *</label>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" name="interests[]" value="events"> Organização de Eventos</label>
-                            <label><input type="checkbox" name="interests[]" value="animals"> Cuidado com Animais</label>
-                            <label><input type="checkbox" name="interests[]" value="marketing"> Divulgação e Marketing</label>
-                            <label><input type="checkbox" name="interests[]" value="admin"> Tarefas Administrativas</label>
-                            <label><input type="checkbox" name="interests[]" value="vet"> Auxílio Veterinário</label>
-                            <label><input type="checkbox" name="interests[]" value="other"> Outros (especifique na motivação)</label>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label>Qual a sua disponibilidade semanal? *</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="availability" value="2-4h" required> 2-4 horas</label>
-                            <label><input type="radio" name="availability" value="5-7h"> 5-7 horas</label>
-                            <label><input type="radio" name="availability" value="8h+"> 8 horas ou mais</label>
-                            <label><input type="radio" name="availability" value="weekends"> Apenas Finais de Semana</label>
-                            <label><input type="radio" name="availability" value="flexible"> Disponibilidade Flexível</label>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="experience">Possui experiência prévia com trabalho voluntário?</label>
-                        <select id="experience" name="experience">
-                            <option value="">Selecione...</option>
-                            <option value="yes">Sim</option>
-                            <option value="no">Não</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="motivation">Por que você gostaria de ser voluntário? *</label>
-                        <textarea id="motivation" name="motivation" rows="5" required placeholder="Conte-nos um pouco sobre sua motivação, habilidades e como gostaria de contribuir..."></textarea>
-                    </div>
-                </fieldset>
-
-                <!-- Botão de Envio -->
-                <button type="submit" class="submit-btn">Enviar Inscrição</button>
-            </form>
+            <div class="input-group" style="margin-top: 30px;">
+                <label>Qual a sua disponibilidade semanal estimada? *</label>
+                <div class="radio-pill-group">
+                    <label class="pill-item">
+                        <input type="radio" name="availability" value="2-4h" required>
+                        <span>2 a 4 horas</span>
+                    </label>
+                    <label class="pill-item">
+                        <input type="radio" name="availability" value="5-7h">
+                        <span>5 a 7 horas</span>
+                    </label>
+                    <label class="pill-item">
+                        <input type="radio" name="availability" value="8h+">
+                        <span>8 horas ou mais</span>
+                    </label>
+                    <label class="pill-item">
+                        <input type="radio" name="availability" value="weekends">
+                        <span>Apenas Finais de Semana</span>
+                    </label>
+                </div>
+            </div>
         </div>
+
+        <!-- Seção 3: Motivação -->
+        <div class="form-section">
+            <h2 class="section-title"><i class="fas fa-edit"></i> 3. Sua Motivação</h2>
+            
+            <div class="input-group">
+                <label for="motivation">Conte-nos por que gostaria de ser voluntário *</label>
+                <textarea id="motivation" name="motivation" rows="5" required placeholder="Fale sobre sua motivação, habilidades ou carinho pelos animais que queira compartilhar conosco..."></textarea>
+            </div>
+        </div>
+
+        <!-- Botão de Envio com Ícone -->
+        <button type="submit" class="submit-btn-modern">
+            <span>Enviar Minha Inscrição</span>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </form>
+</div>
     </main>
 
     <footer class="site-footer">
