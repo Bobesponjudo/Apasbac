@@ -58,7 +58,7 @@ body {
 
 .main-header {
   width: 100%;
-  background: #fae8b8 !important;
+  background: #fff3d4 !important;
   border-bottom: 2px solid #dec8b0;
   position: sticky;
   top: 0;
@@ -239,7 +239,7 @@ main .h1 h1 i {
   justify-content: center;
   gap: 20px;
   padding: 40px 20px;
-  background: #ffe7a9;
+  background: #fff3d4 ;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -435,7 +435,7 @@ main .amigos h1::after {
   display: flex;
   justify-content: center;
   padding: 50px 0 30px;
-  background: rgb(255, 236, 184);
+  background: #fff3d4;
   border-radius: var(--radius-lg);
   margin: 40px auto;
   max-width: 600px;
@@ -2281,7 +2281,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: #fae8b8 !important;
+    background: #fff3d4  !important;
     /* Mantém o fundo sólido */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }

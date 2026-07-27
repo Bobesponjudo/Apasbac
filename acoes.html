@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ações e Eventos - Apasbac</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-link">
+                <img src="imagens/Logo.webp" alt="Logo da Apasbac" class="logo-img">
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="quemsomos.html">Quem somos?</a></li>
+                    <li><a href="queroadotar.html">Quero adotar</a></li>
+                    <li><a href="queroservoluntario.html">Quero ser voluntário</a></li>
+                    <li><a href="acoes.html">Nossas Ações</a></li>
+                </ul>
+            </nav>
+
+            <a href="doeeajude.html" class="btn-donate">DOE E AJUDE</a>
+
+            <div class="user-actions">
+                <a href="entrar.html">Entrar</a>
+                <a href="cadastrarse.html">Cadastre-se</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Faixa de Topo Padronizada -->
+        <div class="faixa-topo">
+            <h1>Ações e Eventos <i class="fa-solid fa-bullhorn"></i></h1>
+            <p>Acompanhe de perto as nossas campanhas, mutirões, feiras de adoção e conquistas na comunidade.</p>
+        </div>
+
+        <div class="page-container">
+            
+            <!-- Filtros de Busca adaptados para Ações -->
+            <form class="search-filters">
+                <div class="filter-grid">
+                    <div class="select-wrapper">
+                        <select name="action-category">
+                            <option value="">Todas as categorias</option>
+                            <option value="adoption">Feira de Adoção</option>
+                            <option value="donation">Campanha de Doação</option>
+                            <option value="awareness">Conscientização</option>
+                            <option value="volunteering">Mutirão de Voluntários</option>
+                        </select>
+                    </div>
+                    <div class="select-wrapper">
+                        <select name="action-status">
+                            <option value="">Todos os status</option>
+                            <option value="upcoming">Próximos Eventos</option>
+                            <option value="ongoing">Em andamento</option>
+                            <option value="completed">Concluídos</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="search-button">Filtrar</button>
+                </div>
+            </form>
+
+            <!-- Grid de Cards de Ações (utilizando o modelo visual dos pets para consistência) -->
+            <div class="container-pets">
+                
+                <!-- Card de Ação 1 (Exemplo: Feira de Adoção) -->
+                <div class="card-pet">
+                    <!-- Substitua pela imagem real do evento na pasta imagens -->
+                    <img src="imagens/Logo.webp" alt="Feira de Adoção">
+                    <div class="info-pet">
+                        <h2>Grande Feira de Adoção</h2>
+                        <p><strong>Categoria:</strong> Evento Presencial</p>
+                        <p><strong>Data:</strong> 15 de Dezembro</p>
+                        <p><strong>Local:</strong> Praça Central de Assis</p>
+                        <a href="#"><button><strong>Saber mais</strong></button></a>
+                    </div>
+                </div>
+
+                <!-- Card de Ação 2 (Exemplo: Campanha de Ração) -->
+                <div class="card-pet">
+                    <img src="imagens/Logo.webp" alt="Campanha do Agasalho Pet">
+                    <div class="info-pet">
+                        <h2>Campanha do Agasalho e Ração</h2>
+                        <p><strong>Categoria:</strong> Arrecadação</p>
+                        <p><strong>Período:</strong> Durante todo o mês</p>
+                        <p><strong>Pontos:</strong> Petshops Parceiros</p>
+                        <a href="#"><button><strong>Como ajudar</strong></button></a>
+                    </div>
+                </div>
+
+                <!-- Card de Ação 3 (Exemplo: Mutirão de Banho) -->
+                <div class="card-pet">
+                    <img src="imagens/Logo.webp" alt="Mutirão de Cuidados">
+                    <div class="info-pet">
+                        <h2>Mutirão de Banho e Carinho</h2>
+                        <p><strong>Categoria:</strong> Voluntariado</p>
+                        <p><strong>Data:</strong> Sábado letivo</p>
+                        <p><strong>Local:</strong> Abrigo Provisório</p>
+                        <a href="#"><button><strong>Participar</strong></button></a>
+                    </div>
+                </div>
+
+                <!-- Card de Ação 4 (Exemplo: Palestra de Posse Responsável) -->
+                <div class="card-pet">
+                    <img src="imagens/Logo.webp" alt="Palestra Educacional">
+                    <div class="info-pet">
+                        <h2>Palestra: Posse Responsável</h2>
+                        <p><strong>Categoria:</strong> Conscientização</p>
+                        <p><strong>Data:</strong> Em breve</p>
+                        <p><strong>Canal:</strong> Online e Presencial</p>
+                        <a href="#"><button><strong>Inscrições</strong></button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content-wrapper">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3>ADOTE</h3>
+                    <a href="queroadotar.html">Quero adotar</a>
+                    <a href="queroadotar.html">Ver mais animais</a>
+                </div>
+                <div class="footer-column">
+                    <h3>COLABORE</h3>
+                    <a href="doeeajude.html">Doe e ajude</a>
+                    <a href="queroservoluntario.html">Seja voluntário</a>
+                    <li><a href="acoes.html">Nossas Ações</a></li>
+                </div>
+                <div class="footer-column">
+                    <h3>SOBRE A APASBAC</h3>
+                    <a href="quemsomos.html">Quem somos?</a>
+                </div>
+                <div class="footer-column">
+                    <h3>PERFIL</h3>
+                    <a href="entrar.html">Entrar</a>
+                    <a href="cadastrarse.html">Cadastre-se</a>
+                </div>
+                <div class="footer-column">
+                    <h3>POR QUE ADOTAR?</h3>
+                    <a href="#">Mude uma vida-adote</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                </div>
+                <div class="footer-logo">
+                    <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
+                </div>
+                    <p class="copyright-text">Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script/script.js"></script>
+</body>
+
+</html>
