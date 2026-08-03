@@ -388,11 +388,11 @@ main .amigos h1::after {
   padding: 18px 20px 20px;
 }
 
-.info-pet h2 {
-  font-family: "Playfair Display", serif;
+.info-pet h3 {
   font-size: 1.15rem;
   color: var(--text-dark);
   margin-bottom: 6px;
+  text-align: center;
 }
 
 .info-pet p {
@@ -410,7 +410,8 @@ main .amigos h1::after {
 }
 
 .info-pet button {
-  margin-top: 14px;
+  display: block;
+  margin: 14px auto 0;
   background: linear-gradient(135deg, var(--primary-light), var(--primary));
   border: none;
   padding: 9px 20px;
@@ -621,6 +622,7 @@ main .amigos h1::after {
   box-shadow: var(--shadow-sm);
   padding: 60px;
   border: 1px solid var(--border);
+  text-align: justify;
 }
 
 .page-title {
@@ -987,7 +989,6 @@ main .amigos h1::after {
   height: 88px;
   object-fit: contain;
   margin-bottom: 16px;
-  filter: brightness(0) invert(1);
   opacity: 0.92;
 }
 
@@ -1261,29 +1262,17 @@ main .amigos h1::after {
   padding: 0 40px;
   align-items: start;
 }
-
-.donation-selection {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  padding: 36px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
+.donation-main img{
+  margin-left: 230px;
 }
-
-.donation-selection h2 {
-  font-family: "Playfair Display", serif;
-  font-size: 1.4rem;
-  color: var(--primary);
-  margin-bottom: 24px;
+.donation-main h2{
+  text-align: center;
+  margin-left: 220px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-
-.donation-type-switcher {
-  display: flex;
-  gap: 0;
-  margin-bottom: 28px;
-  background: var(--cream-dark);
-  border-radius: var(--radius-pill);
-  padding: 4px;
+.donation-main p{
+  text-align: center;
+  margin-left: 230px;
 }
 
 .switch-btn {
@@ -2408,10 +2397,8 @@ body {
   }
 }
 
-/* ==========================================================================
-   FAIXA DE TOPO PADRONIZADA (MODELO DA PÁGINA INICIAL)
-   ========================================================================== */
 .faixa-topo {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   text-align: center;
   padding: 80px 20px;
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
@@ -2451,7 +2438,6 @@ body {
 }
 
 .faixa-topo h1 {
-  font-family: "Playfair Display", serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
   color: var(--white);
   font-weight: 900;
