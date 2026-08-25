@@ -1254,26 +1254,44 @@ main .amigos h1::after {
 }
 
 .donation-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  max-width: 1000px;
-  margin: 56px auto;
-  padding: 0 40px;
-  align-items: start;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  max-width: 800px !important;
+  margin: 40px auto !important;
+  padding: 0 20px !important;
+  gap: 16px !important;
 }
-.donation-main img{
-  margin-left: 230px;
+
+
+.donation-main img {
+  margin-left: 0 !important;
+  max-width: 260px !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
 }
-.donation-main h2{
-  text-align: center;
-  margin-left: 220px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+.donation-main h2 {
+  margin-left: 0 !important;
+  text-align: center !important;
+  font-size: clamp(1.3rem, 4vw, 2rem) !important;
+  line-height: 1.3 !important;
 }
-.donation-main p{
-  text-align: center;
-  margin-left: 230px;
+
+.donation-main p {
+  margin-left: 0 !important;
+  text-align: center !important;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem) !important;
+  max-width: 600px !important;
+  margin: 0 auto !important;
 }
+
 
 .switch-btn {
   flex: 1;
@@ -1762,6 +1780,16 @@ main .amigos h1::after {
   .pet-image-side {
     min-height: 300px;
   }
+  .donation-main {
+    margin: 24px auto !important;
+    padding: 0 16px !important;
+    gap: 12px !important;
+  }
+
+  .donation-main img {
+    max-width: 200px !important;
+  }
+}
 }
 
 
