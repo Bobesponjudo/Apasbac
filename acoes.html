@@ -73,7 +73,7 @@
                 </div>
             </form>
 
-            <div class="container-pets">
+            <div class="container-pets" id="lista-eventos">
                 
                 <!-- Card de Ação 1 (Exemplo: Feira de Adoção) -->
                 <div class="card-pet">
@@ -169,7 +169,43 @@
             </div>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/supabase-client.js"></script>
     <script src="script/script.js"></script>
+    <script>
+        async function carregarEventos() {
+            const container = document.getElementById('lista-eventos');
+            if (!container) return;
+
+            const { data: eventos, error } = await db
+                .from('events')
+                .select('*')
+                .order('event_date', { ascending: true });
+
+            if (error || !eventos || eventos.length === 0) {
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Nenhum evento agendado no momento.</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            eventos.forEach(evt => {
+                const dataFormatada = new Date(evt.event_date + 'T00:00:00').toLocaleDateString('pt-BR');
+                container.innerHTML += `
+                    <div class="card-pet">
+                        <img src="${evt.image_url || 'imagens/Logo.webp'}" alt="${evt.title}">
+                        <div class="info-pet">
+                            <h3>${evt.title}</h3>
+                            <p><strong>Categoria:</strong> ${evt.category}</p>
+                            <p><strong>Data:</strong> ${dataFormatada}</p>
+                            <p><strong>Local:</strong> ${evt.location}</p>
+                            <p style="margin-top: 6px; font-size: 0.85rem;">${evt.description || ''}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        document.addEventListener('DOMContentLoaded', carregarEventos);
+    </script>
 </body>
 
 </html>

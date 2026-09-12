@@ -1790,9 +1790,6 @@ main .amigos h1::after {
     max-width: 200px !important;
   }
 }
-}
-
-
 
 *,
 *::before,
@@ -2741,4 +2738,9 @@ body {
 @keyframes popIn {
   0% { transform: scale(0); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
+}
+@media (max-width: 800px) {
+  .admin-grid {
+    grid-template-columns: 1fr !important;
+  }
 }

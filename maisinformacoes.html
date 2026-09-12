@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Pet - Apasbac</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
 
-   <header class="main-header">
+    <header class="main-header">
         <div class="header-container">
             <a href="index.html" class="logo-link">
                 <img src="imagens/Logo.webp" alt="Logo da Apasbac" class="logo-img">
@@ -41,7 +46,8 @@
                     <img id="pet-img" src="" alt="Foto do Pet">
                 </div>
                 <div class="pet-info-side">
-                    <a href="queroadotar.html" class="back-link"><i class="fas fa-arrow-left"></i> Voltar para a lista</a>
+                    <a href="queroadotar.html" class="back-link"><i class="fas fa-arrow-left"></i> Voltar para a
+                        lista</a>
                     <h1 id="pet-name">Nome do Pet</h1>
                     <div class="pet-tags">
                         <span id="pet-gender">Sexo</span>
@@ -52,6 +58,14 @@
                         <h3>Sobre mim</h3>
                         <p id="pet-desc">Carregando informações...</p>
                     </div>
+                    <div class="pet-vaccines-box"
+                        style="margin: 20px 0; padding: 15px; background: #fff3d4; border-radius: 8px; border-left: 4px solid var(--primary);">
+                        <h4 style="color: var(--primary); margin-bottom: 5px; font-size: 0.95rem;">
+                            <i class="fa-solid fa-syringe"></i> Carteira de Vacinação
+                        </h4>
+                        <p id="pet-vaccines" style="margin: 0; font-size: 0.9rem; color: var(--text-dark);">Carregando
+                            vacinas...</p>
+                    </div>
                     <div class="pet-actions">
                         <a href="queroservoluntario.html" class="action-btn primary">Tenho interesse em adotar</a>
                     </div>
@@ -60,7 +74,7 @@
         </div>
     </main>
 
-     <footer class="site-footer">
+    <footer class="site-footer">
         <div class="footer-content-wrapper">
             <div class="footer-columns">
                 <div class="footer-column">
@@ -91,21 +105,65 @@
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook"
+                        target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
-                    <p class="copyright-text">Todos os direitos reservados.</p>
+                <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script/script.js"></script>
+    <script src="script/supabase-client.js"></script>
     <script>
-        // Executa a função de carregar dados assim que a página abrir
-        window.onload = carregarDadosDoPet;
+        async function carregarDetalhesAnimal() {
+            const params = new URLSearchParams(window.location.search);
+            const petId = params.get('id');
+
+            if (!petId) {
+                window.location.href = 'queroadotar.html';
+                return;
+            }
+
+            // Busca os dados diretamente do Supabase
+            const { data: pet, error } = await db
+                .from('animals')
+                .select('*')
+                .eq('id', petId)
+                .single();
+
+            if (error || !pet) {
+                console.error("Erro ao carregar o pet:", error);
+                document.getElementById('pet-name').innerText = "Animal não encontrado";
+                return;
+            }
+
+            // Trata a foto (caso venha array de fotos ou texto único)
+            let foto = 'imagens/Logo.webp';
+            if (pet.photos && pet.photos.length > 0) {
+                foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
+            } else if (pet.imageUrl) {
+                foto = pet.imageUrl;
+            }
+
+            // Preenche os campos da página
+            document.getElementById('pet-name').innerText = pet.name || 'Sem nome';
+            document.getElementById('pet-img').src = foto;
+            document.getElementById('pet-gender').innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
+            document.getElementById('pet-age').innerText = pet.age || 'Idade não informada';
+            document.getElementById('pet-size').innerText = pet.size || 'Porte médio';
+            document.getElementById('pet-desc').innerText = pet.description || 'Nenhuma descrição detalhada informada.';
+
+            document.title = `${pet.name} - Apasbac`;
+        }
+        // Dentro da função carregarDetalhesAnimal():
+        document.getElementById('pet-vaccines').innerText = pet.vaccines || "Nenhuma informação de vacina cadastrada.";
+        window.onload = carregarDetalhesAnimal;
     </script>
 </body>
+
 </html>
