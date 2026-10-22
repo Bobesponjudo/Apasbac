@@ -469,3 +469,215 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', checkAuth);
 
+// ==========================================================================
+// NOVO: GERENCIADOR DE PERFIL DO USUÁRIO LOGADO (APASBAC)
+// ==========================================================================
+const EMAIL_ADMIN_OFICIAL = "apasbac.assis@gmail.com";
+
+function iniciarGerenciadorPerfil() {
+    const emailLogado = localStorage.getItem("usuario_logado_email");
+    const userActions = document.querySelector('.user-actions');
+
+    if (!userActions || !emailLogado) return;
+
+    // 1. Pega o primeiro nome para exibir no botão
+    const nomeCompleto = localStorage.getItem("usuario_logado_nome") || emailLogado.split('@')[0];
+    const primeiroNome = nomeCompleto.split(' ')[0];
+
+    // 2. Substitui "Entrar" e "Cadastre-se" pelo ícone de usuário
+    userActions.innerHTML = `
+        <button type="button" id="btnAbrirPerfil" class="btn-user-profile" title="Minha Conta">
+            <i class="fa-solid fa-circle-user"></i>
+            <span>Olá, ${primeiroNome}</span>
+        </button>
+    `;
+
+    // 3. Injeta a janelinha (Modal) de Perfil
+    criarModalPerfil();
+
+    // 4. Adiciona o clique para abrir o modal
+    const btnPerfil = document.getElementById('btnAbrirPerfil');
+    if (btnPerfil) {
+        btnPerfil.addEventListener('click', abrirModalPerfil);
+    }
+}
+
+function criarModalPerfil() {
+    if (document.getElementById('modalMeuPerfil')) return;
+
+    const modalHtml = `
+        <div id="modalMeuPerfil" class="modal-overlay" style="display: none;">
+            <div class="modal-box" style="max-width: 480px; background: #fffcf7; border: 1.5px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-lg); position: relative;">
+                <button type="button" class="modal-close" id="btnFecharPerfil" style="position: absolute; top: 16px; right: 20px; font-size: 1.8rem; border: none; background: none; cursor: pointer; color: var(--text-light);">&times;</button>
+                
+                <div style="text-align: center; margin-bottom: 22px;">
+                    <div style="width: 72px; height: 72px; border-radius: 50%; background: #fff1cf; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.4rem; margin: 0 auto 12px; border: 2px solid var(--border);">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.55rem; margin-bottom: 4px;">Minha Conta</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin: 0;">Gerencie suas informações cadastrais</p>
+                </div>
+
+                <form id="formMeuPerfil">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: var(--text-mid); display: block; margin-bottom: 6px;">
+                            <i class="fa-solid fa-pen" style="color: var(--accent); font-size: 0.8rem;"></i> Nome Completo (Editável)
+                        </label>
+                        <input type="text" id="perfil_nome" required style="width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-family: inherit; font-size: 0.9rem;">
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: var(--text-mid); display: block; margin-bottom: 6px;">
+                            <i class="fa-solid fa-phone" style="color: var(--accent); font-size: 0.8rem;"></i> Telefone / WhatsApp (Editável)
+                        </label>
+                        <input type="tel" id="perfil_telefone" required style="width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-family: inherit; font-size: 0.9rem;">
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: var(--text-light); display: block; margin-bottom: 6px;">
+                            <i class="fa-solid fa-lock" style="font-size: 0.8rem;"></i> E-mail (Fixo)
+                        </label>
+                        <input type="email" id="perfil_email" disabled readonly style="width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: #eee4d5; color: #666; font-family: inherit; font-size: 0.9rem; cursor: not-allowed;">
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 20px;">
+                        <label style="font-weight: 600; font-size: 0.85rem; color: var(--text-light); display: block; margin-bottom: 6px;">
+                            <i class="fa-solid fa-lock" style="font-size: 0.8rem;"></i> CPF (Não pode ser alterado)
+                        </label>
+                        <input type="text" id="perfil_cpf" disabled readonly style="width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; background: #eee4d5; color: #666; font-family: inherit; font-size: 0.9rem; cursor: not-allowed;">
+                        <small style="color: var(--text-light); font-size: 0.75rem; display: block; margin-top: 4px;">O CPF e o e-mail são dados de segurança da conta e não podem ser alterados.</small>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button type="submit" id="btnSalvarPerfil" class="submit-btn-modern" style="padding: 13px; font-size: 0.95rem; border-radius: 999px;">
+                            <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                        </button>
+
+                        <div id="adminLinkContainer" style="display: none;">
+                            <a href="admin.html" class="action-btn secondary" style="display: block; text-align: center; padding: 11px; font-size: 0.9rem; border-color: var(--accent); color: var(--primary); text-decoration: none; border-radius: 999px;">
+                                <i class="fa-solid fa-shield-halved"></i> Acessar Painel do Administrador
+                            </a>
+                        </div>
+
+                        <button type="button" id="btnSairConta" style="background: #a92222; color: white; border: none; padding: 12px; border-radius: 999px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Sair da Conta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    document.getElementById('btnFecharPerfil').addEventListener('click', fecharModalPerfil);
+    document.getElementById('modalMeuPerfil').addEventListener('click', (e) => {
+        if (e.target.id === 'modalMeuPerfil') fecharModalPerfil();
+    });
+    document.getElementById('btnSairConta').addEventListener('click', deslogarUsuario);
+    document.getElementById('formMeuPerfil').addEventListener('submit', salvarAlteracoesPerfil);
+}
+
+async function abrirModalPerfil() {
+    const modal = document.getElementById('modalMeuPerfil');
+    if (!modal) return;
+
+    document.getElementById('perfil_nome').value = localStorage.getItem("usuario_logado_nome") || "";
+    document.getElementById('perfil_telefone').value = localStorage.getItem("usuario_logado_telefone") || "";
+    document.getElementById('perfil_email').value = localStorage.getItem("usuario_logado_email") || "";
+    document.getElementById('perfil_cpf').value = localStorage.getItem("usuario_logado_cpf") || "Não informado";
+
+    const email = localStorage.getItem("usuario_logado_email") || "";
+    const adminContainer = document.getElementById('adminLinkContainer');
+    if (adminContainer) {
+        adminContainer.style.display = (email.toLowerCase() === EMAIL_ADMIN_OFICIAL.toLowerCase()) ? 'block' : 'none';
+    }
+
+    modal.style.display = 'flex';
+
+    if (typeof db !== 'undefined') {
+        try {
+            const { data: { user } } = await db.auth.getUser();
+            if (user && user.user_metadata) {
+                const meta = user.user_metadata;
+                if (meta.full_name) {
+                    document.getElementById('perfil_nome').value = meta.full_name;
+                    localStorage.setItem("usuario_logado_nome", meta.full_name);
+                }
+                if (meta.phone) {
+                    document.getElementById('perfil_telefone').value = meta.phone;
+                    localStorage.setItem("usuario_logado_telefone", meta.phone);
+                }
+                if (meta.cpf) {
+                    document.getElementById('perfil_cpf').value = meta.cpf;
+                    localStorage.setItem("usuario_logado_cpf", meta.cpf);
+                }
+            }
+        } catch (e) {}
+    }
+}
+
+function fecharModalPerfil() {
+    const modal = document.getElementById('modalMeuPerfil');
+    if (modal) modal.style.display = 'none';
+}
+
+async function salvarAlteracoesPerfil(e) {
+    e.preventDefault();
+
+    const btnSalvar = document.getElementById('btnSalvarPerfil');
+    const originalHtml = btnSalvar.innerHTML;
+    btnSalvar.disabled = true;
+    btnSalvar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+    const novoNome = document.getElementById('perfil_nome').value.trim();
+    const novoTelefone = document.getElementById('perfil_telefone').value.trim();
+
+    try {
+        if (typeof db !== 'undefined') {
+            const { error } = await db.auth.updateUser({
+                data: {
+                    full_name: novoNome,
+                    phone: novoTelefone
+                }
+            });
+            if (error) throw error;
+        }
+
+        localStorage.setItem("usuario_logado_nome", novoNome);
+        localStorage.setItem("usuario_logado_telefone", novoTelefone);
+
+        const spanNome = document.querySelector('#btnAbrirPerfil span');
+        if (spanNome) {
+            spanNome.innerText = `Olá, ${novoNome.split(' ')[0]}`;
+        }
+
+        alert("Seus dados foram atualizados com sucesso!");
+        fecharModalPerfil();
+    } catch (err) {
+        alert("Erro ao atualizar dados: " + err.message);
+    } finally {
+        btnSalvar.disabled = false;
+        btnSalvar.innerHTML = originalHtml;
+    }
+}
+
+async function deslogarUsuario() {
+    if (confirm("Deseja realmente sair da sua conta?")) {
+        if (typeof db !== 'undefined') {
+            try {
+                await db.auth.signOut();
+            } catch (e) {}
+        }
+
+        localStorage.removeItem("usuario_logado_email");
+        localStorage.removeItem("usuario_logado_nome");
+        localStorage.removeItem("usuario_logado_telefone");
+        localStorage.removeItem("usuario_logado_cpf");
+
+        window.location.reload();
+    }
+}
+
+// Inicia o perfil assim que carregar a página
+document.addEventListener('DOMContentLoaded', iniciarGerenciadorPerfil);

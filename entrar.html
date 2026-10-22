@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <!-- Biblioteca do Supabase via CDN -->
+    <!-- Biblioteca oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -43,7 +43,7 @@
         <div class="login-container">
             <div class="login-card">
                 <header class="login-header">
-                    <img src="imagens/Logo.webp" alt="Logo da Empresa" class="logo">
+                    <img src="imagens/Logo.webp" alt="Logo da Apasbac" class="logo">
                     <h1>Bem-vindo de volta!</h1>
                     <p>Faça login para continuar.</p>
                 </header>
@@ -58,8 +58,6 @@
                         <label for="password">Senha</label>
                         <input type="password" id="password" name="password" placeholder="••••••••" required>
                     </div>
-
-                    <div id="login-error" style="color: #c0392b; font-size: 0.85rem; margin-bottom: 15px; display: none;"></div>
 
                     <button type="submit" class="login-button" id="btnLogin">Entrar</button>
                 </form>
@@ -109,23 +107,19 @@
         </div>
     </footer>
 
-    <!-- 1. Biblioteca oficial do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- 2. Seu arquivo de conexão (com o nome certo: supabase-client.js) -->
+    <!-- Arquivo de conexão com as credenciais do Supabase -->
     <script src="script/supabase-client.js"></script>
 
-    <!-- 3. Lógica direta de login sem conflito com outros scripts -->
+    <!-- Lógica de autenticação com salvamento de perfil -->
     <script>
         const loginForm = document.getElementById('loginForm');
-        const btnEntrar = document.querySelector('.login-button');
+        const btnLogin = document.getElementById('btnLogin');
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            e.stopImmediatePropagation(); // Impede o script antigo de tentar mandar para a Vercel
 
-            btnEntrar.innerText = 'Entrando...';
-            btnEntrar.disabled = true;
+            btnLogin.innerText = 'Entrando...';
+            btnLogin.disabled = true;
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
@@ -137,17 +131,30 @@
             });
 
             if (error) {
-                alert("Erro ao entrar: E-mail ou senha incorretos.");
-                btnEntrar.innerText = 'Entrar';
-                btnEntrar.disabled = false;
+                if (error.message.includes("Email not confirmed")) {
+                    alert("Atenção: Seu e-mail ainda não foi confirmado! Abra o seu Gmail e clique no link de ativação enviado pelo Supabase, ou desative a confirmação de e-mail no painel do Supabase.");
+                } else if (error.message.includes("Invalid login credentials")) {
+                    alert("E-mail não encontrado ou senha incorreta no banco de dados. Verifique os dados digitados ou cadastre-se!");
+                } else {
+                    alert("Erro ao entrar: " + error.message);
+                }
+
+                btnLogin.innerText = 'Entrar';
+                btnLogin.disabled = false;
                 return;
             }
 
-            // Salva o e-mail logado no navegador
+            // Pega os dados extras gravados no cadastro (nome, telefone e CPF)
+            const meta = (data.user && data.user.user_metadata) ? data.user.user_metadata : {};
+            
+            // Salva os dados no navegador para o botão da pessoinha e o modal usarem
             localStorage.setItem("usuario_logado_email", email);
+            localStorage.setItem("usuario_logado_nome", meta.full_name || email.split('@')[0]);
+            localStorage.setItem("usuario_logado_telefone", meta.phone || "");
+            localStorage.setItem("usuario_logado_cpf", meta.cpf || "Não informado");
 
-            // Verifica se é o e-mail de admin cadastrado no supabase-client.js
-            if (email.toLowerCase() === EMAIL_ADMIN_OFICIAL.toLowerCase()) {
+            // Redirecionamento inteligente
+            if (typeof EMAIL_ADMIN_OFICIAL !== 'undefined' && email.toLowerCase() === EMAIL_ADMIN_OFICIAL.toLowerCase()) {
                 alert("Bem-vindo, Administrador!");
                 window.location.href = 'admin.html';
             } else {

@@ -2744,3 +2744,46 @@ body {
     grid-template-columns: 1fr !important;
   }
 }
+/* Botão de Perfil do Usuário Logado */
+.btn-user-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary);
+  color: white !important;
+  border: 1.5px solid var(--primary);
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-user-profile:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(139, 26, 26, 0.3);
+}
+
+.btn-user-profile i {
+  font-size: 1.25rem;
+  color: var(--accent-light);
+}
+
+/* Modal Overlay Global */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
