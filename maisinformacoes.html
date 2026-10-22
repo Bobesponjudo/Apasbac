@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -43,12 +44,12 @@
         <div class="pet-details-container">
             <div class="pet-details-card">
                 <div class="pet-image-side">
-                    <img id="pet-img" src="" alt="Foto do Pet">
+                    <img id="pet-img" src="imagens/Logo.webp" alt="Foto do Pet">
                 </div>
                 <div class="pet-info-side">
                     <a href="queroadotar.html" class="back-link"><i class="fas fa-arrow-left"></i> Voltar para a
                         lista</a>
-                    <h1 id="pet-name">Nome do Pet</h1>
+                    <h1 id="pet-name">Carregando pet...</h1>
                     <div class="pet-tags">
                         <span id="pet-gender">Sexo</span>
                         <span id="pet-age">Idade</span>
@@ -63,11 +64,13 @@
                         <h4 style="color: var(--primary); margin-bottom: 5px; font-size: 0.95rem;">
                             <i class="fa-solid fa-syringe"></i> Carteira de Vacinação
                         </h4>
-                        <p id="pet-vaccines" style="margin: 0; font-size: 0.9rem; color: var(--text-dark);">Carregando
-                            vacinas...</p>
+                        <p id="pet-vaccines" style="margin: 0; font-size: 0.9rem; color: var(--text-dark);">
+                            Carregando vacinas...
+                        </p>
                     </div>
+                    <br>
                     <div class="pet-actions">
-                        <a href="queroservoluntario.html" class="action-btn primary">Tenho interesse em adotar</a>
+                        <a href="adotar.html" class="action-btn primary" id="btn-adotar">Tenho interesse em adotar</a>
                     </div>
                 </div>
             </div>
@@ -86,7 +89,7 @@
                     <h3>COLABORE</h3>
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
-                    <li><a href="acoes.html">Nossas Ações</a></li>
+                    <a href="acoes.html">Nossas Ações</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -120,29 +123,80 @@
 
     <script src="script/supabase-client.js"></script>
     <script>
+        const petsPadrao = {
+            'theo-augusto': {
+                name: "Théo Augusto",
+                photos: ["imagens/animal2.jpeg"],
+                sex: "MALE",
+                age: "4 meses",
+                size: "SMALL",
+                description: "O Théo é um gatinho extremamente carinhoso e brincalhão. Foi resgatado em uma caixa de papelão e agora busca um lar onde possa receber muito amor e sachê. Ele se dá muito bem com outros gatos!",
+                vaccines: "V10 completa, Vermifugado"
+            },
+            'thor': {
+                name: "Thor",
+                photos: ["imagens/animal1.jpeg"],
+                sex: "MALE",
+                age: "2 anos",
+                size: "LARGE",
+                description: "Thor é um cão forte, leal e muito protetor. Apesar do tamanho, é um 'bobão' que ama brincar com bolinhas. Precisa de uma casa com quintal espaçoso para correr.",
+                vaccines: "V10 completa, Antirrábica, Giárdia"
+            },
+            'duque': {
+                name: "Duque",
+                photos: ["imagens/animal3.jpeg"],
+                sex: "MALE",
+                age: "9 meses",
+                size: "MEDIUM",
+                description: "Duque é um jovem cheio de energia! Adora passeios e já aprendeu a dar a pata. É o companheiro ideal para quem gosta de fazer caminhadas ao ar livre.",
+                vaccines: "Antirrábica, Polivalente (todas as doses)"
+            },
+            'dina': {
+                name: "Dina",
+                photos: ["imagens/animal4.jpeg"],
+                sex: "FEMALE",
+                age: "2 anos e 5 meses",
+                size: "MEDIUM",
+                description: "Dina é uma cadelinha tranquila e observadora. Ela é um pouco tímida no começo, mas depois que confia, não desgruda do dono. Perfeita para apartamentos ou casas calmas.",
+                vaccines: "Castrada, Antirrábica, V10"
+            }
+        };
+
         async function carregarDetalhesAnimal() {
             const params = new URLSearchParams(window.location.search);
-            const petId = params.get('id');
+            const petParam = params.get('id') || params.get('pet');
 
-            if (!petId) {
+            if (!petParam) {
                 window.location.href = 'queroadotar.html';
                 return;
             }
 
-            // Busca os dados diretamente do Supabase
-            const { data: pet, error } = await db
-                .from('animals')
-                .select('*')
-                .eq('id', petId)
-                .single();
+            let pet = null;
 
-            if (error || !pet) {
-                console.error("Erro ao carregar o pet:", error);
+            if (petsPadrao[petParam]) {
+                pet = petsPadrao[petParam];
+            } else if (typeof db !== 'undefined') {
+                try {
+                    let query = db.from('animals').select('*');
+                    if (!isNaN(petParam)) {
+                        query = query.eq('id', Number(petParam));
+                    } else {
+                        query = query.eq('uuid', petParam);
+                    }
+                    const { data, error } = await query.maybeSingle();
+                    if (!error && data) pet = data;
+                } catch (err) {
+                    console.error("Erro na consulta do pet:", err);
+                }
+            }
+
+            if (!pet) {
                 document.getElementById('pet-name').innerText = "Animal não encontrado";
+                document.getElementById('pet-desc').innerText = "Não conseguimos localizar as informações deste animal.";
+                document.getElementById('pet-vaccines').innerText = "Sem dados.";
                 return;
             }
 
-            // Trata a foto (caso venha array de fotos ou texto único)
             let foto = 'imagens/Logo.webp';
             if (pet.photos && pet.photos.length > 0) {
                 foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
@@ -150,19 +204,43 @@
                 foto = pet.imageUrl;
             }
 
-            // Preenche os campos da página
+            const generoFormatado = (pet.sex === 'MALE' || pet.sex === 'male' || pet.sex === 'Macho') ? 'Macho' : 'Fêmea';
+            
+            let porteFormatado = pet.size || 'Médio';
+            if (porteFormatado === 'SMALL' || porteFormatado === 'small') porteFormatado = 'Pequeno';
+            else if (porteFormatado === 'MEDIUM' || porteFormatado === 'medium') porteFormatado = 'Médio';
+            else if (porteFormatado === 'LARGE' || porteFormatado === 'large') porteFormatado = 'Grande';
+
+            let vacinasFormatadas = "Nenhuma informação de vacina cadastrada.";
+            if (pet.vaccines) {
+                if (Array.isArray(pet.vaccines) && pet.vaccines.length > 0) {
+                    vacinasFormatadas = pet.vaccines.join(', ');
+                } else if (typeof pet.vaccines === 'string' && pet.vaccines.trim().length > 0) {
+                    vacinasFormatadas = pet.vaccines;
+                }
+            }
+
+            const imgEl = document.getElementById('pet-img');
+            imgEl.src = foto;
+            imgEl.onerror = () => { imgEl.src = 'imagens/Logo.webp'; };
+
             document.getElementById('pet-name').innerText = pet.name || 'Sem nome';
-            document.getElementById('pet-img').src = foto;
-            document.getElementById('pet-gender').innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
+            document.getElementById('pet-gender').innerText = generoFormatado;
             document.getElementById('pet-age').innerText = pet.age || 'Idade não informada';
-            document.getElementById('pet-size').innerText = pet.size || 'Porte médio';
+            document.getElementById('pet-size').innerText = porteFormatado;
             document.getElementById('pet-desc').innerText = pet.description || 'Nenhuma descrição detalhada informada.';
+            document.getElementById('pet-vaccines').innerText = vacinasFormatadas;
+
+            // Atualiza o botão para levar o nome do pet ao formulário de adoção
+            const btnAdotar = document.getElementById('btn-adotar');
+            if (btnAdotar && pet.name) {
+                btnAdotar.href = `adotar.html?pet=${encodeURIComponent(pet.name)}`;
+            }
 
             document.title = `${pet.name} - Apasbac`;
         }
-        // Dentro da função carregarDetalhesAnimal():
-        document.getElementById('pet-vaccines').innerText = pet.vaccines || "Nenhuma informação de vacina cadastrada.";
-        window.onload = carregarDetalhesAnimal;
+
+        window.addEventListener('DOMContentLoaded', carregarDetalhesAnimal);
     </script>
 </body>
 

@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quero adotar</title>
+    <title>Quero adotar - Apasbac</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- Biblioteca do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -40,88 +40,61 @@
         </div>
     </header>
 
-    <body>
-        <main>
-            <div class="faixa-topo">
-                <h1>Encontre seu novo amigo</h1>
-            </div>
-            <div class="page-container">
+    <main>
+        <div class="faixa-topo">
+            <h1>Encontre seu novo amigo <i class="fa-solid fa-paw"></i></h1>
+            <p>Utilize os filtros abaixo para encontrar o companheiro que melhor combina com seu lar e sua rotina.</p>
+        </div>
 
-                <form class="search-filters">
-                    <div class="filter-grid">
-                        <div class="select-wrapper">
-                            <select name="species">
-                                <option value="">Todas as espécies</option>
-                                <option value="dog">Cachorro</option>
-                                <option value="cat">Gato</option>
-                            </select>
-                        </div>
-                        <div class="select-wrapper">
-                            <select name="gender">
-                                <option value="">Todos os sexos</option>
-                                <option value="male">Macho</option>
-                                <option value="female">Fêmea</option>
-                            </select>
-                        </div>
-                        <div class="select-wrapper">
-                            <select name="size">
-                                <option value="">Todos os portes</option>
-                                <option value="small">Pequeno</option>
-                                <option value="medium">Médio</option>
-                                <option value="large">Grande</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="search-button">Buscar</button>
+        <div class="page-container">
+
+            <!-- Formulário de Filtros -->
+            <form class="search-filters" id="form-filtros">
+                <div class="filter-grid">
+                    <div class="select-wrapper">
+                        <select name="species" id="filtro-especie">
+                            <option value="">Todas as espécies</option>
+                            <option value="dog">Cachorros</option>
+                            <option value="cat">Gatos</option>
+                        </select>
                     </div>
 
-                </form>
-
-                <div class="container-pets" id="lista-animais">
-                    <div class="card-pet">
-                        <img src="imagens/animal2.jpeg" alt="">
-                        <div class="info-pet">
-                            <h2>Théo Augusto</h2>
-                            <p><strong>Gênero:</strong> Macho</p>
-                            <p><strong>Idade:</strong> 4 meses</p>
-                            <a href="maisinformacoes.html?pet=theo-augusto"><button><strong>Mais
-                                        informações</strong></button></a>
-                        </div>
-                    </div>
-                    <div class="card-pet">
-                        <img src="imagens/animal1.jpeg" alt="">
-                        <div class="info-pet">
-                            <h2>Thor</h2>
-                            <p><strong>Gênero:</strong> Macho</p>
-                            <p><strong>Idade:</strong> 2 anos</p>
-                            <a href="maisinformacoes.html?pet=thor"><button><strong>Mais
-                                        informações</strong></button></a>
-                        </div>
+                    <div class="select-wrapper">
+                        <select name="gender" id="filtro-sexo">
+                            <option value="">Todos os sexos</option>
+                            <option value="male">Macho</option>
+                            <option value="female">Fêmea</option>
+                        </select>
                     </div>
 
-                    <div class="card-pet">
-                        <img src="imagens/animal3.jpeg" alt="">
-                        <div class="info-pet">
-                            <h2>Duque</h2>
-                            <p><strong>Gênero:</strong> Macho</p>
-                            <p><strong>Idade:</strong> 9 meses</p>
-                            <a href="maisinformacoes.html?pet=duque"><button><strong>Mais
-                                        informações</strong></button></a>
-                        </div>
+                    <div class="select-wrapper">
+                        <select name="size" id="filtro-porte">
+                            <option value="">Todos os portes</option>
+                            <option value="small">Porte Pequeno</option>
+                            <option value="medium">Porte Médio</option>
+                            <option value="large">Porte Grande</option>
+                        </select>
                     </div>
 
-                    <div class="card-pet">
-                        <img src="imagens/animal4.jpeg" alt="">
-                        <div class="info-pet">
-                            <h2>Dina</h2>
-                            <p><strong>Gênero:</strong> Fêmea</p>
-                            <p><strong>Idade:</strong> 2 anos e 5 meses</p>
-                            <a href="maisinformacoes.html?pet=dina"><button><strong>Mais
-                                        informações</strong></button></a>
-                        </div>
-                    </div>
+                    <button type="submit" class="search-button">
+                        <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                    </button>
+                    
+                    <button type="button" id="btn-limpar" class="action-btn secondary" style="display: none; padding: 11px 20px; font-size: 0.88rem;">
+                        <i class="fa-solid fa-rotate-left"></i> Limpar
+                    </button>
                 </div>
-        </main>
-         <footer class="site-footer">
+            </form>
+
+            <!-- Grade onde os animais são renderizados -->
+            <div class="container-pets" id="lista-animais">
+                <p style="grid-column: 1/-1; text-align: center;"><i class="fa-solid fa-spinner fa-spin"></i> Carregando nossos amiguinhos...</p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
         <div class="footer-content-wrapper">
             <div class="footer-columns">
                 <div class="footer-column">
@@ -133,7 +106,7 @@
                     <h3>COLABORE</h3>
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
-                    <li><a href="acoes.html">Nossas Ações</a></li>
+                    <a href="acoes.html">Nossas Ações</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -158,11 +131,201 @@
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
-                    <p class="copyright-text">Todos os direitos reservados.</p>
+                <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
-        <script src="script/script.js"></script>
-    </body>
+
+    <!-- Scripts de Conexão -->
+    <script src="script/supabase-client.js"></script>
+    <script src="script/script.js"></script>
+
+    <script>
+        window.carregarAnimaisDaAPI = async function() {};
+
+        const petsPadrao = [
+            {
+                id: 'theo-augusto',
+                name: "Théo Augusto",
+                species: 'cat',
+                sex: 'MALE',
+                size: 'SMALL',
+                age: "4 meses",
+                photo: "imagens/animal2.jpeg"
+            },
+            {
+                id: 'thor',
+                name: "Thor",
+                species: 'dog',
+                sex: 'MALE',
+                size: 'LARGE',
+                age: "2 anos",
+                photo: "imagens/animal1.jpeg"
+            },
+            {
+                id: 'duque',
+                name: "Duque",
+                species: 'dog',
+                sex: 'MALE',
+                size: 'MEDIUM',
+                age: "9 meses",
+                photo: "imagens/animal3.jpeg"
+            },
+            {
+                id: 'dina',
+                name: "Dina",
+                species: 'dog',
+                sex: 'FEMALE',
+                size: 'MEDIUM',
+                age: "2 anos e 5 meses",
+                photo: "imagens/animal4.jpeg"
+            }
+        ];
+
+        let todosOsAnimais = [];
+
+        async function carregarTodosOsAnimais() {
+            todosOsAnimais = [...petsPadrao];
+
+            if (typeof db !== 'undefined') {
+                try {
+                    const { data: doBanco, error } = await db.from('animals').select('*');
+                    if (!error && doBanco && doBanco.length > 0) {
+                        const formatados = doBanco.map(pet => {
+                            let foto = 'imagens/Logo.webp';
+                            if (pet.photos && pet.photos.length > 0) {
+                                foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
+                            } else if (pet.imageUrl) {
+                                foto = pet.imageUrl;
+                            }
+
+                            let especie = (pet.species || '').toLowerCase();
+                            if (!especie) {
+                                const texto = ((pet.breed || '') + ' ' + (pet.description || '')).toLowerCase();
+                                if (texto.includes('gato') || texto.includes('gata') || texto.includes('felin')) {
+                                    especie = 'cat';
+                                } else {
+                                    especie = 'dog';
+                                }
+                            }
+
+                            return {
+                                id: pet.id || pet.uuid,
+                                name: pet.name || 'Sem nome',
+                                species: especie,
+                                sex: (pet.sex || 'MALE').toUpperCase(),
+                                size: (pet.size || 'MEDIUM').toUpperCase(),
+                                age: pet.age || 'Idade não informada',
+                                photo: foto
+                            };
+                        });
+
+                        todosOsAnimais = [...formatados, ...petsPadrao];
+                    }
+                } catch (err) {
+                    console.error("Erro ao buscar animais do Supabase:", err);
+                }
+            }
+
+            renderizarAnimais(todosOsAnimais);
+        }
+
+        function renderizarAnimais(lista) {
+            const container = document.getElementById('lista-animais');
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            if (lista.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; background: #fffcf7; border-radius: 12px; border: 1.5px dashed var(--border);">
+                        <i class="fa-solid fa-magnifying-glass" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
+                        <h3 style="color: var(--primary); margin-bottom: 8px;">Nenhum amiguinho encontrado</h3>
+                        <p style="color: var(--text-mid); margin-bottom: 20px;">Não encontramos nenhum animal com os critérios selecionados. Tente outras opções!</p>
+                        <button type="button" class="action-btn primary" onclick="limparFiltros()">Ver todos os animais</button>
+                    </div>
+                `;
+                return;
+            }
+
+            lista.forEach(pet => {
+                const generoTexto = (pet.sex === 'MALE' || pet.sex === 'MACHO') ? 'Macho' : 'Fêmea';
+                
+                let porteTexto = 'Médio';
+                if (pet.size === 'SMALL' || pet.size === 'PEQUENO') porteTexto = 'Pequeno';
+                else if (pet.size === 'LARGE' || pet.size === 'GRANDE') porteTexto = 'Grande';
+
+                container.innerHTML += `
+                    <div class="card-pet">
+                        <img src="${pet.photo}" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
+                        <div class="info-pet">
+                            <h2 style="font-size: 1.25rem; color: var(--primary); text-align: center; margin-bottom: 6px;">${pet.name}</h2>
+                            <p><strong>Gênero:</strong> ${generoTexto}</p>
+                            <p><strong>Porte:</strong> ${porteTexto}</p>
+                            <p><strong>Idade:</strong> ${pet.age}</p>
+                            <a href="maisinformacoes.html?id=${encodeURIComponent(pet.id)}">
+                                <button type="button"><strong>Mais informações</strong></button>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function aplicarFiltros(e) {
+            if (e) e.preventDefault();
+
+            const especieSelecionada = document.getElementById('filtro-especie').value;
+            const sexoSelecionado = document.getElementById('filtro-sexo').value;
+            const porteSelecionado = document.getElementById('filtro-porte').value;
+            const btnLimpar = document.getElementById('btn-limpar');
+
+            if (especieSelecionada || sexoSelecionado || porteSelecionado) {
+                btnLimpar.style.display = 'inline-block';
+            } else {
+                btnLimpar.style.display = 'none';
+            }
+
+            const filtrados = todosOsAnimais.filter(pet => {
+                if (especieSelecionada && pet.species !== especieSelecionada) {
+                    return false;
+                }
+
+                if (sexoSelecionado) {
+                    const sexoPet = (pet.sex === 'MALE' || pet.sex === 'MACHO') ? 'male' : 'female';
+                    if (sexoPet !== sexoSelecionado) return false;
+                }
+
+                if (porteSelecionado) {
+                    let portePet = 'medium';
+                    if (pet.size === 'SMALL' || pet.size === 'PEQUENO') portePet = 'small';
+                    else if (pet.size === 'LARGE' || pet.size === 'GRANDE') portePet = 'large';
+
+                    if (portePet !== porteSelecionado) return false;
+                }
+
+                return true;
+            });
+
+            renderizarAnimais(filtrados);
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtro-especie').value = "";
+            document.getElementById('filtro-sexo').value = "";
+            document.getElementById('filtro-porte').value = "";
+            document.getElementById('btn-limpar').style.display = 'none';
+            renderizarAnimais(todosOsAnimais);
+        }
+
+        document.getElementById('form-filtros').addEventListener('submit', aplicarFiltros);
+        document.getElementById('filtro-especie').addEventListener('change', aplicarFiltros);
+        document.getElementById('filtro-sexo').addEventListener('change', aplicarFiltros);
+        document.getElementById('filtro-porte').addEventListener('change', aplicarFiltros);
+        document.getElementById('btn-limpar').addEventListener('click', limparFiltros);
+
+        document.addEventListener('DOMContentLoaded', carregarTodosOsAnimais);
+    </script>
+</body>
 
 </html>

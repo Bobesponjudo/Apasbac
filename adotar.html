@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Adoção - Apasbac</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <a href="index.html" class="logo-link">
+                <img src="imagens/Logo.webp" alt="Logo da Apasbac" class="logo-img">
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="quemsomos.html">Quem somos?</a></li>
+                    <li><a href="queroadotar.html">Quero adotar!</a></li>
+                    <li><a href="queroservoluntario.html">Quero ser voluntário</a></li>
+                    <li><a href="acoes.html">Nossas Ações</a></li>
+                </ul>
+            </nav>
+
+            <a href="doeeajude.html" class="btn-donate">DOE E AJUDE</a>
+
+            <div class="user-actions">
+                <a href="entrar.html">Entrar</a>
+                <a href="cadastrarse.html">Cadastre-se</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="faixa-topo">
+            <h1>Formulário de Adoção Responsável <i class="fa-solid fa-heart"></i></h1>
+            <p>Adoção é um ato de amor e compromisso para toda a vida do animal. Preencha o questionário abaixo para que nossa equipe avalie a compatibilidade e entre em contato.</p>
+        </div>
+
+        <div class="form-container" style="margin-top: 35px; margin-bottom: 50px;">
+            <form action="https://formsubmit.co/ajax/apasbac.assis@gmail.com" method="POST" class="volunteer-form-modern" id="formAdocao">
+                
+                <!-- Configurações do FormSubmit -->
+                <input type="hidden" name="_subject" id="emailSubject" value="Novo Pedido de Adoção - APASBAC">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+
+                <!-- Seção 1: Animal de Interesse -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-paw"></i> 1. Animal de Interesse</h2>
+                    <p class="field-desc">Indique qual amigo você gostaria de levar para sua família.</p>
+                    
+                    <div class="input-grid">
+                        <div class="input-group full-width">
+                            <label for="pet_interesse">Nome do Pet Pretendido *</label>
+                            <input type="text" id="pet_interesse" name="pet_interesse" required placeholder="Ex: Thor, Théo Augusto, etc.">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção 2: Dados Pessoais do Adotante -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-id-card"></i> 2. Dados do Adotante</h2>
+                    <p class="field-desc">Seus dados de contato para podermos agendar a visita ou entrevista.</p>
+                    
+                    <div class="input-grid">
+                        <div class="input-group full-width">
+                            <label for="adopter_name">Nome Completo *</label>
+                            <input type="text" id="adopter_name" name="nome_adotante" required placeholder="Digite seu nome completo">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="adopter_email">E-mail *</label>
+                            <input type="email" id="adopter_email" name="email" required placeholder="seuemail@exemplo.com">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="adopter_phone">WhatsApp / Telefone com DDD *</label>
+                            <input type="tel" id="adopter_phone" name="telefone_whatsapp" required placeholder="(44) 99999-9999">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="adopter_cpf">CPF *</label>
+                            <input type="text" id="adopter_cpf" name="cpf" maxlength="14" required placeholder="000.000.000-00">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="adopter_birth">Data de Nascimento *</label>
+                            <input type="date" id="adopter_birth" name="data_nascimento" required>
+                        </div>
+
+                        <div class="input-group full-width">
+                            <label for="adopter_address">Endereço completo (Rua, Bairro, Cidade) *</label>
+                            <input type="text" id="adopter_address" name="endereco" required placeholder="Ex: Rua das Flores, 123 - Centro - Assis Chateaubriand">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção 3: Moradia & Segurança -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-house"></i> 3. Moradia & Segurança</h2>
+                    <p class="field-desc">Queremos garantir que o novo lar seja seguro e confortável para o bichinho.</p>
+
+                    <div class="input-group">
+                        <label>Tipo de residência: *</label>
+                        <div class="radio-pill-group">
+                            <label class="pill-item">
+                                <input type="radio" name="tipo_moradia" value="Casa com quintal murado" required>
+                                <span>Casa com quintal</span>
+                            </label>
+                            <label class="pill-item">
+                                <input type="radio" name="tipo_moradia" value="Apartamento">
+                                <span>Apartamento</span>
+                            </label>
+                            <label class="pill-item">
+                                <input type="radio" name="tipo_moradia" value="Chácara / Sítio">
+                                <span>Chácara / Zona Rural</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-grid" style="margin-top: 15px;">
+                        <div class="input-group">
+                            <label for="moradia_situacao">O imóvel é: *</label>
+                            <select id="moradia_situacao" name="imovel_proprio_alugado" required>
+                                <option value="">Selecione...</option>
+                                <option value="Proprio">Próprio</option>
+                                <option value="Alugado">Alugado (com permissão para pets)</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="seguranca_fuga">O local é seguro contra fugas? *</label>
+                            <select id="seguranca_fuga" name="seguro_contra_fugas" required>
+                                <option value="">Selecione...</option>
+                                <option value="Sim, muros altos/portao fechado/telas">Sim, muros altos / portão fechado / telas</option>
+                                <option value="Parcialmente, vou adequar antes da chegada">Parcialmente, vou adequar antes da chegada</option>
+                                <option value="Nao tem portao ou muro">Não tem portão ou muros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label for="outros_pets">Você já possui outros animais em casa atualmente? (Se sim, quantos e quais?) *</label>
+                        <textarea id="outros_pets" name="outros_animais_em_casa" rows="2" required placeholder="Ex: Tenho 1 gatinha de 3 anos já castrada e vacinada. / Não possuo outros pets."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Todos os membros da casa concordam com a adoção? *</label>
+                        <div class="radio-pill-group">
+                            <label class="pill-item">
+                                <input type="radio" name="todos_concordam" value="Sim, todos concordam" required>
+                                <span>Sim, todos concordam</span>
+                            </label>
+                            <label class="pill-item">
+                                <input type="radio" name="todos_concordam" value="Moro sozinho(a)">
+                                <span>Moro sozinho(a)</span>
+                            </label>
+                            <label class="pill-item">
+                                <input type="radio" name="todos_concordam" value="Ainda estamos conversando">
+                                <span>Ainda estamos conversando</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção 4: Motivação e Cuidados -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fa-solid fa-heart-circle-check"></i> 4. Motivação e Cuidados</h2>
+                    <p class="field-desc">Um animalzinho vive entre 10 a 18 anos e dependerá de você para tudo.</p>
+
+                    <div class="input-group">
+                        <label for="motivacao">Por que você deseja adotar este animalzinho? *</label>
+                        <textarea id="motivacao" name="motivo_adocao" rows="3" required placeholder="Conte um pouco sobre sua rotina e o motivo da escolha..."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="mudanca_futura">Em caso de mudança de residência ou viagem, o que fará com o pet? *</label>
+                        <textarea id="mudanca_futura" name="planejamento_futuro" rows="2" required placeholder="Ex: O pet é da família e irá comigo para onde eu for."></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Ciência e Responsabilidades: *</label>
+                        <div class="checkbox-group" style="margin-top: 10px;">
+                            <label>
+                                <input type="checkbox" name="ciente_custos" required>
+                                Estou ciente dos custos financeiros com alimentação, vacinas anuais e cuidados veterinários.
+                            </label>
+                            <label>
+                                <input type="checkbox" name="ciente_castracao" required>
+                                Comprometo-me a zelar pela saúde, carinho e nunca abandonar nem prender o animal em correntes.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Envio -->
+                <button type="submit" class="submit-btn-modern" id="btnEnviarAdocao">
+                    <span>Enviar Proposta de Adoção</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content-wrapper">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h3>ADOTE</h3>
+                    <a href="queroadotar.html">Quero adotar</a>
+                    <a href="queroadotar.html">Ver mais animais</a>
+                </div>
+                <div class="footer-column">
+                    <h3>COLABORE</h3>
+                    <a href="doeeajude.html">Doe e ajude</a>
+                    <a href="queroservoluntario.html">Seja voluntário</a>
+                    <a href="acoes.html">Nossas Ações</a>
+                </div>
+                <div class="footer-column">
+                    <h3>SOBRE A APASBAC</h3>
+                    <a href="quemsomos.html">Quem somos?</a>
+                </div>
+                <div class="footer-column">
+                    <h3>PERFIL</h3>
+                    <a href="entrar.html">Entrar</a>
+                    <a href="cadastrarse.html">Cadastre-se</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                </div>
+                <div class="footer-logo">
+                    <img src="imagens/Logo.webp" alt="Logo Apasbac">
+                </div>
+                <p class="copyright-text">Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Preenche o nome do Pet a partir da URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const petName = params.get('pet');
+            if (petName) {
+                const petInput = document.getElementById('pet_interesse');
+                if (petInput) petInput.value = decodeURIComponent(petName);
+                const subjectInput = document.getElementById('emailSubject');
+                if (subjectInput) subjectInput.value = `Novo Pedido de Adoção: ${decodeURIComponent(petName)} - APASBAC`;
+            }
+        });
+
+        // Envio inteligente com leitura detalhada do FormSubmit
+        const form = document.getElementById('formAdocao');
+        const container = document.querySelector('.form-container');
+
+        if (form && container) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('btnEnviarAdocao');
+                const originalHtml = submitBtn.innerHTML;
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Enviando proposta...</span> <i class="fas fa-spinner fa-spin"></i>';
+
+                const formData = new FormData(form);
+
+                try {
+                    const response = await fetch("https://formsubmit.co/ajax/apasbac.assis@gmail.com", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    // Se o FormSubmit ainda estiver aguardando confirmação no Gmail
+                    if (data.message && data.message.toLowerCase().includes("activate")) {
+                        container.innerHTML = `
+                            <div class="success-container" style="padding: 40px 25px; border-left: 6px solid #d4a017; background: #fffcf0;">
+                                <div style="font-size: 3.5rem; color: #d4a017; margin-bottom: 10px;">
+                                    <i class="fa-solid fa-envelope-open-text"></i>
+                                </div>
+                                <h2 style="color: var(--primary);">Ativação necessária no Gmail!</h2>
+                                <p style="margin-top: 10px;">
+                                    O FormSubmit enviou um e-mail de confirmação para <strong>apasbac.assis@gmail.com</strong>.
+                                </p>
+                                <p style="font-size: 0.9rem; color: #555;">
+                                    Por favor, abra sua caixa de entrada (ou a pasta de <strong>Spam / Lixo Eletrônico</strong>), abra o e-mail do FormSubmit e clique em <strong>"Activate Form"</strong> para liberar o envio imediato deste e de todos os próximos pedidos!
+                                </p>
+                                <a href="index.html" class="success-back-btn" style="margin-top: 20px;">Voltar ao Início</a>
+                            </div>
+                        `;
+                        container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return;
+                    }
+
+                    if (response.ok && data.success !== "false") {
+                        const petInformado = document.getElementById('pet_interesse').value || 'seu futuro amigo';
+                        const nomeAdotante = document.getElementById('adopter_name').value || '';
+                        const whatsAdotante = document.getElementById('adopter_phone').value || '';
+
+                        // Mensagem formatada caso queira mandar uma cópia no WhatsApp da ONG
+                        const msgWhats = encodeURIComponent(`Olá, Apasbac! Acabei de enviar minha ficha de adoção no site para o pet *${petInformado}*.\nMeu nome é *${nomeAdotante}*.`);
+
+                        container.innerHTML = `
+                            <div class="success-container" style="padding: 50px 30px;">
+                                <div class="success-icon">
+                                    <i class="fas fa-heart-circle-check"></i>
+                                </div>
+                                <h2>Proposta de Adoção Enviada!</h2>
+                                <p>Recebemos com muito carinho o seu interesse em adotar <strong>${petInformado}</strong>! A ficha foi enviada para o e-mail da <strong>APASBAC</strong> e entraremos em contato em breve.</p>
+                                
+                                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+                                    <a href="queroadotar.html" class="success-back-btn">Ver Outros Animais</a>
+                                </div>
+                            </div>
+                        `;
+                        container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        throw new Error(data.message || 'Erro no envio');
+                    }
+                } catch (error) {
+                    alert('Erro ao enviar: ' + error.message + '\n\nCertifique-se de que o e-mail da Apasbac já ativou o formulário do FormSubmit.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalHtml;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

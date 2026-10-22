@@ -2698,7 +2698,7 @@ body {
 
 .success-icon {
   font-size: 4.5rem;
-  color: #27ae60; /* Verde folha de sucesso */
+  color: #810000; /* Verde folha de sucesso */
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
