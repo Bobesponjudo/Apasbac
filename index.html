@@ -41,25 +41,11 @@
     </header>
 
     <main>
-    <div class="faixa-topo">
-        <h1>Bem-vindo ao site da Apasbac! <i class="fa-solid fa-heart"></i></h1>
-    </div>
+        <div class="faixa-topo">
+            <h1>Bem-vindo ao site da Apasbac! <i class="fa-solid fa-heart"></i></h1>
+        </div>
         <div class="marquee-container">
             <div class="marquee-content">
-                <div class="marquee-item"><img src="imagens/animal1.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal2.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal3.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal4.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal5.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal6.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/cachorro.jpg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal1.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal2.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal3.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal4.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal5.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal6.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/cachorro.jpg" alt=""></div>
                 <div class="marquee-item"><img src="imagens/animal1.jpeg" alt=""></div>
                 <div class="marquee-item"><img src="imagens/animal2.jpeg" alt=""></div>
                 <div class="marquee-item"><img src="imagens/animal3.jpeg" alt=""></div>
@@ -81,25 +67,24 @@
             <a href="queroadotar.html" class="action-btn primary">Quero adotar</a>
             <a href="queroservoluntario.html" class="action-btn secondary">Quero ser voluntário</a>
         </section>
-        <div class="amigos">
-            <h1>
-                Amigos que acabaram de chegar!
-            </h1>
-        </div>
-        <div class="container-pets" id="lista-animais">
 
+        <div class="amigos">
+            <h1>Amigos que acabaram de chegar!</h1>
+        </div>
+
+        <div class="container-pets" id="lista-animais">
+            <!-- Cards padrão de fallback -->
             <div class="card-pet">
-                <img src="imagens/animal2.jpeg" alt="">
+                <img src="imagens/animal2.jpeg" alt="Théo Augusto">
                 <div class="info-pet">
                     <h2>Théo Augusto</h2>
                     <p><strong>Gênero:</strong> Macho</p>
                     <p><strong>Idade:</strong> 4 meses</p>
-                    <a href="maisinformacoes.html?pet=theo-augusto"><button><strong>Mais
-                                informações</strong></button></a>
+                    <a href="maisinformacoes.html?pet=theo-augusto"><button><strong>Mais informações</strong></button></a>
                 </div>
             </div>
             <div class="card-pet">
-                <img src="imagens/animal1.jpeg" alt="">
+                <img src="imagens/animal1.jpeg" alt="Thor">
                 <div class="info-pet">
                     <h2>Thor</h2>
                     <p><strong>Gênero:</strong> Macho</p>
@@ -107,9 +92,8 @@
                     <a href="maisinformacoes.html?pet=thor"><button><strong>Mais informações</strong></button></a>
                 </div>
             </div>
-
             <div class="card-pet">
-                <img src="imagens/animal3.jpeg" alt="">
+                <img src="imagens/animal3.jpeg" alt="Duque">
                 <div class="info-pet">
                     <h2>Duque</h2>
                     <p><strong>Gênero:</strong> Macho</p>
@@ -117,9 +101,8 @@
                     <a href="maisinformacoes.html?pet=duque"><button><strong>Mais informações</strong></button></a>
                 </div>
             </div>
-
             <div class="card-pet">
-                <img src="imagens/animal4.jpeg" alt="">
+                <img src="imagens/animal4.jpeg" alt="Dina">
                 <div class="info-pet">
                     <h2>Dina</h2>
                     <p><strong>Gênero:</strong> Fêmea</p>
@@ -128,9 +111,13 @@
                 </div>
             </div>
         </div>
+
         <div class="btn-container">
-            <button class="btn-pesquisar">Ver mais animais</button>
+            <a href="queroadotar.html" style="text-decoration: none;">
+                <button class="btn-pesquisar">Ver mais animais</button>
+            </a>
         </div>
+
         <section class="intro-modern" style="text-align: center; padding: 60px 20px;">
             <h1 style="font-size: 3rem; color: var(--primary); font-weight: 800;">
                 Amigo não se compra, <br><span style="color: var(--secondary)">se adota.</span>
@@ -142,7 +129,7 @@
         </section>
     </main>
 
-     <footer class="site-footer">
+    <footer class="site-footer">
         <div class="footer-content-wrapper">
             <div class="footer-columns">
                 <div class="footer-column">
@@ -179,11 +166,48 @@
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
-                    <p class="copyright-text">Todos os direitos reservados.</p>
+                <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
-    <script src="script/script.js"></script>
-</body>
 
+    <!-- Cliente da API Oficial -->
+    <script src="script/api-client.js"></script>
+    <script src="script/script.js"></script>
+
+    <script>
+        // Carrega os 4 últimos animais cadastrados na API
+        async function carregarDestaquesAPI() {
+            try {
+                const response = await api.getAnimals({ isAdopted: false, limit: 4 });
+                const animais = Array.isArray(response) ? response : (response.data || []);
+
+                if (animais && animais.length > 0) {
+                    const container = document.getElementById('lista-animais');
+                    container.innerHTML = "";
+
+                    animais.forEach(pet => {
+                        const foto = (pet.photos && pet.photos[0]) || pet.imageUrl || 'imagens/Logo.webp';
+                        const genero = (pet.sex === 'MALE' || pet.sex === 'male') ? 'Macho' : 'Fêmea';
+
+                        container.innerHTML += `
+                            <div class="card-pet">
+                                <img src="${foto}" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
+                                <div class="info-pet">
+                                    <h2>${pet.name}</h2>
+                                    <p><strong>Gênero:</strong> ${genero}</p>
+                                    <p><strong>Idade:</strong> ${pet.age || 'Não informada'}</p>
+                                    <a href="maisinformacoes.html?id=${pet.id}"><button><strong>Mais informações</strong></button></a>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.log("Mantendo animais padrão na home:", e.message);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', carregarDestaquesAPI);
+    </script>
+</body>
 </html>

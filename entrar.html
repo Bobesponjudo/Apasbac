@@ -11,8 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <!-- Biblioteca oficial do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -107,10 +105,9 @@
         </div>
     </footer>
 
-    <!-- Arquivo de conexão com as credenciais do Supabase -->
-    <script src="script/supabase-client.js"></script>
+    <!-- Cliente da API Oficial -->
+    <script src="script/api-client.js"></script>
 
-    <!-- Lógica de autenticação com salvamento de perfil -->
     <script>
         const loginForm = document.getElementById('loginForm');
         const btnLogin = document.getElementById('btnLogin');
@@ -124,42 +121,23 @@
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
-            // Faz o login no Supabase
-            const { data, error } = await db.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+            try {
+                const { user } = await api.login(email, password);
 
-            if (error) {
-                if (error.message.includes("Email not confirmed")) {
-                    alert("Atenção: Seu e-mail ainda não foi confirmado! Abra o seu Gmail e clique no link de ativação enviado pelo Supabase, ou desative a confirmação de e-mail no painel do Supabase.");
-                } else if (error.message.includes("Invalid login credentials")) {
-                    alert("E-mail não encontrado ou senha incorreta no banco de dados. Verifique os dados digitados ou cadastre-se!");
+                localStorage.setItem("usuario_logado_email", user.email);
+                localStorage.setItem("usuario_logado_nome", user.fullName || user.email);
+
+                if (user.role === 'ADMIN' || user.role === 'STAFF') {
+                    alert(`Bem-vindo, ${user.fullName} (${user.role})!`);
+                    window.location.href = 'admin.html';
                 } else {
-                    alert("Erro ao entrar: " + error.message);
+                    alert(`Olá, ${user.fullName || 'Tutor'}! Login efetuado com sucesso.`);
+                    window.location.href = 'index.html';
                 }
-
+            } catch (error) {
+                alert("Erro ao entrar: " + error.message);
                 btnLogin.innerText = 'Entrar';
                 btnLogin.disabled = false;
-                return;
-            }
-
-            // Pega os dados extras gravados no cadastro (nome, telefone e CPF)
-            const meta = (data.user && data.user.user_metadata) ? data.user.user_metadata : {};
-            
-            // Salva os dados no navegador para o botão da pessoinha e o modal usarem
-            localStorage.setItem("usuario_logado_email", email);
-            localStorage.setItem("usuario_logado_nome", meta.full_name || email.split('@')[0]);
-            localStorage.setItem("usuario_logado_telefone", meta.phone || "");
-            localStorage.setItem("usuario_logado_cpf", meta.cpf || "Não informado");
-
-            // Redirecionamento inteligente
-            if (typeof EMAIL_ADMIN_OFICIAL !== 'undefined' && email.toLowerCase() === EMAIL_ADMIN_OFICIAL.toLowerCase()) {
-                alert("Bem-vindo, Administrador!");
-                window.location.href = 'admin.html';
-            } else {
-                alert("Login realizado com sucesso!");
-                window.location.href = 'index.html';
             }
         });
     </script>

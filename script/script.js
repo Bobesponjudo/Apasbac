@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://apasbac-api.vercel.app/api/v1"; // Substitua pela URL real
+
 
 const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.nav-dot');

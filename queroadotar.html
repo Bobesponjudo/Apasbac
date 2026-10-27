@@ -11,8 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <!-- Biblioteca do Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -136,13 +134,11 @@
         </div>
     </footer>
 
-    <!-- Scripts de Conexão -->
-    <script src="script/supabase-client.js"></script>
+    <!-- Cliente da API Oficial -->
+    <script src="script/api-client.js"></script>
     <script src="script/script.js"></script>
 
     <script>
-        window.carregarAnimaisDaAPI = async function() {};
-
         const petsPadrao = [
             {
                 id: 'theo-augusto',
@@ -187,44 +183,40 @@
         async function carregarTodosOsAnimais() {
             todosOsAnimais = [...petsPadrao];
 
-            if (typeof db !== 'undefined') {
-                try {
-                    const { data: doBanco, error } = await db.from('animals').select('*');
-                    if (!error && doBanco && doBanco.length > 0) {
-                        const formatados = doBanco.map(pet => {
-                            let foto = 'imagens/Logo.webp';
-                            if (pet.photos && pet.photos.length > 0) {
-                                foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
-                            } else if (pet.imageUrl) {
-                                foto = pet.imageUrl;
-                            }
+            try {
+                const response = await api.getAnimals({ isAdopted: false, limit: 100 });
+                const doBanco = Array.isArray(response) ? response : (response.data || []);
 
-                            let especie = (pet.species || '').toLowerCase();
-                            if (!especie) {
-                                const texto = ((pet.breed || '') + ' ' + (pet.description || '')).toLowerCase();
-                                if (texto.includes('gato') || texto.includes('gata') || texto.includes('felin')) {
-                                    especie = 'cat';
-                                } else {
-                                    especie = 'dog';
-                                }
-                            }
+                if (doBanco && doBanco.length > 0) {
+                    const formatados = doBanco.map(pet => {
+                        let foto = 'imagens/Logo.webp';
+                        if (pet.photos && pet.photos.length > 0) {
+                            foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
+                        } else if (pet.imageUrl) {
+                            foto = pet.imageUrl;
+                        }
 
-                            return {
-                                id: pet.id || pet.uuid,
-                                name: pet.name || 'Sem nome',
-                                species: especie,
-                                sex: (pet.sex || 'MALE').toUpperCase(),
-                                size: (pet.size || 'MEDIUM').toUpperCase(),
-                                age: pet.age || 'Idade não informada',
-                                photo: foto
-                            };
-                        });
+                        let especie = (pet.species || '').toLowerCase();
+                        if (!especie) {
+                            const texto = `${pet.breed || ''} ${pet.description || ''}`.toLowerCase();
+                            especie = (texto.includes('gato') || texto.includes('gata') || texto.includes('felin')) ? 'cat' : 'dog';
+                        }
 
-                        todosOsAnimais = [...formatados, ...petsPadrao];
-                    }
-                } catch (err) {
-                    console.error("Erro ao buscar animais do Supabase:", err);
+                        return {
+                            id: pet.id || pet.uuid,
+                            name: pet.name || 'Sem nome',
+                            species: especie,
+                            sex: (pet.sex || 'MALE').toUpperCase(),
+                            size: (pet.size || 'MEDIUM').toUpperCase(),
+                            age: pet.age || 'Idade não informada',
+                            photo: foto
+                        };
+                    });
+
+                    todosOsAnimais = [...formatados, ...petsPadrao];
                 }
+            } catch (err) {
+                console.warn("API indisponível ou em carregamento inicial. Exibindo animais padrão:", err.message);
             }
 
             renderizarAnimais(todosOsAnimais);
@@ -253,7 +245,7 @@
                 
                 let porteTexto = 'Médio';
                 if (pet.size === 'SMALL' || pet.size === 'PEQUENO') porteTexto = 'Pequeno';
-                else if (pet.size === 'LARGE' || pet.size === 'GRANDE') porteTexto = 'Grande';
+                else if (pet.size === 'LARGE' || pet.size === 'GRANDE' || pet.size === 'EXTRA_LARGE') porteTexto = 'Grande';
 
                 container.innerHTML += `
                     <div class="card-pet">
@@ -287,9 +279,7 @@
             }
 
             const filtrados = todosOsAnimais.filter(pet => {
-                if (especieSelecionada && pet.species !== especieSelecionada) {
-                    return false;
-                }
+                if (especieSelecionada && pet.species !== especieSelecionada) return false;
 
                 if (sexoSelecionado) {
                     const sexoPet = (pet.sex === 'MALE' || pet.sex === 'MACHO') ? 'male' : 'female';
@@ -299,7 +289,7 @@
                 if (porteSelecionado) {
                     let portePet = 'medium';
                     if (pet.size === 'SMALL' || pet.size === 'PEQUENO') portePet = 'small';
-                    else if (pet.size === 'LARGE' || pet.size === 'GRANDE') portePet = 'large';
+                    else if (pet.size === 'LARGE' || pet.size === 'GRANDE' || pet.size === 'EXTRA_LARGE') portePet = 'large';
 
                     if (portePet !== porteSelecionado) return false;
                 }
@@ -327,5 +317,4 @@
         document.addEventListener('DOMContentLoaded', carregarTodosOsAnimais);
     </script>
 </body>
-
 </html>

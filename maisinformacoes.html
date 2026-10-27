@@ -11,8 +11,6 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -121,7 +119,8 @@
         </div>
     </footer>
 
-    <script src="script/supabase-client.js"></script>
+    <!-- Cliente da API Oficial -->
+    <script src="script/api-client.js"></script>
     <script>
         const petsPadrao = {
             'theo-augusto': {
@@ -171,22 +170,13 @@
                 return;
             }
 
-            let pet = null;
+            let pet = petsPadrao[petParam] || null;
 
-            if (petsPadrao[petParam]) {
-                pet = petsPadrao[petParam];
-            } else if (typeof db !== 'undefined') {
+            if (!pet) {
                 try {
-                    let query = db.from('animals').select('*');
-                    if (!isNaN(petParam)) {
-                        query = query.eq('id', Number(petParam));
-                    } else {
-                        query = query.eq('uuid', petParam);
-                    }
-                    const { data, error } = await query.maybeSingle();
-                    if (!error && data) pet = data;
+                    pet = await api.getAnimalPublic(petParam);
                 } catch (err) {
-                    console.error("Erro na consulta do pet:", err);
+                    console.warn("Animal não retornado pela API:", err.message);
                 }
             }
 
@@ -209,7 +199,7 @@
             let porteFormatado = pet.size || 'Médio';
             if (porteFormatado === 'SMALL' || porteFormatado === 'small') porteFormatado = 'Pequeno';
             else if (porteFormatado === 'MEDIUM' || porteFormatado === 'medium') porteFormatado = 'Médio';
-            else if (porteFormatado === 'LARGE' || porteFormatado === 'large') porteFormatado = 'Grande';
+            else if (porteFormatado === 'LARGE' || porteFormatado === 'large' || porteFormatado === 'EXTRA_LARGE') porteFormatado = 'Grande';
 
             let vacinasFormatadas = "Nenhuma informação de vacina cadastrada.";
             if (pet.vaccines) {
@@ -231,7 +221,6 @@
             document.getElementById('pet-desc').innerText = pet.description || 'Nenhuma descrição detalhada informada.';
             document.getElementById('pet-vaccines').innerText = vacinasFormatadas;
 
-            // Atualiza o botão para levar o nome do pet ao formulário de adoção
             const btnAdotar = document.getElementById('btn-adotar');
             if (btnAdotar && pet.name) {
                 btnAdotar.href = `adotar.html?pet=${encodeURIComponent(pet.name)}`;
@@ -243,5 +232,4 @@
         window.addEventListener('DOMContentLoaded', carregarDetalhesAnimal);
     </script>
 </body>
-
 </html>
