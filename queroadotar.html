@@ -185,15 +185,29 @@
 
             try {
                 const response = await api.getAnimals({ isAdopted: false, limit: 100 });
-                const doBanco = Array.isArray(response) ? response : (response.data || []);
+                const doBanco = Array.isArray(response) ? response : (response.data?.data || response.data || []);
 
                 if (doBanco && doBanco.length > 0) {
                     const formatados = doBanco.map(pet => {
+                        // Tenta extrair a foto de várias propriedades possíveis
                         let foto = 'imagens/Logo.webp';
                         if (pet.photos && pet.photos.length > 0) {
                             foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
                         } else if (pet.imageUrl) {
                             foto = pet.imageUrl;
+                        } else if (pet.description && pet.description.includes('Foto URL:')) {
+                            // Extrai a foto se ela foi salva na descrição
+                            const matchFoto = pet.description.match(/Foto URL:\s*([^|]+)/);
+                            if (matchFoto && matchFoto[1].trim() && matchFoto[1].trim() !== 'imagens/Logo.webp') {
+                                foto = matchFoto[1].trim();
+                            }
+                        }
+
+                        // Tenta extrair a idade se foi salva na descrição
+                        let idadeFinal = pet.age || 'Não informada';
+                        if (!pet.age && pet.description && pet.description.includes('Idade:')) {
+                            const matchIdade = pet.description.match(/Idade:\s*([^|]+)/);
+                            if (matchIdade) idadeFinal = matchIdade[1].trim();
                         }
 
                         let especie = (pet.species || '').toLowerCase();
@@ -208,7 +222,7 @@
                             species: especie,
                             sex: (pet.sex || 'MALE').toUpperCase(),
                             size: (pet.size || 'MEDIUM').toUpperCase(),
-                            age: pet.age || 'Idade não informada',
+                            age: idadeFinal,
                             photo: foto
                         };
                     });
@@ -216,12 +230,11 @@
                     todosOsAnimais = [...formatados, ...petsPadrao];
                 }
             } catch (err) {
-                console.warn("API indisponível ou em carregamento inicial. Exibindo animais padrão:", err.message);
+                console.warn("Aviso ao carregar API pública:", err.message);
             }
 
             renderizarAnimais(todosOsAnimais);
         }
-
         function renderizarAnimais(lista) {
             const container = document.getElementById('lista-animais');
             if (!container) return;

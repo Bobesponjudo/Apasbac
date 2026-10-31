@@ -11,6 +11,102 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <style>
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .password-wrapper input {
+            padding-right: 42px !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            cursor: pointer;
+            color: var(--text-light);
+            font-size: 1.05rem;
+            user-select: none;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .forgot-link-box {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -10px;
+            margin-bottom: 22px;
+        }
+
+        .forgot-link {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box-reset {
+            background: #fffcf7;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 20px;
+            padding: 35px 30px;
+            border: 1.5px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            text-align: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close-reset {
+            position: absolute;
+            top: 15px;
+            right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-close-reset:hover {
+            color: var(--primary);
+        }
+    </style>
 </head>
 
 <body>
@@ -54,7 +150,14 @@
 
                     <div class="input-group">
                         <label for="password">Senha</label>
-                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="••••••••" required>
+                            <i class="fa-solid fa-eye-slash toggle-password" data-target="password" title="Mostrar/Ocultar Senha"></i>
+                        </div>
+                    </div>
+
+                    <div class="forgot-link-box">
+                        <a href="#" id="btnAbrirModalEsqueci" class="forgot-link">Esqueceu sua senha?</a>
                     </div>
 
                     <button type="submit" class="login-button" id="btnLogin">Entrar</button>
@@ -63,6 +166,69 @@
                 <footer class="login-footer">
                     <p>Não tem uma conta? <a href="cadastrarse.html">Cadastre-se</a></p>
                 </footer>
+            </div>
+        </div>
+
+        <!-- MODAL 1: PEDIR O E-MAIL DE RECUPERAÇÃO -->
+        <div id="modalResetPassword" class="modal-overlay">
+            <div class="modal-box-reset">
+                <button type="button" class="modal-close-reset" id="btnFecharModalReset">&times;</button>
+                
+                <div style="width: 65px; height: 65px; border-radius: 50%; background: #fff0d4; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 15px; border: 2px solid var(--border);">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px;">Recuperar Senha</h2>
+                <p style="font-size: 0.88rem; color: var(--text-mid); margin-bottom: 22px; line-height: 1.5;">
+                    Digite seu e-mail para enviarmos o link seguro de redefinição de senha.
+                </p>
+
+                <form id="formRecuperarSenha">
+                    <div class="input-group" style="text-align: left; margin-bottom: 18px;">
+                        <label for="reset_email">E-mail Cadastrado</label>
+                        <input type="email" id="reset_email" placeholder="exemplo@email.com" required style="width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 6px; background: white;">
+                    </div>
+
+                    <button type="submit" id="btnEnviarReset" class="login-button" style="padding: 12px; font-size: 0.95rem;">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Link de Recuperação
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MODAL 2: CRIAR NOVA SENHA (Abre ao clicar no link do e-mail) -->
+        <div id="modalNovaSenha" class="modal-overlay">
+            <div class="modal-box-reset">
+                <div style="width: 65px; height: 65px; border-radius: 50%; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 15px; border: 2px solid #c8e6c9;">
+                    <i class="fa-solid fa-lock-open"></i>
+                </div>
+                
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px;">Criar Nova Senha</h2>
+                <p style="font-size: 0.88rem; color: var(--text-mid); margin-bottom: 20px;">
+                    Digite e confirme a sua nova senha abaixo:
+                </p>
+
+                <form id="formNovaSenha">
+                    <div class="input-group" style="text-align: left; margin-bottom: 15px;">
+                        <label for="nova_senha">Nova Senha *</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="nova_senha" required minlength="8" placeholder="Mínimo 8 caracteres">
+                            <i class="fa-solid fa-eye-slash toggle-password" data-target="nova_senha"></i>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="text-align: left; margin-bottom: 22px;">
+                        <label for="confirmar_nova_senha">Confirmar Nova Senha *</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmar_nova_senha" required minlength="8" placeholder="Repita a nova senha">
+                            <i class="fa-solid fa-eye-slash toggle-password" data-target="confirmar_nova_senha"></i>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnSalvarNovaSenha" class="login-button" style="padding: 13px;">
+                        <i class="fa-solid fa-check"></i> Salvar Nova Senha
+                    </button>
+                </form>
             </div>
         </div>
     </main>
@@ -105,10 +271,115 @@
         </div>
     </footer>
 
-    <!-- Cliente da API Oficial -->
+    <!-- Conexão com Supabase e API Oficial -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script/supabase-client.js"></script>
     <script src="script/api-client.js"></script>
 
     <script>
+        // 1. Alternador do Olhinho (Funciona em qualquer campo com data-target)
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                if (input) {
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    this.classList.toggle('fa-eye', isPassword);
+                    this.classList.toggle('fa-eye-slash', !isPassword);
+                }
+            });
+        });
+
+        // 2. Detecção automática do link de redefinição de senha vindo do e-mail
+        if (typeof db !== 'undefined') {
+            db.auth.onAuthStateChange(async (event, session) => {
+                if (event === 'PASSWORD_RECOVERY') {
+                    document.getElementById('modalNovaSenha').style.display = 'flex';
+                }
+            });
+
+            if (window.location.hash && window.location.hash.includes('type=recovery')) {
+                document.getElementById('modalNovaSenha').style.display = 'flex';
+            }
+        }
+
+        // 3. Salvar a Nova Senha no Banco de Dados
+        document.getElementById('formNovaSenha')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSalvarNovaSenha');
+            const novaSenha = document.getElementById('nova_senha').value;
+            const confirma = document.getElementById('confirmar_nova_senha').value;
+
+            if (novaSenha !== confirma) {
+                alert("As senhas não coincidem. Digite novamente.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Atualizando senha...';
+
+            try {
+                const { error } = await db.auth.updateUser({ password: novaSenha });
+                if (error) throw error;
+
+                alert("Senha redefinida com sucesso! Você já pode entrar com sua nova senha.");
+                document.getElementById('modalNovaSenha').style.display = 'none';
+                window.location.hash = ''; // Limpa a URL
+            } catch (err) {
+                alert("Erro ao redefinir senha: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Nova Senha';
+            }
+        });
+
+        // 4. Modal para Pedir E-mail de Recuperação
+        const modalReset = document.getElementById('modalResetPassword');
+        document.getElementById('btnAbrirModalEsqueci')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const emailDigitado = document.getElementById('email').value.trim();
+            if (emailDigitado) document.getElementById('reset_email').value = emailDigitado;
+            modalReset.style.display = 'flex';
+        });
+
+        document.getElementById('btnFecharModalReset')?.addEventListener('click', () => {
+            modalReset.style.display = 'none';
+        });
+
+        modalReset?.addEventListener('click', (e) => {
+            if (e.target === modalReset) modalReset.style.display = 'none';
+        });
+
+        document.getElementById('formRecuperarSenha')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btnEnviar = document.getElementById('btnEnviarReset');
+            const originalHtml = btnEnviar.innerHTML;
+            const emailReset = document.getElementById('reset_email').value.trim();
+
+            btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                if (typeof db !== 'undefined') {
+                    const { error } = await db.auth.resetPasswordForEmail(emailReset, {
+                        redirectTo: window.location.origin + '/entrar.html'
+                    });
+                    if (error) throw error;
+                }
+
+                alert(`Um link de recuperação em português foi enviado para ${emailReset}!\n\nVerifique sua Caixa de Entrada ou pasta de Lixo/Spam.`);
+                modalReset.style.display = 'none';
+                document.getElementById('formRecuperarSenha').reset();
+            } catch (err) {
+                alert("Erro ao solicitar recuperação: " + err.message);
+            } finally {
+                btnEnviar.disabled = false;
+                btnEnviar.innerHTML = originalHtml;
+            }
+        });
+
+        // 5. Login Principal (Compatível com Usuários Comuns via Supabase e Admin)
         const loginForm = document.getElementById('loginForm');
         const btnLogin = document.getElementById('btnLogin');
 
@@ -118,24 +389,61 @@
             btnLogin.innerText = 'Entrando...';
             btnLogin.disabled = true;
 
-            const email = document.getElementById('email').value.trim();
+            const emailDigitado = document.getElementById('email').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
 
             try {
-                const { user } = await api.login(email, password);
+                let role = 'USER';
+                let fullName = emailDigitado.split('@')[0];
 
-                localStorage.setItem("usuario_logado_email", user.email);
-                localStorage.setItem("usuario_logado_nome", user.fullName || user.email);
+                // 1. Tenta logar pelo Supabase Auth primeiro (Garante que qualquer usuário comum consiga se logar com a senha nova)
+                if (typeof db !== 'undefined') {
+                    const { data, error: supaErr } = await db.auth.signInWithPassword({
+                        email: emailDigitado,
+                        password: password
+                    });
 
-                if (user.role === 'ADMIN' || user.role === 'STAFF') {
-                    alert(`Bem-vindo, ${user.fullName} (${user.role})!`);
+                    if (!supaErr && data.session) {
+                        // Se logou com sucesso no Supabase, pega metadados se houver
+                        const userMeta = data.user.user_metadata || {};
+                        fullName = userMeta.full_name || fullName;
+                    } else {
+                        // Se falhou no Supabase, tenta a API da Vercel (para compatibilidade com contas antigas)
+                        try {
+                            const res = await api.login(emailDigitado, password);
+                            const u = res.user || res.data || res;
+                            const dadosUser = (u && u.data) ? (u.data.user || u.data) : (u.user || u);
+                            role = (dadosUser.role || 'USER').toUpperCase();
+                            fullName = dadosUser.fullName || fullName;
+                        } catch (apiErr) {
+                            // Se falhou nos dois, joga o erro original do Supabase ou da API
+                            throw new Error(supaErr ? supaErr.message : apiErr.message);
+                        }
+                    }
+                } else {
+                    // Fallback caso o Supabase não carregue
+                    const res = await api.login(emailDigitado, password);
+                    const u = res.user || res.data || res;
+                    const dadosUser = (u && u.data) ? (u.data.user || u.data) : (u.user || u);
+                    role = (dadosUser.role || 'USER').toUpperCase();
+                    fullName = dadosUser.fullName || fullName;
+                }
+
+                localStorage.setItem("usuario_logado_email", emailDigitado);
+                localStorage.setItem("usuario_logado_nome", fullName);
+
+                const isAdmin = emailDigitado === 'apasbac.assis@gmail.com' || role === 'ADMIN' || role === 'STAFF';
+
+                if (isAdmin) {
+                    alert("Bem-vindo, Administrador!");
                     window.location.href = 'admin.html';
                 } else {
-                    alert(`Olá, ${user.fullName || 'Tutor'}! Login efetuado com sucesso.`);
+                    alert(`Olá, ${fullName}! Login efetuado com sucesso.`);
                     window.location.href = 'index.html';
                 }
             } catch (error) {
-                alert("Erro ao entrar: " + error.message);
+                alert("E-mail ou senha incorretos. Verifique seus dados.");
+                console.error("Erro no login:", error);
                 btnLogin.innerText = 'Entrar';
                 btnLogin.disabled = false;
             }

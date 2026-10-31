@@ -55,10 +55,10 @@
                     <div class="select-wrapper">
                         <select name="action-category">
                             <option value="">Todas as categorias</option>
-                            <option value="adoption">Feira de Adoção</option>
-                            <option value="donation">Campanha de Doação</option>
-                            <option value="awareness">Conscientização</option>
-                            <option value="volunteering">Mutirão de Voluntários</option>
+                            <option value="Feira de Adoção">Feira de Adoção</option>
+                            <option value="Campanha de Doação">Campanha de Doação</option>
+                            <option value="Conscientização">Conscientização</option>
+                            <option value="Mutirão">Mutirão de Voluntários</option>
                         </select>
                     </div>
                     <div class="select-wrapper">
@@ -74,56 +74,7 @@
             </form>
 
             <div class="container-pets" id="lista-eventos">
-                
-                <!-- Card de Ação 1 (Exemplo: Feira de Adoção) -->
-                <div class="card-pet">
-                    <!-- Substitua pela imagem real do evento na pasta imagens -->
-                    <img src="imagens/Logo.webp" alt="Feira de Adoção">
-                    <div class="info-pet">
-                        <h3>Grande Feira de Adoção</h3>
-                        <p><strong>Categoria:</strong> Evento Presencial</p>
-                        <p><strong>Data:</strong> 15 de Dezembro de 2026</p>
-                        <p><strong>Local:</strong> Praça Central de Assis</p>
-                        <a href="#"><button><strong>Saber mais</strong></button></a>
-                    </div>
-                </div>
-
-                <!-- Card de Ação 2 (Exemplo: Campanha de Ração) -->
-                <div class="card-pet">
-                    <img src="imagens/Logo.webp" alt="Campanha do Agasalho Pet">
-                    <div class="info-pet">
-                        <h3>Campanha do Agasalho e Ração</h3>
-                        <p><strong>Categoria:</strong> Arrecadação</p>
-                        <p><strong>Período:</strong> Julho e Agosto de 2026</p>
-                        <p><strong>Pontos:</strong> Petshops Parceiros</p>
-                        <a href="#"><button><strong>Como ajudar</strong></button></a>
-                    </div>
-                </div>
-
-                <!-- Card de Ação 3 (Exemplo: Mutirão de Banho) -->
-                <div class="card-pet">
-                    <img src="imagens/Logo.webp" alt="Mutirão de Cuidados">
-                    <div class="info-pet">
-                        <h3>Mutirão de Banho e Carinho</h3>
-                        <p><strong>Categoria:</strong> Voluntariado</p>
-                        <p><strong>Data:</strong> 12 de Agosto de 2026</p>
-                        <p><strong>Local:</strong> Abrigo Provisório</p>
-                        <a href="#"><button><strong>Participar</strong></button></a>
-                    </div>
-                </div>
-
-                <!-- Card de Ação 4 (Exemplo: Palestra de Posse Responsável) -->
-                <div class="card-pet">
-                    <img src="imagens/Logo.webp" alt="Palestra Educacional">
-                    <div class="info-pet">
-                        <h3>Palestra: Adoção Responsável</h3>
-                        <p><strong>Categoria:</strong> Conscientização</p>
-                        <p><strong>Data:</strong> 22 de Setembro de 2026</p>
-                        <p><strong>Canal:</strong> Online e Presencial</p>
-                        <a href="#"><button><strong>Inscrições</strong></button></a>
-                    </div>
-                </div>
-
+                <p style='grid-column: 1/-1; text-align: center;'><i class="fa-solid fa-spinner fa-spin"></i> Carregando eventos...</p>
             </div>
         </div>
     </main>
@@ -165,14 +116,27 @@
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
-                    <p class="copyright-text">Todos os direitos reservados.</p>
+                <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script/supabase-client.js"></script>
+    <script src="script/api-client.js"></script>
     <script src="script/script.js"></script>
     <script>
+        // Função de Sanitização para proteção contra XSS
+        function protegerTexto(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         async function carregarEventos() {
             const container = document.getElementById('lista-eventos');
             if (!container) return;
@@ -189,16 +153,21 @@
 
             container.innerHTML = "";
             eventos.forEach(evt => {
-                const dataFormatada = new Date(evt.event_date + 'T00:00:00').toLocaleDateString('pt-BR');
+                let dataFormatada = 'A definir';
+                if (evt.event_date && evt.event_date.includes('-')) {
+                    const partes = evt.event_date.split('-');
+                    dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                }
+
                 container.innerHTML += `
                     <div class="card-pet">
-                        <img src="${evt.image_url || 'imagens/Logo.webp'}" alt="${evt.title}">
+                        <img src="${protegerTexto(evt.image_url) || 'imagens/Logo.webp'}" alt="${protegerTexto(evt.title)}" onerror="this.src='imagens/Logo.webp'">
                         <div class="info-pet">
-                            <h3>${evt.title}</h3>
-                            <p><strong>Categoria:</strong> ${evt.category}</p>
+                            <h3>${protegerTexto(evt.title)}</h3>
+                            <p><strong>Categoria:</strong> ${protegerTexto(evt.category)}</p>
                             <p><strong>Data:</strong> ${dataFormatada}</p>
-                            <p><strong>Local:</strong> ${evt.location}</p>
-                            <p style="margin-top: 6px; font-size: 0.85rem;">${evt.description || ''}</p>
+                            <p><strong>Local:</strong> ${protegerTexto(evt.location)}</p>
+                            <p style="margin-top: 6px; font-size: 0.85rem;">${protegerTexto(evt.description || '')}</p>
                         </div>
                     </div>
                 `;
