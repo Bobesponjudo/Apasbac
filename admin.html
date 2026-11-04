@@ -239,6 +239,7 @@
         </div>
 
         <!-- 3. FORMULÁRIO: CADASTRAR EVENTO (Com Data Inicial e Término) -->
+        <!-- FORMULÁRIO: CADASTRAR EVENTO -->
         <div id="aba-evento" class="admin-form-box" style="display: none;">
             <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-bullhorn"></i> Informações do Evento</h2>
             <form id="formEvento">
@@ -258,23 +259,17 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Data de Início *</label>
+                        <label>Data do Evento *</label>
                         <input type="date" id="event_date" required>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-                    <div class="input-group">
-                        <label>Data de Término (Opcional)</label>
-                        <input type="date" id="event_end_date">
-                    </div>
-                    <div class="input-group">
-                        <label>Localização / Onde vai ser *</label>
-                        <input type="text" id="event_location" placeholder="Ex: Praça Central" required>
-                    </div>
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Localização / Onde vai ser *</label>
+                    <input type="text" id="event_location" placeholder="Ex: Praça Central" required>
                 </div>
 
-                <div class="input-group" style="margin-top: 15px;">
+                <div class="input-group">
                     <label>Link de Imagem (opcional)</label>
                     <input type="url" id="event_image" placeholder="Deixe vazio para usar a logo padrão">
                 </div>
@@ -483,8 +478,7 @@
             }
         }
 
-        // CADASTRAR EVENTO COM DATA DE INÍCIO E TÉRMINO NO SUPABASE
-        document.getElementById('formEvento').addEventListener('submit', async (e) => {
+    document.getElementById('formEvento').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSalvarEvento');
             btn.disabled = true;
@@ -512,13 +506,11 @@
             }
 
             const foto = document.getElementById('event_image').value.trim() || 'imagens/Logo.webp';
-            const dataFim = document.getElementById('event_end_date').value.trim();
 
             const { error } = await db.from('events').insert([{
                 title: document.getElementById('event_title').value.trim(),
                 category: document.getElementById('event_category').value,
                 event_date: document.getElementById('event_date').value,
-                end_date: dataFim ? dataFim : null,
                 location: document.getElementById('event_location').value.trim(),
                 description: document.getElementById('event_desc').value.trim(),
                 image_url: foto,
@@ -536,7 +528,6 @@
                 mostrarAba('list-evento');
             }
         });
-
         // Listar Eventos do Supabase
         async function carregarListaEventos() {
             const container = document.getElementById('lista-eventos-admin');

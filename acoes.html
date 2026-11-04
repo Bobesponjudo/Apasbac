@@ -180,14 +180,7 @@
 
             container.innerHTML = "";
             eventos.forEach(evt => {
-                const dataInicioFmt = formatarDataSimples(evt.event_date);
-                const dataFimFmt = formatarDataSimples(evt.end_date);
-                
-                // Exibe "15/12/2026" ou "De 15/12/2026 até 20/12/2026"
-                let exibicaoData = dataInicioFmt;
-                if (dataFimFmt && dataFimFmt !== dataInicioFmt) {
-                    exibicaoData = `De ${dataInicioFmt} até ${dataFimFmt}`;
-                }
+                const dataFmt = formatarDataSimples(evt.event_date);
 
                 container.innerHTML += `
                     <div class="card-pet">
@@ -195,7 +188,7 @@
                         <div class="info-pet">
                             <h3>${protegerTexto(evt.title)}</h3>
                             <p><strong>Categoria:</strong> ${protegerTexto(evt.category)}</p>
-                            <p><strong>Data:</strong> ${exibicaoData}</p>
+                            <p><strong>Data:</strong> ${dataFmt}</p>
                             <p><strong>Local:</strong> ${protegerTexto(evt.location)}</p>
                             <p style="margin-top: 6px; font-size: 0.85rem;">${protegerTexto(evt.description || '')}</p>
                         </div>
@@ -204,15 +197,14 @@
             });
         }
 
-        // Lógica Avançada de Filtros (Categoria + Status Dinâmico por Data)
+        // Lógica dos Filtros (Categoria + Status por Data Atual)
         document.querySelector('.search-filters')?.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const categoriaFiltro = document.querySelector('select[name="action-category"]').value;
             const statusFiltro = document.querySelector('select[name="action-status"]').value;
             
-            // Pega a data atual do sistema formatada como YYYY-MM-DD
-            const hoje = new Date().toISOString().split('T')[0];
+            const hoje = new Date().toISOString().split('T')[0]; // Data de hoje (YYYY-MM-DD)
 
             const filtrados = listaEventosCache.filter(evt => {
                 // 1. Filtro por Categoria
@@ -220,22 +212,18 @@
                     return false;
                 }
 
-                // 2. Filtro por Status baseado na Data Atual
+                // 2. Filtro por Status
                 if (statusFiltro) {
-                    const inicio = evt.event_date ? evt.event_date.split('T')[0] : hoje;
-                    const fim = evt.end_date ? evt.end_date.split('T')[0] : inicio; // Se não tiver fim, vale só o dia do início
-
-                    if (statusFiltro === 'upcoming') {
-                        // Próximos: A data de início ainda está no futuro (maior que hoje)
-                        if (inicio <= hoje) return false;
-                    } 
-                    else if (statusFiltro === 'ongoing') {
-                        // Em andamento: Hoje está dentro do período (entre início e fim inclusives)
-                        if (hoje < inicio || hoje > fim) return false;
-                    } 
-                    else if (statusFiltro === 'completed') {
-                        // Concluídos: A data final já passou (menor que hoje)
-                        if (fim >= hoje) return false;
+                    const dataEvt = evt.event_date ? evt.event_date.split('T')[0] : '';
+                    
+                    if (statusFiltro === 'upcoming' && dataEvt <= hoje) {
+                        return false; // Próximos (precisa ser maior que hoje)
+                    }
+                    if (statusFiltro === 'ongoing' && dataEvt !== hoje) {
+                        return false; // Em andamento (precisa ser exatamente hoje)
+                    }
+                    if (statusFiltro === 'completed' && dataEvt >= hoje) {
+                        return false; // Concluídos (precisa ser menor que hoje)
                     }
                 }
 
