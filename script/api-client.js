@@ -3,6 +3,7 @@
  */
 window.API_BASE_URL = window.API_BASE_URL || 'https://apasbac-api.vercel.app';
 var API_BASE_URL = window.API_BASE_URL;
+
 // Função auxiliar para decodificar o Payload do JWT sem bibliotecas externas
 function parseJwt(token) {
     try {
@@ -11,7 +12,7 @@ function parseJwt(token) {
         const base64Url = clean.split('.')[1];
         if (!base64Url) return null;
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
@@ -32,23 +33,21 @@ const api = {
     setSession(tokens, user) {
         if (!tokens) return;
 
-        // Captura o token em qualquer formato que a API possa ter devolvido
-        const access = tokens.accessToken || 
-                       tokens.access_token || 
-                       tokens.token || 
-                       (tokens.tokens && (tokens.tokens.accessToken || tokens.tokens.token)) ||
-                       (tokens.data && (tokens.data.accessToken || tokens.data.token));
+        const access = tokens.accessToken ||
+            tokens.access_token ||
+            tokens.token ||
+            (tokens.tokens && (tokens.tokens.accessToken || tokens.tokens.token)) ||
+            (tokens.data && (tokens.data.accessToken || tokens.data.token));
 
-        const refresh = tokens.refreshToken || 
-                        tokens.refresh_token || 
-                        (tokens.tokens && tokens.tokens.refreshToken) ||
-                        (tokens.data && tokens.data.refreshToken);
+        const refresh = tokens.refreshToken ||
+            tokens.refresh_token ||
+            (tokens.tokens && tokens.tokens.refreshToken) ||
+            (tokens.data && tokens.data.refreshToken);
 
         if (access) {
             const cleanToken = access.startsWith('Bearer ') ? access.slice(7) : access;
             localStorage.setItem('apasbac_access_token', cleanToken);
 
-            // Se o objeto de usuário não veio pronto, extrai direto do JWT
             if (!user) {
                 user = tokens.user || (tokens.data && tokens.data.user);
                 if (!user) {
@@ -58,11 +57,17 @@ const api = {
                             id: decoded.sub || decoded.id,
                             email: decoded.email,
                             fullName: decoded.fullName || decoded.name || (decoded.email ? decoded.email.split('@')[0] : 'Usuário'),
-                            role: decoded.role || 'USER'
+                            // FORÇA ADMIN SE FOR O EMAIL OFICIAL
+                            role: (decoded.email === 'apasbac.assis@gmail.com') ? 'ADMIN' : (decoded.role || 'USER')
                         };
                     }
                 }
             }
+        }
+
+        // Garante que o objeto user salvo também tenha a role de admin se for o e-mail oficial
+        if (user && user.email === 'apasbac.assis@gmail.com') {
+            user.role = 'ADMIN';
         }
 
         if (refresh) localStorage.setItem('apasbac_refresh_token', refresh);
@@ -101,7 +106,6 @@ const api = {
 
         let response = await fetch(url, options);
 
-        // Se o token expirou (401), tenta renovar usando o refresh token
         if (response.status === 401 && this.getRefreshToken() && !endpoint.includes('/auth/')) {
             const renewed = await this.refreshToken();
             if (renewed) {
@@ -159,10 +163,8 @@ const api = {
             body: JSON.stringify({ email, password })
         });
 
-        // 1. Salva o token e extrai o usuário (seja da resposta ou do payload do JWT)
         this.setSession(res);
 
-        // 2. Tenta obter dados adicionais no /users/me de forma segura (sem travar o login caso a rota falhe)
         let user = this.getUser();
         try {
             const me = await this.getMe();
@@ -171,7 +173,7 @@ const api = {
                 this.setSession(res, user);
             }
         } catch (err) {
-            console.warn('Endpoint /users/me não respondeu, usando dados decodificados do JWT:', err.message);
+            console.warn('Endpoint /users/me não respondeu, usando dados do token:', err.message);
         }
 
         if (!user) {
@@ -239,14 +241,20 @@ const api = {
     }
 };
 
+// Renderização automática do Menu do Cabeçalho
 document.addEventListener('DOMContentLoaded', () => {
     const user = api.getUser();
     const userActions = document.querySelector('.user-actions');
 
     if (user && userActions) {
-        const primeiroNome = user.fullName ? user.fullName.split(' ')[0] : 'Usuário';
-        const linkAdmin = (user.role === 'ADMIN' || user.role === 'STAFF') 
-            ? '<a href="admin.html" style="background: var(--accent); color: var(--primary-dark) !important; font-weight: 700;"><i class="fa-solid fa-lock"></i> Painel</a>' 
+        const email = (user.email || localStorage.getItem('usuario_logado_email') || '').toLowerCase();
+        const role = (user.role || '').toUpperCase();
+        const isAdmin = email === 'apasbac.assis@gmail.com' || role === 'ADMIN' || role === 'STAFF';
+
+        const primeiroNome = user.fullName ? user.fullName.split(' ')[0] : 'Admin';
+
+        const linkAdmin = isAdmin
+            ? '<a href="admin.html" style="background: var(--accent); color: var(--primary-dark) !important; font-weight: 700; margin-right: 6px;"><i class="fa-solid fa-lock"></i> Painel</a>'
             : '';
 
         userActions.innerHTML = `
@@ -257,8 +265,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <a href="#" id="btnHeaderLogout" style="background: #7a1515;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
         `;
 
-        document.getElementById('btnHeaderLogout')?.addEventListener('click', (e) => {
+        document.getElementById('btnHeaderLogout')?.addEventListener('click', async (e) => {
             e.preventDefault();
+            if (typeof db !== 'undefined') {
+                try { await db.auth.signOut(); } catch (err) { }
+            }
             api.logout();
         });
     }

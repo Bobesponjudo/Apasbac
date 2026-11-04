@@ -1,5 +1,4 @@
-
-
+// ============ CARROSSEL ============
 const slides = document.querySelectorAll('.carousel-slide');
 const dots = document.querySelectorAll('.nav-dot');
 const prevBtn = document.getElementById('prevBtn');
@@ -111,7 +110,8 @@ document.querySelectorAll('.card-pet, .caixa').forEach(el => {
     el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(el);
 });
-// ============ BANCO DE DADOS DOS PETS ============
+
+// ============ BANCO DE DADOS DOS PETS ESTÁTICOS ============
 const petsData = {
     'theo-augusto': {
         nome: "Théo Augusto",
@@ -149,11 +149,13 @@ const petsData = {
 
 async function listarAnimais() {
     try {
-        const response = await fetch(`${API_BASE_URL}/animals`);
+        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
+        const response = await fetch(`${baseUrl}/animals`);
         const animals = await response.json();
         
         const container = document.querySelector('.container-pets');
-        container.innerHTML = ""; // Limpa os estáticos
+        if (!container) return;
+        container.innerHTML = "";
 
         animals.forEach(pet => {
             container.innerHTML += `
@@ -178,40 +180,29 @@ async function carregarAnimaisDaAPI() {
     if (!container) return;
 
     try {
-        container.innerHTML = "<p>Carregando nossos amiguinhos...</p>";
-
-        const response = await fetch(`${API_BASE_URL}/animals`);
-        if (!response.ok) throw new Error("Erro ao buscar animais");
+        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
+        const response = await fetch(`${baseUrl}/animals`);
+        if (!response.ok) return;
 
         const respostaCompleta = await response.json();
+        const animais = (respostaCompleta && respostaCompleta.data && respostaCompleta.data.data) 
+            ? respostaCompleta.data.data 
+            : (Array.isArray(respostaCompleta) ? respostaCompleta : null);
 
-        // AQUI ESTÁ O SEGREDO: 
-        // A lista real de animais está dentro de respostaCompleta.data.data
-        const animais = respostaCompleta.data.data;
-
-        // Verificamos se animais é realmente uma lista antes de continuar
-        if (!animais || !Array.isArray(animais)) {
-            container.innerHTML = "<p>Nenhum animal encontrado no momento.</p>";
-            return;
-        }
+        if (!animais || !Array.isArray(animais) || animais.length === 0) return;
 
         container.innerHTML = "";
-
         animais.forEach(pet => {
             const genero = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
-            
-            // Usando a primeira foto do array que vem na sua API
-            const foto = (pet.photos && pet.photos.length > 0) 
-                         ? pet.photos[0] 
-                         : 'imagens/Logo.webp';
+            const foto = (pet.photos && pet.photos.length > 0) ? pet.photos[0] : 'imagens/Logo.webp';
 
             const card = `
                 <div class="card-pet">
-                    <img src="${foto}" alt="${pet.name}">
+                    <img src="${foto}" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
                     <div class="info-pet">
                         <h2>${pet.name}</h2>
                         <p><strong>Gênero:</strong> ${genero}</p>
-                        <p><strong>Raça:</strong> ${pet.breed}</p>
+                        <p><strong>Raça:</strong> ${pet.breed || 'SRD'}</p>
                         <a href="maisinformacoes.html?id=${pet.id}">
                             <button><strong>Mais informações</strong></button>
                         </a>
@@ -220,161 +211,67 @@ async function carregarAnimaisDaAPI() {
             `;
             container.innerHTML += card;
         });
-
     } catch (error) {
-        console.error("Erro detalhado:", error);
-        container.innerHTML = "<p>Erro ao carregar animais. Verifique o console.</p>";
-    }
-}
-
-// 3. Chamar a função quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-    checkAuth(); // Sua função de autenticação
-    carregarAnimaisDaAPI(); // Busca os animais da API
-});
-
-const registerForm = document.getElementById('registerForm');
-if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const payload = {
-            fullName: document.getElementById('full-name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            cpf: document.getElementById('cpf').value,
-            password: document.getElementById('password').value,
-            confirmPassword: document.getElementById('confirm-password').value
-        };
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                alert("Cadastro realizado com sucesso! Faça seu login.");
-                window.location.href = 'entrar.html';
-            } else {
-                const data = await response.json();
-                alert("Erro: " + (data.message || "Verifique os dados."));
-            }
-        } catch (error) {
-            alert("Não foi possível conectar ao servidor.");
-        }
-    });
-}
-
-// --- 2. FUNÇÃO DE LOGIN ---
-const loginForm = document.getElementById('loginForm');
-if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Salva o token VIP no navegador
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('userName', email); // Opcional: salvar algo para mostrar na tela
-                
-                window.location.href = 'index.html';
-            } else {
-                alert("E-mail ou senha incorretos.");
-            }
-        } catch (error) {
-            alert("Erro ao conectar com a API.");
-        }
-    });
-}
-
-// --- 3. CONTROLE DE INTERFACE (LOGADO vs DESLOGADO) ---
-function checkAuth() {
-    const token = localStorage.getItem('accessToken');
-    const userActions = document.querySelector('.user-actions');
-
-    if (token && userActions) {
-        // Se estiver logado, muda o menu
-        userActions.innerHTML = `
-            <span style="color: #8b1a1a; font-weight: 600; margin-right: 10px;">Olá!</span>
-            <a href="#" id="logoutBtn" style="background: #5c0f0f;">Sair</a>
-        `;
-
-        document.getElementById('logoutBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('userName');
-            window.location.href = 'index.html';
-        });
+        console.log("Carregamento de animais da API mantido via script da página.");
     }
 }
 
 async function carregarDadosDoPet() {
     const params = new URLSearchParams(window.location.search);
-    const petId = params.get('id'); // Agora pegamos o ID numérico
+    const petId = params.get('id');
 
     if (!petId) return;
 
     try {
-        // Usando o endpoint público de detalhes que está no seu Swagger
-        const response = await fetch(`${API_BASE_URL}/animals/public/${petId}`);
-        
-        if (!response.ok) {
-            window.location.href = 'queroadotar.html';
-            return;
-        }
+        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
+        const response = await fetch(`${baseUrl}/animals/public/${petId}`);
+        if (!response.ok) return;
 
         const pet = await response.json();
-
-        // Preenche o HTML com os dados reais da API
-        document.getElementById('pet-name').innerText = pet.name;
-        document.getElementById('pet-img').src = (pet.photos && pet.photos.length > 0) ? pet.photos[0] : 'imagens/Logo.webp';
-        document.getElementById('pet-gender').innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
-        document.getElementById('pet-age').innerText = pet.age || "Não informada";
-        document.getElementById('pet-size').innerText = pet.size;
-        document.getElementById('pet-desc').innerText = pet.description;
+        const nomeEl = document.getElementById('pet-name');
+        if (nomeEl) nomeEl.innerText = pet.name;
+        
+        const imgEl = document.getElementById('pet-img');
+        if (imgEl) imgEl.src = (pet.photos && pet.photos.length > 0) ? pet.photos[0] : 'imagens/Logo.webp';
+        
+        const genEl = document.getElementById('pet-gender');
+        if (genEl) genEl.innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
+        
+        const ageEl = document.getElementById('pet-age');
+        if (ageEl) ageEl.innerText = pet.age || "Não informada";
+        
+        const sizeEl = document.getElementById('pet-size');
+        if (sizeEl) sizeEl.innerText = pet.size;
+        
+        const descEl = document.getElementById('pet-desc');
+        if (descEl) descEl.innerText = pet.description;
         
         document.title = `Conheça o ${pet.name} - Apasbac`;
-
     } catch (error) {
         console.error("Erro ao carregar detalhes:", error);
     }
 }
 
 async function enviarFormularioMonitoramento(dados) {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('apasbac_access_token') || localStorage.getItem('accessToken');
+    const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
 
-    const response = await fetch(`${API_BASE_URL}/monitoring`, {
+    await fetch(`${baseUrl}/monitoring`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Aqui vai o token de login
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(dados)
     });
 }
 
-// ============ ADAPTAÇÃO PARA MENU HAMBÚRGUER (CELULAR) ============
-
-// ============ ADAPTAÇÃO PARA MENU HAMBÚRGUER (DROPDOWN) ============
-
+// ============ MENU HAMBÚRGUER (MOBILE) ============
 function iniciarMenuHamburguer() {
     const mainHeader = document.querySelector('.main-header');
     const headerContainer = document.querySelector('.header-container');
     if (!mainHeader || !headerContainer) return;
 
-    // Cria o botão hambúrguer dinamicamente se ele não existir
     if (!document.querySelector('.menu-toggle')) {
         const menuToggle = document.createElement('button');
         menuToggle.classList.add('menu-toggle');
@@ -385,38 +282,23 @@ function iniciarMenuHamburguer() {
 
         menuToggle.addEventListener('click', () => {
             const isOpen = mainHeader.classList.toggle('menu-open');
-            
-            // Alterna o ícone do botão
-            if (isOpen) {
-                menuToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-            } else {
-                menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
-            }
+            menuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
         });
     }
 }
 
-// Inicializador de carregamento
-document.addEventListener('DOMContentLoaded', () => {
-    checkAuth(); 
-    carregarAnimaisDaAPI(); 
-    iniciarMenuHamburguer(); 
-});
-
-// ============ ENVIO DO FORMULÁRIO DE VOLUNTÁRIOS VIA AJAX ============
-
+// ============ ENVIO DO FORMULÁRIO DE VOLUNTÁRIOS ============
 function configurarEnvioFormulario() {
     const form = document.querySelector('.volunteer-form-modern');
     const container = document.querySelector('.form-container');
     if (!form || !container) return;
 
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Impede o navegador de recarregar ou redirecionar a página
+        e.preventDefault();
 
         const submitBtn = form.querySelector('.submit-btn-modern');
         const originalBtnHtml = submitBtn.innerHTML;
 
-        // Desativa o botão de envio para evitar cliques duplos e adiciona um spinner de carregamento
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Enviando...</span> <i class="fas fa-spinner fa-spin"></i>';
 
@@ -433,7 +315,6 @@ function configurarEnvioFormulario() {
             });
 
             if (response.ok) {
-                // Substitui o formulário por um card de sucesso com animação suave
                 container.innerHTML = `
                     <div class="success-container">
                         <div class="success-icon">
@@ -444,58 +325,54 @@ function configurarEnvioFormulario() {
                         <a href="index.html" class="success-back-btn">Voltar para o Início</a>
                     </div>
                 `;
-                // Rola a página suavemente até o topo da caixa de sucesso
                 container.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 throw new Error('Falha no envio');
             }
         } catch (error) {
             alert('Ocorreu um erro ao enviar seu formulário. Por favor, verifique sua conexão e tente novamente.');
-            
-            // Restaura o estado do botão original em caso de falha
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnHtml;
         }
     });
 }
 
-// Inicializador de carregamento consolidado
-document.addEventListener('DOMContentLoaded', () => {
-    checkAuth(); 
-    carregarAnimaisDaAPI(); 
-    iniciarMenuHamburguer(); 
-    configurarEnvioFormulario(); // Ativa a interceptação de envio seguro do formulário
-});
-
-document.addEventListener('DOMContentLoaded', checkAuth);
-
 // ==========================================================================
-// NOVO: GERENCIADOR DE PERFIL DO USUÁRIO LOGADO (APASBAC)
+// GERENCIADOR DE PERFIL DO USUÁRIO LOGADO (MINHA CONTA + BOTÃO DO ADMIN)
 // ==========================================================================
 const EMAIL_ADMIN_OFICIAL = "apasbac.assis@gmail.com";
 
 function iniciarGerenciadorPerfil() {
-    const emailLogado = localStorage.getItem("usuario_logado_email");
+    const emailLogado = localStorage.getItem("usuario_logado_email") || 
+                        (typeof api !== 'undefined' && api.getUser() ? api.getUser().email : null);
     const userActions = document.querySelector('.user-actions');
 
     if (!userActions || !emailLogado) return;
 
-    // 1. Pega o primeiro nome para exibir no botão
     const nomeCompleto = localStorage.getItem("usuario_logado_nome") || emailLogado.split('@')[0];
     const primeiroNome = nomeCompleto.split(' ')[0];
 
-    // 2. Substitui "Entrar" e "Cadastre-se" pelo ícone de usuário
+    // Verifica se é o Administrador Master para exibir o botão dourado "Painel"
+    const emailLower = emailLogado.toLowerCase();
+    const userObj = (typeof api !== 'undefined' && api.getUser) ? api.getUser() : null;
+    const role = userObj && userObj.role ? userObj.role.toUpperCase() : '';
+    const isAdmin = emailLower === EMAIL_ADMIN_OFICIAL.toLowerCase() || role === 'ADMIN' || role === 'STAFF';
+
+    const btnPainel = isAdmin
+        ? `<a href="admin.html" style="background: var(--accent); color: var(--primary-dark) !important; font-weight: 700; margin-right: 6px;"><i class="fa-solid fa-lock"></i> Painel</a>`
+        : '';
+
+    // Renderiza ambos: o botão do Painel (se for admin) e o botão "Minha Conta"
     userActions.innerHTML = `
+        ${btnPainel}
         <button type="button" id="btnAbrirPerfil" class="btn-user-profile" title="Minha Conta">
             <i class="fa-solid fa-circle-user"></i>
             <span>Olá, ${primeiroNome}</span>
         </button>
     `;
 
-    // 3. Injeta a janelinha (Modal) de Perfil
     criarModalPerfil();
 
-    // 4. Adiciona o clique para abrir o modal
     const btnPerfil = document.getElementById('btnAbrirPerfil');
     if (btnPerfil) {
         btnPerfil.addEventListener('click', abrirModalPerfil);
@@ -570,12 +447,12 @@ function criarModalPerfil() {
 
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-    document.getElementById('btnFecharPerfil').addEventListener('click', fecharModalPerfil);
-    document.getElementById('modalMeuPerfil').addEventListener('click', (e) => {
+    document.getElementById('btnFecharPerfil')?.addEventListener('click', fecharModalPerfil);
+    document.getElementById('modalMeuPerfil')?.addEventListener('click', (e) => {
         if (e.target.id === 'modalMeuPerfil') fecharModalPerfil();
     });
-    document.getElementById('btnSairConta').addEventListener('click', deslogarUsuario);
-    document.getElementById('formMeuPerfil').addEventListener('submit', salvarAlteracoesPerfil);
+    document.getElementById('btnSairConta')?.addEventListener('click', deslogarUsuario);
+    document.getElementById('formMeuPerfil')?.addEventListener('submit', salvarAlteracoesPerfil);
 }
 
 async function abrirModalPerfil() {
@@ -635,13 +512,14 @@ async function salvarAlteracoesPerfil(e) {
 
     try {
         if (typeof db !== 'undefined') {
-            const { error } = await db.auth.updateUser({
-                data: {
-                    full_name: novoNome,
-                    phone: novoTelefone
-                }
-            });
-            if (error) throw error;
+            try {
+                await db.auth.updateUser({
+                    data: {
+                        full_name: novoNome,
+                        phone: novoTelefone
+                    }
+                });
+            } catch (err) {}
         }
 
         localStorage.setItem("usuario_logado_nome", novoNome);
@@ -665,19 +543,26 @@ async function salvarAlteracoesPerfil(e) {
 async function deslogarUsuario() {
     if (confirm("Deseja realmente sair da sua conta?")) {
         if (typeof db !== 'undefined') {
-            try {
-                await db.auth.signOut();
-            } catch (e) {}
+            try { await db.auth.signOut(); } catch (e) {}
+        }
+        if (typeof api !== 'undefined' && api.clearSession) {
+            api.clearSession();
         }
 
         localStorage.removeItem("usuario_logado_email");
         localStorage.removeItem("usuario_logado_nome");
         localStorage.removeItem("usuario_logado_telefone");
         localStorage.removeItem("usuario_logado_cpf");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userName");
 
         window.location.reload();
     }
 }
 
-// Inicia o perfil assim que carregar a página
-document.addEventListener('DOMContentLoaded', iniciarGerenciadorPerfil);
+// Inicializador de carregamento
+document.addEventListener('DOMContentLoaded', () => {
+    iniciarMenuHamburguer(); 
+    configurarEnvioFormulario();
+    iniciarGerenciadorPerfil();
+});
