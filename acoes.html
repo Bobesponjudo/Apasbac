@@ -126,7 +126,6 @@
     <script src="script/api-client.js"></script>
     <script src="script/script.js"></script>
     <script>
-        // Função de Sanitização para proteção contra XSS
         function protegerTexto(str) {
             if (!str) return '';
             return String(str)
@@ -137,17 +136,39 @@
                 .replace(/'/g, '&#039;');
         }
 
+        let listaEventosCache = [];
+
         async function carregarEventos() {
             const container = document.getElementById('lista-eventos');
             if (!container) return;
 
-            const { data: eventos, error } = await db
-                .from('events')
-                .select('*')
-                .order('event_date', { ascending: true });
+            try {
+                const { data: eventos, error } = await db
+                    .from('events')
+                    .select('*')
+                    .order('event_date', { ascending: true });
 
-            if (error || !eventos || eventos.length === 0) {
-                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Nenhum evento agendado no momento.</p>";
+                if (error) throw error;
+
+                if (!eventos || eventos.length === 0) {
+                    container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Nenhum evento agendado no momento.</p>";
+                    return;
+                }
+
+                listaEventosCache = eventos;
+                renderizarEventos(listaEventosCache);
+            } catch (err) {
+                console.error("Erro ao carregar eventos:", err);
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--primary);'>Erro ao carregar os eventos do banco.</p>";
+            }
+        }
+
+        function renderizarEventos(eventos) {
+            const container = document.getElementById('lista-eventos');
+            if (!container) return;
+
+            if (eventos.length === 0) {
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Nenhum evento encontrado com os filtros selecionados.</p>";
                 return;
             }
 
@@ -155,7 +176,7 @@
             eventos.forEach(evt => {
                 let dataFormatada = 'A definir';
                 if (evt.event_date && evt.event_date.includes('-')) {
-                    const partes = evt.event_date.split('-');
+                    const partes = evt.event_date.split('T')[0].split('-');
                     dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
                 }
 
@@ -173,8 +194,37 @@
                 `;
             });
         }
+
+        // Lógica dos Filtros (Categoria e Status)
+        document.querySelector('.search-filters')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const categoriaFiltro = document.querySelector('select[name="action-category"]').value;
+            const statusFiltro = document.querySelector('select[name="action-status"]').value;
+            const hoje = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
+
+            const filtrados = listaEventosCache.filter(evt => {
+                // Filtro por Categoria
+                if (categoriaFiltro && evt.category !== categoriaFiltro) {
+                    return false;
+                }
+
+                // Filtro por Status (Próximos vs Concluídos)
+                if (statusFiltro) {
+                    const dataEvt = evt.event_date ? evt.event_date.split('T')[0] : '';
+                    if (statusFiltro === 'upcoming' && dataEvt < hoje) {
+                        return false; // Quer próximos, mas o evento já passou
+                    }
+                    if (statusFiltro === 'completed' && dataEvt >= hoje) {
+                        return false; // Quer concluídos, mas o evento ainda vai acontecer
+                    }
+                }
+
+                return true;
+            });
+
+            renderizarEventos(filtrados);
+        });
+
         document.addEventListener('DOMContentLoaded', carregarEventos);
     </script>
-</body>
-
-</html>
