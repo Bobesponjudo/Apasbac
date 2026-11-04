@@ -354,47 +354,44 @@
     <script src="script/supabase-client.js"></script>
 
     <script>
-        // 1. Verificação de Acesso à prova de falhas
+       // Verificação definitiva para a Vercel e Localhost
         (async function verificarAdmin() {
+            // Pega o e-mail salvo no navegador ou tenta descobrir pelo token
+            const emailSalvo = (localStorage.getItem('usuario_logado_email') || '').trim().toLowerCase();
+
+            // SE O E-MAIL FOR O OFICIAL DA ONG, LIBERA IMEDIATAMENTE SEM CHECAR A API!
+            if (emailSalvo === 'apasbac.assis@gmail.com') {
+                const userDisp = document.getElementById("user-display");
+                if (userDisp) userDisp.innerText = "Admin Oficial (apasbac.assis@gmail.com)";
+                return; // Libera o painel direto!
+            }
+
+            // Se não estiver logado de forma alguma, manda para o entrar.html
             if (!api.isAuthenticated()) {
-                alert("Acesso restrito! Faça login com uma conta de administrador ou staff.");
+                alert("Acesso restrito! Faça login com uma conta de administrador.");
                 window.location.href = "entrar.html";
                 return;
             }
 
             try {
-                const emailLogado = (localStorage.getItem('usuario_logado_email') || '').trim().toLowerCase();
-
-                let userMe = null;
-                try {
-                    userMe = await api.getMe();
-                } catch (e) {
-                    userMe = api.getUser();
-                }
-
-                // Desembrulha a resposta de qualquer padrão que a API possa usar
-                const dados = (userMe && userMe.data) ? (userMe.data.user || userMe.data) : (userMe && userMe.user ? userMe.user : (userMe || {}));
-                const userEmail = (dados.email || emailLogado).toLowerCase();
+                const user = await api.getMe();
+                const dados = (user && user.data) ? (user.data.user || user.data) : (user || {});
+                const userEmail = (dados.email || emailSalvo).toLowerCase();
                 const userRole = (dados.role || '').toUpperCase();
 
-                const isAdmin = emailLogado === 'apasbac.assis@gmail.com' || 
-                                userEmail === 'apasbac.assis@gmail.com' || 
-                                userRole === 'ADMIN' || 
-                                userRole === 'STAFF';
+                const isAdmin = userEmail === 'apasbac.assis@gmail.com' || userRole === 'ADMIN' || userRole === 'STAFF';
 
                 if (!isAdmin) {
-                    alert("Acesso negado: Somente administradores ou colaboradores podem acessar este painel.");
+                    alert("Acesso negado: Somente administradores podem acessar este painel.");
                     window.location.href = "index.html";
                     return;
                 }
 
                 const userDisp = document.getElementById("user-display");
-                if (userDisp) {
-                    userDisp.innerText = `Admin (${emailLogado || 'apasbac.assis@gmail.com'})`;
-                }
+                if (userDisp) userDisp.innerText = `Admin (${userEmail})`;
             } catch (err) {
-                console.error("Erro na verificação:", err);
-                if (localStorage.getItem('usuario_logado_email') === 'apasbac.assis@gmail.com') {
+                // Se a API falhar mas o e-mail salvo for o do admin, deixa entrar mesmo assim
+                if (emailSalvo === 'apasbac.assis@gmail.com') {
                     return;
                 }
                 api.clearSession();
