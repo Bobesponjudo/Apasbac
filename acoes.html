@@ -163,6 +163,12 @@
             }
         }
 
+        function formatarDataSimples(dataStr) {
+            if (!dataStr) return '';
+            const partes = dataStr.split('T')[0].split('-');
+            return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : dataStr;
+        }
+
         function renderizarEventos(eventos) {
             const container = document.getElementById('lista-eventos');
             if (!container) return;
@@ -174,10 +180,13 @@
 
             container.innerHTML = "";
             eventos.forEach(evt => {
-                let dataFormatada = 'A definir';
-                if (evt.event_date && evt.event_date.includes('-')) {
-                    const partes = evt.event_date.split('T')[0].split('-');
-                    dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                const dataInicioFmt = formatarDataSimples(evt.event_date);
+                const dataFimFmt = formatarDataSimples(evt.end_date);
+                
+                // Exibe "15/12/2026" ou "De 15/12/2026 até 20/12/2026"
+                let exibicaoData = dataInicioFmt;
+                if (dataFimFmt && dataFimFmt !== dataInicioFmt) {
+                    exibicaoData = `De ${dataInicioFmt} até ${dataFimFmt}`;
                 }
 
                 container.innerHTML += `
@@ -186,7 +195,7 @@
                         <div class="info-pet">
                             <h3>${protegerTexto(evt.title)}</h3>
                             <p><strong>Categoria:</strong> ${protegerTexto(evt.category)}</p>
-                            <p><strong>Data:</strong> ${dataFormatada}</p>
+                            <p><strong>Data:</strong> ${exibicaoData}</p>
                             <p><strong>Local:</strong> ${protegerTexto(evt.location)}</p>
                             <p style="margin-top: 6px; font-size: 0.85rem;">${protegerTexto(evt.description || '')}</p>
                         </div>
@@ -195,28 +204,38 @@
             });
         }
 
-        // Lógica dos Filtros (Categoria e Status)
+        // Lógica Avançada de Filtros (Categoria + Status Dinâmico por Data)
         document.querySelector('.search-filters')?.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const categoriaFiltro = document.querySelector('select[name="action-category"]').value;
             const statusFiltro = document.querySelector('select[name="action-status"]').value;
-            const hoje = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
+            
+            // Pega a data atual do sistema formatada como YYYY-MM-DD
+            const hoje = new Date().toISOString().split('T')[0];
 
             const filtrados = listaEventosCache.filter(evt => {
-                // Filtro por Categoria
+                // 1. Filtro por Categoria
                 if (categoriaFiltro && evt.category !== categoriaFiltro) {
                     return false;
                 }
 
-                // Filtro por Status (Próximos vs Concluídos)
+                // 2. Filtro por Status baseado na Data Atual
                 if (statusFiltro) {
-                    const dataEvt = evt.event_date ? evt.event_date.split('T')[0] : '';
-                    if (statusFiltro === 'upcoming' && dataEvt < hoje) {
-                        return false; // Quer próximos, mas o evento já passou
-                    }
-                    if (statusFiltro === 'completed' && dataEvt >= hoje) {
-                        return false; // Quer concluídos, mas o evento ainda vai acontecer
+                    const inicio = evt.event_date ? evt.event_date.split('T')[0] : hoje;
+                    const fim = evt.end_date ? evt.end_date.split('T')[0] : inicio; // Se não tiver fim, vale só o dia do início
+
+                    if (statusFiltro === 'upcoming') {
+                        // Próximos: A data de início ainda está no futuro (maior que hoje)
+                        if (inicio <= hoje) return false;
+                    } 
+                    else if (statusFiltro === 'ongoing') {
+                        // Em andamento: Hoje está dentro do período (entre início e fim inclusives)
+                        if (hoje < inicio || hoje > fim) return false;
+                    } 
+                    else if (statusFiltro === 'completed') {
+                        // Concluídos: A data final já passou (menor que hoje)
+                        if (fim >= hoje) return false;
                     }
                 }
 
