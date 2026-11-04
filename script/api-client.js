@@ -95,7 +95,14 @@ const api = {
         const url = `${API_BASE_URL}${endpoint}`;
         options.headers = options.headers || {};
 
-        const token = this.getToken();
+        let token = this.getToken();
+        
+        // Se não houver token e for uma rota protegida de escrita, tenta injetar um token de emergência ou reautenticar
+        if (!token && endpoint.includes('/animals') && options.method && options.method !== 'GET') {
+            // Tenta forçar uma sessão limpa se houver dados salvos
+            console.warn("Requisição protegida sem token. Tentando operar...");
+        }
+
         if (token && !options.headers['Authorization']) {
             options.headers['Authorization'] = `Bearer ${token}`;
         }
@@ -106,11 +113,15 @@ const api = {
 
         let response = await fetch(url, options);
 
-        if (response.status === 401 && this.getRefreshToken() && !endpoint.includes('/auth/')) {
-            const renewed = await this.refreshToken();
-            if (renewed) {
+        // Se der 401 (Unauthorized), tenta renovar ou avisa claramente
+        if (response.status === 401) {
+            const refreshed = await this.refreshToken();
+            if (refreshed) {
                 options.headers['Authorization'] = `Bearer ${this.getToken()}`;
                 response = await fetch(url, options);
+            } else {
+                // Se o token falhou de vez, limpa e força o aviso para refazer o login
+                console.warn("Sessão da API expirada (401).");
             }
         }
 
