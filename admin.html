@@ -167,7 +167,8 @@
 
         <!-- FORMULÁRIO 1: CADASTRAR ANIMAL VIA API -->
         <div id="aba-animal" class="admin-form-box">
-            <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-dog"></i> Informações do Animal</h2>
+            <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-dog"></i> Informações do
+                Animal</h2>
             <form id="formAnimal">
                 <div class="input-group">
                     <label>Nome do Pet *</label>
@@ -177,14 +178,16 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Sexo *</label>
-                        <select id="pet_sex" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                        <select id="pet_sex"
+                            style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
                             <option value="MALE">Macho</option>
                             <option value="FEMALE">Fêmea</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label>Porte *</label>
-                        <select id="pet_size" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                        <select id="pet_size"
+                            style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
                             <option value="SMALL">Pequeno</option>
                             <option value="MEDIUM">Médio</option>
                             <option value="LARGE">Grande</option>
@@ -210,11 +213,14 @@
                 </div>
                 <div class="input-group">
                     <label>Temperamento *</label>
-                    <input type="text" id="pet_temperament" placeholder="Ex: Dócil, Brincalhão, Calmo, Amigável" required>
+                    <input type="text" id="pet_temperament" placeholder="Ex: Dócil, Brincalhão, Calmo, Amigável"
+                        required>
                 </div>
                 <div class="input-group">
                     <label>História / Descrição do Animal</label>
-                    <textarea id="pet_description" rows="3" placeholder="Conte sobre o temperamento, resgate ou cuidados especiais..." style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
+                    <textarea id="pet_description" rows="3"
+                        placeholder="Conte sobre o temperamento, resgate ou cuidados especiais..."
+                        style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
                 </div>
                 <div class="input-group">
                     <label>Vacinas já aplicadas *</label>
@@ -230,7 +236,8 @@
 
         <!-- FORMULÁRIO 2: CADASTRAR EVENTO (SUPABASE) -->
         <div id="aba-evento" class="admin-form-box" style="display: none;">
-            <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-bullhorn"></i> Informações do Evento</h2>
+            <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-bullhorn"></i> Informações do
+                Evento</h2>
             <form id="formEvento">
                 <div class="input-group">
                     <label>Título do Evento *</label>
@@ -240,7 +247,8 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Categoria *</label>
-                        <select id="event_category" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                        <select id="event_category"
+                            style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
                             <option value="Feira de Adoção">Feira de Adoção</option>
                             <option value="Campanha de Doação">Campanha de Doação</option>
                             <option value="Mutirão">Mutirão</option>
@@ -248,24 +256,31 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Data *</label>
+                        <label>Data de Início *</label>
                         <input type="date" id="event_date" required>
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <label>Localização / Onde vai ser *</label>
-                    <input type="text" id="event_location" placeholder="Ex: Av. Brasil, 500 - Em frente ao parque" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div class="input-group">
+                        <label>Data de Término (Opcional)</label>
+                        <input type="date" id="event_end_date">
+                    </div>
+                    <div class="input-group">
+                        <label>Localização / Onde vai ser *</label>
+                        <input type="text" id="event_location" placeholder="Ex: Av. Brasil, 500" required>
+                    </div>
                 </div>
 
-                <div class="input-group">
+                <div class="input-group" style="margin-top: 15px;">
                     <label>Link de Imagem (opcional)</label>
                     <input type="url" id="event_image" placeholder="Deixe vazio para usar a logo padrão">
                 </div>
 
                 <div class="input-group">
                     <label>Descrição do Evento</label>
-                    <textarea id="event_desc" rows="3" placeholder="Explique os detalhes do evento..." style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
+                    <textarea id="event_desc" rows="3" placeholder="Explique os detalhes do evento..."
+                        style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
                 </div>
 
                 <button type="submit" class="submit-btn-modern" id="btnSalvarEvento">
@@ -273,29 +288,6 @@
                 </button>
             </form>
         </div>
-
-        <!-- LISTA DE ANIMAIS VIA API -->
-        <div id="aba-list-animal" class="admin-form-box" style="display: none; max-width: 850px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: var(--primary); margin: 0;"><i class="fa-solid fa-paw"></i> Animais Cadastrados (API)</h2>
-                <button onclick="carregarListaAnimais()" style="padding: 6px 14px; border-radius: 20px; cursor: pointer;">
-                    <i class="fa-solid fa-arrows-rotate"></i> Atualizar
-                </button>
-            </div>
-            <div id="lista-animais-admin"><p>Carregando animais...</p></div>
-        </div>
-
-        <!-- LISTA DE EVENTOS VIA SUPABASE -->
-        <div id="aba-list-evento" class="admin-form-box" style="display: none; max-width: 850px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: var(--primary); margin: 0;"><i class="fa-solid fa-calendar-days"></i> Eventos Cadastrados</h2>
-                <button onclick="carregarListaEventos()" style="padding: 6px 14px; border-radius: 20px; cursor: pointer;">
-                    <i class="fa-solid fa-arrows-rotate"></i> Atualizar
-                </button>
-            </div>
-            <div id="lista-eventos-admin"><p>Carregando eventos...</p></div>
-        </div>
-
         <!-- MODAL DE EDITAR ANIMAL VIA API -->
         <div id="modalEditAnimal" class="modal-overlay">
             <div class="modal-box">
@@ -319,7 +311,8 @@
                         <label>Vacinas (separadas por vírgula)</label>
                         <input type="text" id="edit_pet_vaccines">
                     </div>
-                    <button type="submit" class="submit-btn-modern" style="padding: 12px; margin-top: 15px;">Salvar Alterações</button>
+                    <button type="submit" class="submit-btn-modern" style="padding: 12px; margin-top: 15px;">Salvar
+                        Alterações</button>
                 </form>
             </div>
         </div>
@@ -343,7 +336,8 @@
                         <label>Localização</label>
                         <input type="text" id="edit_evt_location" required>
                     </div>
-                    <button type="submit" class="submit-btn-modern" style="padding: 12px; margin-top: 15px;">Salvar Alterações</button>
+                    <button type="submit" class="submit-btn-modern" style="padding: 12px; margin-top: 15px;">Salvar
+                        Alterações</button>
                 </form>
             </div>
         </div>
@@ -354,32 +348,31 @@
     <script src="script/supabase-client.js"></script>
 
     <script>
-       // Verificação definitiva para a Vercel e Localhost
+        // 1. Verificação de Acesso à prova de falhas
         (async function verificarAdmin() {
-            // Pega o e-mail salvo no navegador ou tenta descobrir pelo token
             const emailSalvo = (localStorage.getItem('usuario_logado_email') || '').trim().toLowerCase();
 
-            // SE O E-MAIL FOR O OFICIAL DA ONG, LIBERA IMEDIATAMENTE SEM CHECAR A API!
             if (emailSalvo === 'apasbac.assis@gmail.com') {
                 const userDisp = document.getElementById("user-display");
                 if (userDisp) userDisp.innerText = "Admin Oficial (apasbac.assis@gmail.com)";
-                return; // Libera o painel direto!
+                return;
             }
 
-            // Se não estiver logado de forma alguma, manda para o entrar.html
             if (!api.isAuthenticated()) {
-                alert("Acesso restrito! Faça login com uma conta de administrador.");
+                alert("Acesso restrito! Faça login com uma conta de administrador ou staff.");
                 window.location.href = "entrar.html";
                 return;
             }
 
             try {
-                const user = await api.getMe();
-                const dados = (user && user.data) ? (user.data.user || user.data) : (user || {});
+                let userMe = null;
+                try { userMe = await api.getMe(); } catch (e) { userMe = api.getUser(); }
+
+                const dados = (userMe && userMe.data) ? (userMe.data.user || userMe.data) : (userMe && userMe.user ? userMe.user : (userMe || {}));
                 const userEmail = (dados.email || emailSalvo).toLowerCase();
                 const userRole = (dados.role || '').toUpperCase();
 
-                const isAdmin = userEmail === 'apasbac.assis@gmail.com' || userRole === 'ADMIN' || userRole === 'STAFF';
+                const isAdmin = emailSalvo === 'apasbac.assis@gmail.com' || userEmail === 'apasbac.assis@gmail.com' || userRole === 'ADMIN' || userRole === 'STAFF';
 
                 if (!isAdmin) {
                     alert("Acesso negado: Somente administradores podem acessar este painel.");
@@ -388,27 +381,24 @@
                 }
 
                 const userDisp = document.getElementById("user-display");
-                if (userDisp) userDisp.innerText = `Admin (${userEmail})`;
+                if (userDisp) userDisp.innerText = `Admin (${emailSalvo})`;
             } catch (err) {
-                // Se a API falhar mas o e-mail salvo for o do admin, deixa entrar mesmo assim
-                if (emailSalvo === 'apasbac.assis@gmail.com') {
-                    return;
-                }
+                if (emailSalvo === 'apasbac.assis@gmail.com') return;
                 api.clearSession();
                 window.location.href = "entrar.html";
             }
         })();
 
-        // Botão de Logout Seguro
+        // Botão de Logout
         document.getElementById('btnLogout')?.addEventListener('click', async (e) => {
             e.preventDefault();
             if (typeof db !== 'undefined') {
-                try { await db.auth.signOut(); } catch (err) {}
+                try { await db.auth.signOut(); } catch (err) { }
             }
             api.logout();
         });
 
-        // 2. Alternar Abas
+        // Alternar Abas
         function mostrarAba(tipo) {
             document.getElementById('aba-animal').style.display = 'none';
             document.getElementById('aba-evento').style.display = 'none';
@@ -438,21 +428,17 @@
             document.getElementById(id).style.display = 'none';
         }
 
-        // 3. Salvar Animal na API REST
-        // 3. Salvar Animal na API REST (Ajustado para o formato exigido pela API)
+        // Formulário de Animais
         document.getElementById('formAnimal').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSalvarAnimal');
             btn.disabled = true;
             btn.innerText = "Salvando na API...";
 
+            const foto = document.getElementById('pet_photo').value.trim() || 'imagens/Logo.webp';
             const vacinasTexto = document.getElementById('pet_vaccines').value;
             const vacinasArray = vacinasTexto.split(',').map(v => v.trim()).filter(Boolean);
 
-            // Payload ajustado conforme os erros retornados pela API:
-            // - Removido 'age' e 'photos' que a API barrou
-            // - Adicionado 'escapeTendency' (booleano obrigatório)
-            // - Caso queira mandar imagem ou idade, elas vão na descrição ou em campos aceitos pela API
             const payload = {
                 name: document.getElementById('pet_name').value.trim(),
                 sex: document.getElementById('pet_sex').value,
@@ -460,8 +446,8 @@
                 breed: document.getElementById('pet_breed').value.trim(),
                 temperament: document.getElementById('pet_temperament').value.trim(),
                 vaccines: vacinasArray,
-                description: `Idade: ${document.getElementById('pet_age').value.trim()} | Foto URL: ${document.getElementById('pet_photo').value.trim()} | ` + document.getElementById('pet_description').value.trim(),
-                escapeTendency: false // Campo booleano exigido pela API da Vercel
+                description: `Idade: ${document.getElementById('pet_age').value.trim()} | Foto URL: ${foto} | ` + document.getElementById('pet_description').value.trim(),
+                escapeTendency: false
             };
 
             try {
@@ -470,7 +456,6 @@
                 document.getElementById('formAnimal').reset();
                 mostrarAba('list-animal');
             } catch (err) {
-                console.error("Erro ao cadastrar animal:", err);
                 alert("Erro ao cadastrar animal: " + err.message);
             } finally {
                 btn.disabled = false;
@@ -478,28 +463,18 @@
             }
         });
 
-        // 4. Listar Animais da API REST (Desembrulha a resposta corretamente)
+        // Listar Animais
         let animaisCache = [];
         async function carregarListaAnimais() {
             const container = document.getElementById('lista-animais-admin');
-            container.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Carregando animais da API...</p>';
+            container.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Carregando animais...</p>';
 
             try {
                 const res = await api.getAnimals({ limit: 100 });
-                
-                // Desembrulha a lista de qualquer estrutura que a API enviar
                 let lista = [];
-                if (Array.isArray(res)) {
-                    lista = res;
-                } else if (res && Array.isArray(res.data)) {
-                    lista = res.data;
-                } else if (res && res.data && Array.isArray(res.data.data)) {
-                    lista = res.data.data;
-                } else if (res && res.data && Array.isArray(res.data.items)) {
-                    lista = res.data.items;
-                } else if (res && Array.isArray(res.items)) {
-                    lista = res.items;
-                }
+                if (Array.isArray(res)) lista = res;
+                else if (res?.data && Array.isArray(res.data)) lista = res.data;
+                else if (res?.data?.data && Array.isArray(res.data.data)) lista = res.data.data;
 
                 animaisCache = lista;
 
@@ -526,9 +501,6 @@
                             </div>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn-edit" onclick="abrirEditarAnimal(${petId})">
-                                <i class="fa-solid fa-pen"></i> Editar
-                            </button>
                             <button class="btn-delete" onclick="excluirAnimal(${petId}, '${pet.name}')">
                                 <i class="fa-solid fa-trash"></i> Excluir
                             </button>
@@ -542,7 +514,7 @@
         }
 
         async function excluirAnimal(id, nome) {
-            if (!confirm(`Deseja realmente excluir o animal "${nome}" via API?`)) return;
+            if (!confirm(`Deseja realmente excluir o animal "${nome}"?`)) return;
             try {
                 await api.deleteAnimal(id);
                 alert("Animal removido com sucesso!");
@@ -552,142 +524,116 @@
             }
         }
 
-        function abrirEditarAnimal(id) {
-            const pet = animaisCache.find(p => p.id === id);
-            if (!pet) return alert("Animal não encontrado.");
-
-            document.getElementById('edit_pet_id').value = pet.id;
-            document.getElementById('edit_pet_name').value = pet.name || '';
-            document.getElementById('edit_pet_breed').value = pet.breed || '';
-            document.getElementById('edit_pet_temperament').value = pet.temperament || '';
-            document.getElementById('edit_pet_vaccines').value = Array.isArray(pet.vaccines) ? pet.vaccines.join(', ') : (pet.vaccines || '');
-
-            document.getElementById('modalEditAnimal').style.display = 'flex';
-        }
-
-        document.getElementById('formEditAnimal').addEventListener('submit', async (e) => {
+        // CADASTRAR EVENTO COM DATA DE INÍCIO E TÉRMINO NO SUPABASE
+        document.getElementById('formEvento').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const id = document.getElementById('edit_pet_id').value;
-            const vacinas = document.getElementById('edit_pet_vaccines').value.split(',').map(v => v.trim()).filter(Boolean);
+            const btn = document.getElementById('btnSalvarEvento');
+            btn.disabled = true;
+            btn.innerText = "Publicando...";
 
-            try {
-                await api.updateAnimal(id, {
-                    name: document.getElementById('edit_pet_name').value,
-                    breed: document.getElementById('edit_pet_breed').value,
-                    temperament: document.getElementById('edit_pet_temperament').value,
-                    vaccines: vacinas
+            let { data: { session } } = await db.auth.getSession();
+            if (!session) {
+                const senhaSupabase = prompt("Digite a senha do Supabase para autorizar a publicação:");
+                if (!senhaSupabase) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
+                    return;
+                }
+                const { data: loginData, error: loginErr } = await db.auth.signInWithPassword({
+                    email: 'apasbac.assis@gmail.com',
+                    password: senhaSupabase
                 });
+                if (loginErr) {
+                    alert("Erro de senha do Supabase: " + loginErr.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
+                    return;
+                }
+                session = loginData.session;
+            }
 
-                alert("Animal atualizado com sucesso!");
-                fecharModal('modalEditAnimal');
-                carregarListaAnimais();
-            } catch (err) {
-                alert("Erro ao atualizar animal: " + err.message);
+            const foto = document.getElementById('event_image').value.trim() || 'imagens/Logo.webp';
+            const dataFim = document.getElementById('event_end_date').value.trim();
+
+            const { error } = await db.from('events').insert([{
+                title: document.getElementById('event_title').value.trim(),
+                category: document.getElementById('event_category').value,
+                event_date: document.getElementById('event_date').value,
+                end_date: dataFim ? dataFim : null,
+                location: document.getElementById('event_location').value.trim(),
+                description: document.getElementById('event_desc').value.trim(),
+                image_url: foto,
+                created_at: new Date().toISOString()
+            }]);
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
+
+            if (error) {
+                alert("Erro ao cadastrar evento: " + error.message);
+            } else {
+                alert("Evento publicado com sucesso!");
+                document.getElementById('formEvento').reset();
+                mostrarAba('list-evento');
             }
         });
 
-    
-        // 5. EVENTOS VIA SUPABASE (Autenticação Automática e Publicação Direta)
+        // Listar Eventos do Supabase
         async function carregarListaEventos() {
             const container = document.getElementById('lista-eventos-admin');
-            if (!container) return;
-            container.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Carregando eventos do banco...</p>';
+            container.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Carregando eventos...</p>';
 
-            try {
-                const { data: eventos, error } = await db
-                    .from('events')
-                    .select('*')
-                    .order('event_date', { ascending: true });
+            const { data: eventos, error } = await db.from('events').select('*').order('event_date', { ascending: true });
 
-                if (error) {
-                    container.innerHTML = `<p style="color: #c0392b;">Erro do Supabase: ${error.message}</p>`;
-                    console.error("Erro Supabase ao listar:", error);
-                    return;
-                }
-
-                if (!eventos || eventos.length === 0) {
-                    container.innerHTML = '<p style="color:#888;">Nenhum evento cadastrado ainda.</p>';
-                    return;
-                }
-
-                container.innerHTML = '';
-                eventos.forEach(evt => {
-                    const evtId = evt.id;
-                    
-                    // Formatação segura de data (não quebra com formatos diferentes)
-                    let dataFormatada = 'Data não definida';
-                    if (evt.event_date) {
-                        const strDate = String(evt.event_date);
-                        if (strDate.includes('-')) {
-                            const partes = strDate.split('T')[0].split('-');
-                            dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
-                        } else {
-                            dataFormatada = strDate;
-                        }
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'item-card';
-                    card.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 14px;">
-                            <img src="${evt.image_url || 'imagens/Logo.webp'}" class="item-thumb" alt="Evento" onerror="this.src='imagens/Logo.webp'">
-                            <div>
-                                <h4 style="margin: 0; color: var(--primary);">${evt.title || 'Sem título'}</h4>
-                                <p style="margin: 2px 0; font-size: 0.85rem; color: #555;">
-                                    ${evt.category || 'Evento'} • ${dataFormatada} • ${evt.location || 'Local a definir'}
-                                </p>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn-edit" id="btn-edit-${evtId}">
-                                <i class="fa-solid fa-pen"></i> Editar
-                            </button>
-                            <button class="btn-delete" id="btn-del-${evtId}">
-                                <i class="fa-solid fa-trash"></i> Excluir
-                            </button>
-                        </div>
-                    `;
-
-                    container.appendChild(card);
-
-                    // Adiciona os cliques de forma segura
-                    document.getElementById(`btn-edit-${evtId}`)?.addEventListener('click', () => abrirEditarEvento(evtId));
-                    document.getElementById(`btn-del-${evtId}`)?.addEventListener('click', () => excluirEvento(evtId, evt.title));
-                });
-            } catch (err) {
-                console.error("Erro ao listar eventos:", err);
-                container.innerHTML = `<p style="color: #c0392b;">Erro ao carregar eventos: ${err.message}</p>`;
+            if (error) {
+                container.innerHTML = `<p style="color: #c0392b;">Erro ao carregar: ${error.message}</p>`;
+                return;
             }
+
+            if (!eventos || eventos.length === 0) {
+                container.innerHTML = '<p style="color:#888;">Nenhum evento cadastrado ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            eventos.forEach(evt => {
+                const evtId = evt.id;
+                const inicio = evt.event_date ? evt.event_date.split('T')[0].split('-').reverse().join('/') : '';
+                const fim = evt.end_date ? evt.end_date.split('T')[0].split('-').reverse().join('/') : '';
+                const periodo = (fim && fim !== inicio) ? `De ${inicio} até ${fim}` : inicio;
+
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <img src="${evt.image_url || 'imagens/Logo.webp'}" class="item-thumb" alt="Evento" onerror="this.src='imagens/Logo.webp'">
+                        <div>
+                            <h4 style="margin: 0; color: var(--primary);">${evt.title}</h4>
+                            <p style="margin: 2px 0; font-size: 0.85rem; color: #555;">
+                                ${evt.category} • ${periodo} • ${evt.location}
+                            </p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-delete" onclick="excluirEvento('${evtId}', '${evt.title}')">
+                            <i class="fa-solid fa-trash"></i> Excluir
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
 
-        async function abrirEditarEvento(id) {
-            const { data: evt, error } = await db.from('events').select('*').eq('id', id).single();
-            if (error || !evt) return alert("Evento não encontrado.");
-
-            document.getElementById('edit_evt_id').value = evt.id;
-            document.getElementById('edit_evt_title').value = evt.title || '';
-            document.getElementById('edit_evt_date').value = evt.event_date || '';
-            document.getElementById('edit_evt_location').value = evt.location || '';
-            document.getElementById('modalEditEvento').style.display = 'flex';
-        }
-
-        document.getElementById('formEditEvento')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('edit_evt_id').value;
-
-            const { error } = await db.from('events').update({
-                title: document.getElementById('edit_evt_title').value,
-                event_date: document.getElementById('edit_evt_date').value,
-                location: document.getElementById('edit_evt_location').value
-            }).eq('id', id);
-
-            if (error) alert("Erro ao salvar: " + error.message);
+        async function excluirEvento(id, titulo) {
+            if (!confirm(`Deseja excluir o evento "${titulo}"?`)) return;
+            const { error } = await db.from('events').delete().eq('id', id);
+            if (error) alert("Erro ao excluir: " + error.message);
             else {
-                alert("Evento atualizado com sucesso!");
-                fecharModal('modalEditEvento');
+                alert("Evento excluído com sucesso!");
                 carregarListaEventos();
             }
-        });
+        }
     </script>
 </body>
+
 </html>
