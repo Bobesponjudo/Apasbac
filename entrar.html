@@ -215,6 +215,7 @@
                             <input type="password" id="nova_senha" required minlength="8" placeholder="Mínimo 8 caracteres">
                             <i class="fa-solid fa-eye-slash toggle-password" data-target="nova_senha"></i>
                         </div>
+                        <small style="display: block; margin-top: 6px; font-size: 0.78rem; color: #777;">Mínimo 8 caracteres, com 1 letra maiúscula, 1 número e 1 especial (@ $ ! % * ? &).</small>
                     </div>
 
                     <div class="input-group" style="text-align: left; margin-bottom: 22px;">
@@ -232,8 +233,7 @@
             </div>
         </div>
     </main>
-
-    <footer class="site-footer">
+<footer class="site-footer">
         <div class="footer-content-wrapper">
             <div class="footer-columns">
                 <div class="footer-column">
@@ -246,6 +246,7 @@
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
                     <a href="acoes.html">Nossas Ações</a>
+                    <a href="feedback.html">Avalie nosso site</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -256,25 +257,42 @@
                     <a href="entrar.html">Entrar</a>
                     <a href="cadastrarse.html">Cadastre-se</a>
                 </div>
+                <div class="footer-column">
+                    <h3>POR QUE ADOTAR?</h3>
+                    <a href="quemsomos.html">Mude uma vida: adote!</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Departamento de meio ambiente</h3>
+                    <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site:
+                        assischateaubriand.pr.gov.br</a>
+                    <a
+                        href="https://mail.google.com/mail/u/0/?hl=pt-BR#inbox?compose=CllgCHrkVQNCxBnJfvxDRjlVqfmqtJCTBpDkGpVddwfdGtGMKnZWHHtMmqPWjMGDHnzFXpgQZkg">
+                        E-mail: depmeioambienteassis@gmail.com</a>
+                    <a href="#">Telefone: (44) 99843-7113</a>
+
+
+
+                </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook"
+                        target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="footer-logo">
-                    <img src="imagens/Logo.webp" alt="Logo">
+                    <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
                 <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Conexão com Supabase e API Oficial -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script/supabase-client.js"></script>
+    <!-- Conexão com a API oficial -->
     <script src="script/api-client.js"></script>
+    <script src="script/script.js"></script>
 
     <script>
         // 1. Alternador do Olhinho (Funciona em qualquer campo com data-target)
@@ -291,20 +309,13 @@
             });
         });
 
-        // 2. Detecção automática do link de redefinição de senha vindo do e-mail
-        if (typeof db !== 'undefined') {
-            db.auth.onAuthStateChange(async (event, session) => {
-                if (event === 'PASSWORD_RECOVERY') {
-                    document.getElementById('modalNovaSenha').style.display = 'flex';
-                }
-            });
+        // 2. Detecta o token de redefinição enviado pela API
+        const resetUrl = new URL(window.location.href);
+        const hashParams = new URLSearchParams(resetUrl.hash.replace(/^#/, ''));
+        let resetToken = resetUrl.searchParams.get('token') || hashParams.get('token');
+        if (resetToken) document.getElementById('modalNovaSenha').style.display = 'flex';
 
-            if (window.location.hash && window.location.hash.includes('type=recovery')) {
-                document.getElementById('modalNovaSenha').style.display = 'flex';
-            }
-        }
-
-        // 3. Salvar a Nova Senha no Banco de Dados
+        // 3. Salvar a nova senha na API
         document.getElementById('formNovaSenha')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSalvarNovaSenha');
@@ -316,16 +327,24 @@
                 return;
             }
 
+            if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(novaSenha)) {
+                alert("A senha precisa ter no mínimo 8 caracteres, com 1 letra maiúscula, 1 número e 1 caractere especial (@ $ ! % * ? &).");
+                return;
+            }
+
             btn.disabled = true;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Atualizando senha...';
 
             try {
-                const { error } = await db.auth.updateUser({ password: novaSenha });
-                if (error) throw error;
+                if (!resetToken) throw new Error('O link de redefinição não contém um token válido.');
+                await api.resetPassword(resetToken, novaSenha, confirma);
 
                 alert("Senha redefinida com sucesso! Você já pode entrar com sua nova senha.");
                 document.getElementById('modalNovaSenha').style.display = 'none';
-                window.location.hash = ''; // Limpa a URL
+                resetUrl.searchParams.delete('token');
+                resetUrl.hash = '';
+                window.history.replaceState(null, '', resetUrl.pathname + resetUrl.search);
+                resetToken = null;
             } catch (err) {
                 alert("Erro ao redefinir senha: " + err.message);
             } finally {
@@ -361,14 +380,9 @@
             btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
 
             try {
-                if (typeof db !== 'undefined') {
-                    const { error } = await db.auth.resetPasswordForEmail(emailReset, {
-                        redirectTo: window.location.origin + '/entrar.html'
-                    });
-                    if (error) throw error;
-                }
+                await api.forgotPassword(emailReset);
 
-                alert(`Um link de recuperação em português foi enviado para ${emailReset}!\n\nVerifique sua Caixa de Entrada ou pasta de Lixo/Spam.`);
+                alert(`Se houver uma conta para ${emailReset}, enviaremos um link de recuperação. Verifique sua caixa de entrada e a pasta de spam.`);
                 modalReset.style.display = 'none';
                 document.getElementById('formRecuperarSenha').reset();
             } catch (err) {
@@ -379,7 +393,7 @@
             }
         });
 
-        // 5. Login Principal (Compatível com Usuários Comuns via Supabase e Admin)
+        // 5. Login pela API oficial
         const loginForm = document.getElementById('loginForm');
         const btnLogin = document.getElementById('btnLogin');
 
@@ -393,46 +407,11 @@
             const password = document.getElementById('password').value;
 
             try {
-                let role = 'USER';
-                let fullName = emailDigitado.split('@')[0];
+                const { user } = await api.login(emailDigitado, password);
+                const role = (user.role || 'USER').toUpperCase();
+                const fullName = user.fullName || emailDigitado.split('@')[0];
 
-                // 1. Tenta logar pelo Supabase Auth primeiro (Garante que qualquer usuário comum consiga se logar com a senha nova)
-                if (typeof db !== 'undefined') {
-                    const { data, error: supaErr } = await db.auth.signInWithPassword({
-                        email: emailDigitado,
-                        password: password
-                    });
-
-                    if (!supaErr && data.session) {
-                        // Se logou com sucesso no Supabase, pega metadados se houver
-                        const userMeta = data.user.user_metadata || {};
-                        fullName = userMeta.full_name || fullName;
-                    } else {
-                        // Se falhou no Supabase, tenta a API da Vercel (para compatibilidade com contas antigas)
-                        try {
-                            const res = await api.login(emailDigitado, password);
-                            const u = res.user || res.data || res;
-                            const dadosUser = (u && u.data) ? (u.data.user || u.data) : (u.user || u);
-                            role = (dadosUser.role || 'USER').toUpperCase();
-                            fullName = dadosUser.fullName || fullName;
-                        } catch (apiErr) {
-                            // Se falhou nos dois, joga o erro original do Supabase ou da API
-                            throw new Error(supaErr ? supaErr.message : apiErr.message);
-                        }
-                    }
-                } else {
-                    // Fallback caso o Supabase não carregue
-                    const res = await api.login(emailDigitado, password);
-                    const u = res.user || res.data || res;
-                    const dadosUser = (u && u.data) ? (u.data.user || u.data) : (u.user || u);
-                    role = (dadosUser.role || 'USER').toUpperCase();
-                    fullName = dadosUser.fullName || fullName;
-                }
-
-                localStorage.setItem("usuario_logado_email", emailDigitado);
-                localStorage.setItem("usuario_logado_nome", fullName);
-
-                const isAdmin = emailDigitado === 'apasbac.assis@gmail.com' || role === 'ADMIN' || role === 'STAFF';
+                const isAdmin = role === 'ADMIN' || role === 'STAFF';
 
                 if (isAdmin) {
                     alert("Bem-vindo, Administrador!");
@@ -442,7 +421,21 @@
                     window.location.href = 'index.html';
                 }
             } catch (error) {
-                alert("E-mail ou senha incorretos. Verifique seus dados.");
+                let mensagem;
+                if (error.status === 401) {
+                    mensagem = "E-mail ou senha incorretos. Verifique seus dados.";
+                } else if (error.status === 403) {
+                    mensagem = "Esta conta não tem permissão para acessar o painel.";
+                } else if (error.status === 429) {
+                    mensagem = `Muitas tentativas. Aguarde ${error.retryAfter || 'alguns'} segundos e tente novamente.`;
+                } else if (error.status >= 500) {
+                    mensagem = "A API de autenticação está com erro interno. O site e o navegador conseguiram se conectar, mas o servidor não concluiu o login.";
+                    if (error.requestId) mensagem += ` Informe este código ao responsável pela API: ${error.requestId}.`;
+                } else {
+                    mensagem = `Não foi possível entrar: ${error.message}`;
+                    if (error.requestId) mensagem += ` (Código: ${error.requestId})`;
+                }
+                alert(mensagem);
                 console.error("Erro no login:", error);
                 btnLogin.innerText = 'Entrar';
                 btnLogin.disabled = false;

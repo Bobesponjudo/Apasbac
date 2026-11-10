@@ -149,18 +149,17 @@ const petsData = {
 
 async function listarAnimais() {
     try {
-        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
-        const response = await fetch(`${baseUrl}/animals`);
-        const animals = await response.json();
-        
+        const animals = api.getList(await api.getAnimals({ isAdopted: false, limit: 12 }));
         const container = document.querySelector('.container-pets');
         if (!container) return;
-        container.innerHTML = "";
+        container.innerHTML = animals.length
+            ? ""
+            : "<p style='grid-column: 1/-1; text-align: center;'>Nenhum animal disponível no momento.</p>";
 
         animals.forEach(pet => {
             container.innerHTML += `
                 <div class="card-pet">
-                    <img src="${pet.imageUrl || 'imagens/placeholder.jpg'}" alt="${pet.name}">
+                    <img src="${pet.photos?.[0] || 'imagens/Logo.webp'}" alt="${pet.name}">
                     <div class="info-pet">
                         <h2>${pet.name}</h2>
                         <p><strong>Gênero:</strong> ${pet.sex === 'MALE' ? 'Macho' : 'Fêmea'}</p>
@@ -180,21 +179,16 @@ async function carregarAnimaisDaAPI() {
     if (!container) return;
 
     try {
-        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
-        const response = await fetch(`${baseUrl}/animals`);
-        if (!response.ok) return;
+        const animais = api.getList(await api.getAnimals({ isAdopted: false, limit: 12 }));
+        if (animais.length === 0) {
+            container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Nenhum animal disponível no momento.</p>";
+            return;
+        }
 
-        const respostaCompleta = await response.json();
-        const animais = (respostaCompleta && respostaCompleta.data && respostaCompleta.data.data) 
-            ? respostaCompleta.data.data 
-            : (Array.isArray(respostaCompleta) ? respostaCompleta : null);
-
-        if (!animais || !Array.isArray(animais) || animais.length === 0) return;
-
-        container.innerHTML = "";
+        container.innerHTML = '';
         animais.forEach(pet => {
             const genero = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
-            const foto = (pet.photos && pet.photos.length > 0) ? pet.photos[0] : 'imagens/Logo.webp';
+            const foto = pet.photos?.[0] || 'imagens/Logo.webp';
 
             const card = `
                 <div class="card-pet">
@@ -212,7 +206,8 @@ async function carregarAnimaisDaAPI() {
             container.innerHTML += card;
         });
     } catch (error) {
-        console.log("Carregamento de animais da API mantido via script da página.");
+        console.error("Erro ao carregar animais:", error);
+        container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--primary);'>Não foi possível carregar os animais.</p>";
     }
 }
 
@@ -223,11 +218,7 @@ async function carregarDadosDoPet() {
     if (!petId) return;
 
     try {
-        const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
-        const response = await fetch(`${baseUrl}/animals/public/${petId}`);
-        if (!response.ok) return;
-
-        const pet = await response.json();
+        const pet = await api.getAnimalPublic(petId);
         const nomeEl = document.getElementById('pet-name');
         if (nomeEl) nomeEl.innerText = pet.name;
         
@@ -238,7 +229,8 @@ async function carregarDadosDoPet() {
         if (genEl) genEl.innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
         
         const ageEl = document.getElementById('pet-age');
-        if (ageEl) ageEl.innerText = pet.age || "Não informada";
+        const ageInDescription = pet.description?.match(/(?:^|\|\s*)Idade:\s*([^|]+)/i)?.[1]?.trim();
+        if (ageEl) ageEl.innerText = pet.age || ageInDescription || "Não informada";
         
         const sizeEl = document.getElementById('pet-size');
         if (sizeEl) sizeEl.innerText = pet.size;
@@ -253,17 +245,7 @@ async function carregarDadosDoPet() {
 }
 
 async function enviarFormularioMonitoramento(dados) {
-    const token = localStorage.getItem('apasbac_access_token') || localStorage.getItem('accessToken');
-    const baseUrl = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://apasbac-api.vercel.app';
-
-    await fetch(`${baseUrl}/monitoring`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(dados)
-    });
+    return api.request('/monitoring', { method: 'POST', body: dados, auth: true });
 }
 
 // ============ MENU HAMBÚRGUER (MOBILE) ============
@@ -275,14 +257,18 @@ function iniciarMenuHamburguer() {
     if (!document.querySelector('.menu-toggle')) {
         const menuToggle = document.createElement('button');
         menuToggle.classList.add('menu-toggle');
+        menuToggle.type = 'button';
         menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
         menuToggle.setAttribute('aria-label', 'Abrir menu');
+        menuToggle.setAttribute('aria-expanded', 'false');
 
         headerContainer.appendChild(menuToggle);
 
         menuToggle.addEventListener('click', () => {
             const isOpen = mainHeader.classList.toggle('menu-open');
             menuToggle.innerHTML = isOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+            menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
         });
     }
 }
@@ -340,23 +326,19 @@ function configurarEnvioFormulario() {
 // ==========================================================================
 // GERENCIADOR DE PERFIL DO USUÁRIO LOGADO (MINHA CONTA + BOTÃO DO ADMIN)
 // ==========================================================================
-const EMAIL_ADMIN_OFICIAL = "apasbac.assis@gmail.com";
-
 function iniciarGerenciadorPerfil() {
-    const emailLogado = localStorage.getItem("usuario_logado_email") || 
-                        (typeof api !== 'undefined' && api.getUser() ? api.getUser().email : null);
+    const user = typeof api !== 'undefined' ? api.getUser() : null;
+    const emailLogado = user?.email;
     const userActions = document.querySelector('.user-actions');
 
     if (!userActions || !emailLogado) return;
 
-    const nomeCompleto = localStorage.getItem("usuario_logado_nome") || emailLogado.split('@')[0];
+    const nomeCompleto = user.fullName || emailLogado.split('@')[0];
     const primeiroNome = nomeCompleto.split(' ')[0];
 
-    // Verifica se é o Administrador Master para exibir o botão dourado "Painel"
     const emailLower = emailLogado.toLowerCase();
-    const userObj = (typeof api !== 'undefined' && api.getUser) ? api.getUser() : null;
-    const role = userObj && userObj.role ? userObj.role.toUpperCase() : '';
-    const isAdmin = emailLower === EMAIL_ADMIN_OFICIAL.toLowerCase() || role === 'ADMIN' || role === 'STAFF';
+    const role = user.role ? user.role.toUpperCase() : '';
+    const isAdmin = role === 'ADMIN' || role === 'STAFF';
 
     const btnPainel = isAdmin
         ? `<a href="admin.html" style="background: var(--accent); color: var(--primary-dark) !important; font-weight: 700; margin-right: 6px;"><i class="fa-solid fa-lock"></i> Painel</a>`
@@ -459,38 +441,28 @@ async function abrirModalPerfil() {
     const modal = document.getElementById('modalMeuPerfil');
     if (!modal) return;
 
-    document.getElementById('perfil_nome').value = localStorage.getItem("usuario_logado_nome") || "";
-    document.getElementById('perfil_telefone').value = localStorage.getItem("usuario_logado_telefone") || "";
-    document.getElementById('perfil_email').value = localStorage.getItem("usuario_logado_email") || "";
-    document.getElementById('perfil_cpf').value = localStorage.getItem("usuario_logado_cpf") || "Não informado";
+    let user = api.getUser();
+    document.getElementById('perfil_nome').value = user?.fullName || "";
+    document.getElementById('perfil_telefone').value = user?.phone || "";
+    document.getElementById('perfil_email').value = user?.email || "";
+    document.getElementById('perfil_cpf').value = user?.cpf || "Não informado";
 
-    const email = localStorage.getItem("usuario_logado_email") || "";
     const adminContainer = document.getElementById('adminLinkContainer');
     if (adminContainer) {
-        adminContainer.style.display = (email.toLowerCase() === EMAIL_ADMIN_OFICIAL.toLowerCase()) ? 'block' : 'none';
+        adminContainer.style.display = ['ADMIN', 'STAFF'].includes(user?.role?.toUpperCase()) ? 'block' : 'none';
     }
 
     modal.style.display = 'flex';
 
-    if (typeof db !== 'undefined') {
-        try {
-            const { data: { user } } = await db.auth.getUser();
-            if (user && user.user_metadata) {
-                const meta = user.user_metadata;
-                if (meta.full_name) {
-                    document.getElementById('perfil_nome').value = meta.full_name;
-                    localStorage.setItem("usuario_logado_nome", meta.full_name);
-                }
-                if (meta.phone) {
-                    document.getElementById('perfil_telefone').value = meta.phone;
-                    localStorage.setItem("usuario_logado_telefone", meta.phone);
-                }
-                if (meta.cpf) {
-                    document.getElementById('perfil_cpf').value = meta.cpf;
-                    localStorage.setItem("usuario_logado_cpf", meta.cpf);
-                }
-            }
-        } catch (e) {}
+    try {
+        user = await api.getMe();
+        api.setUser(user);
+        document.getElementById('perfil_nome').value = user.fullName || "";
+        document.getElementById('perfil_telefone').value = user.phone || "";
+        document.getElementById('perfil_email').value = user.email || "";
+        document.getElementById('perfil_cpf').value = user.cpf || "Não informado";
+    } catch (error) {
+        alert(`Não foi possível carregar os dados atuais do perfil: ${error.message}`);
     }
 }
 
@@ -511,19 +483,12 @@ async function salvarAlteracoesPerfil(e) {
     const novoTelefone = document.getElementById('perfil_telefone').value.trim();
 
     try {
-        if (typeof db !== 'undefined') {
-            try {
-                await db.auth.updateUser({
-                    data: {
-                        full_name: novoNome,
-                        phone: novoTelefone
-                    }
-                });
-            } catch (err) {}
-        }
-
-        localStorage.setItem("usuario_logado_nome", novoNome);
-        localStorage.setItem("usuario_logado_telefone", novoTelefone);
+        const user = api.getUser() || await api.getMe();
+        const updatedUser = await api.updateUser(user.id, {
+            fullName: novoNome,
+            phone: novoTelefone
+        });
+        api.setUser(updatedUser || { ...user, fullName: novoNome, phone: novoTelefone });
 
         const spanNome = document.querySelector('#btnAbrirPerfil span');
         if (spanNome) {
@@ -542,21 +507,12 @@ async function salvarAlteracoesPerfil(e) {
 
 async function deslogarUsuario() {
     if (confirm("Deseja realmente sair da sua conta?")) {
-        if (typeof db !== 'undefined') {
-            try { await db.auth.signOut(); } catch (e) {}
+        try {
+            await api.logout(false);
+        } catch (error) {
+            alert(`A sessão foi encerrada neste dispositivo, mas a API não confirmou o logout: ${error.message}`);
         }
-        if (typeof api !== 'undefined' && api.clearSession) {
-            api.clearSession();
-        }
-
-        localStorage.removeItem("usuario_logado_email");
-        localStorage.removeItem("usuario_logado_nome");
-        localStorage.removeItem("usuario_logado_telefone");
-        localStorage.removeItem("usuario_logado_cpf");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("userName");
-
-        window.location.reload();
+        window.location.href = 'index.html';
     }
 }
 

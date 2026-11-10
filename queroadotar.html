@@ -92,7 +92,7 @@
         </div>
     </main>
 
-    <footer class="site-footer">
+   <footer class="site-footer">
         <div class="footer-content-wrapper">
             <div class="footer-columns">
                 <div class="footer-column">
@@ -105,6 +105,7 @@
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
                     <a href="acoes.html">Nossas Ações</a>
+                    <a href="feedback.html">Avalie nosso site</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -117,14 +118,28 @@
                 </div>
                 <div class="footer-column">
                     <h3>POR QUE ADOTAR?</h3>
-                    <a href="#">Mude uma vida: adote!</a>
+                    <a href="quemsomos.html">Mude uma vida: adote!</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Departamento de meio ambiente</h3>
+                    <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site:
+                        assischateaubriand.pr.gov.br</a>
+                    <a
+                        href="https://mail.google.com/mail/u/0/?hl=pt-BR#inbox?compose=CllgCHrkVQNCxBnJfvxDRjlVqfmqtJCTBpDkGpVddwfdGtGMKnZWHHtMmqPWjMGDHnzFXpgQZkg">
+                        E-mail: depmeioambienteassis@gmail.com</a>
+                    <a href="#">Telefone: (44) 99843-7113</a>
+
+
+
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook"
+                        target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
@@ -139,102 +154,63 @@
     <script src="script/script.js"></script>
 
     <script>
-        const petsPadrao = [
-            {
-                id: 'theo-augusto',
-                name: "Théo Augusto",
-                species: 'cat',
-                sex: 'MALE',
-                size: 'SMALL',
-                age: "4 meses",
-                photo: "imagens/animal2.jpeg"
-            },
-            {
-                id: 'thor',
-                name: "Thor",
-                species: 'dog',
-                sex: 'MALE',
-                size: 'LARGE',
-                age: "2 anos",
-                photo: "imagens/animal1.jpeg"
-            },
-            {
-                id: 'duque',
-                name: "Duque",
-                species: 'dog',
-                sex: 'MALE',
-                size: 'MEDIUM',
-                age: "9 meses",
-                photo: "imagens/animal3.jpeg"
-            },
-            {
-                id: 'dina',
-                name: "Dina",
-                species: 'dog',
-                sex: 'FEMALE',
-                size: 'MEDIUM',
-                age: "2 anos e 5 meses",
-                photo: "imagens/animal4.jpeg"
-            }
-        ];
-
         let todosOsAnimais = [];
 
-        async function carregarTodosOsAnimais() {
-            todosOsAnimais = [...petsPadrao];
-
-            try {
-                const response = await api.getAnimals({ isAdopted: false, limit: 100 });
-                const doBanco = Array.isArray(response) ? response : (response.data?.data || response.data || []);
-
-                if (doBanco && doBanco.length > 0) {
-                    const formatados = doBanco.map(pet => {
-                        // Tenta extrair a foto de várias propriedades possíveis
-                        let foto = 'imagens/Logo.webp';
-                        if (pet.photos && pet.photos.length > 0) {
-                            foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
-                        } else if (pet.imageUrl) {
-                            foto = pet.imageUrl;
-                        } else if (pet.description && pet.description.includes('Foto URL:')) {
-                            // Extrai a foto se ela foi salva na descrição
-                            const matchFoto = pet.description.match(/Foto URL:\s*([^|]+)/);
-                            if (matchFoto && matchFoto[1].trim() && matchFoto[1].trim() !== 'imagens/Logo.webp') {
-                                foto = matchFoto[1].trim();
-                            }
-                        }
-
-                        // Tenta extrair a idade se foi salva na descrição
-                        let idadeFinal = pet.age || 'Não informada';
-                        if (!pet.age && pet.description && pet.description.includes('Idade:')) {
-                            const matchIdade = pet.description.match(/Idade:\s*([^|]+)/);
-                            if (matchIdade) idadeFinal = matchIdade[1].trim();
-                        }
-
-                        let especie = (pet.species || '').toLowerCase();
-                        if (!especie) {
-                            const texto = `${pet.breed || ''} ${pet.description || ''}`.toLowerCase();
-                            especie = (texto.includes('gato') || texto.includes('gata') || texto.includes('felin')) ? 'cat' : 'dog';
-                        }
-
-                        return {
-                            id: pet.id || pet.uuid,
-                            name: pet.name || 'Sem nome',
-                            species: especie,
-                            sex: (pet.sex || 'MALE').toUpperCase(),
-                            size: (pet.size || 'MEDIUM').toUpperCase(),
-                            age: idadeFinal,
-                            photo: foto
-                        };
-                    });
-
-                    todosOsAnimais = [...formatados, ...petsPadrao];
+        function extrairFotoAnimal(pet) {
+            if (pet.photo && typeof pet.photo === 'string' && pet.photo.trim()) return pet.photo;
+            if (pet.photos && pet.photos.length > 0) return Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
+            if (pet.imageUrl) return pet.imageUrl;
+            if (pet.image) return pet.image;
+            if (pet.description && pet.description.includes('Foto URL:')) {
+                const matchFoto = pet.description.match(/Foto URL:\s*([^|]+)/);
+                if (matchFoto && matchFoto[1].trim() && matchFoto[1].trim() !== 'imagens/Logo.webp') {
+                    return matchFoto[1].trim();
                 }
+            }
+            return 'imagens/Logo.webp';
+        }
+
+        async function carregarTodosOsAnimais() {
+            try {
+                const response = await api.getAnimals({ isAdopted: false, limit: 50 });
+                const doBanco = api.getList ? api.getList(response) : (Array.isArray(response) ? response : (response.data?.data || response.data || []));
+
+                // Apenas animais cadastrados e NÃO adotados
+                const disponiveis = doBanco.filter(pet => pet.isAdopted !== true && pet.adopted !== true && pet.status !== 'ADOPTED');
+
+                todosOsAnimais = disponiveis.map(pet => {
+                    let foto = extrairFotoAnimal(pet);
+
+                    let idadeFinal = pet.age || 'Não informada';
+                    if (!pet.age && pet.description && pet.description.includes('Idade:')) {
+                        const matchIdade = pet.description.match(/Idade:\s*([^|]+)/);
+                        if (matchIdade) idadeFinal = matchIdade[1].trim();
+                    }
+
+                    let especie = (pet.species || '').toLowerCase();
+                    if (!especie) {
+                        const texto = `${pet.breed || ''} ${pet.description || ''}`.toLowerCase();
+                        especie = (texto.includes('gato') || texto.includes('gata') || texto.includes('felin')) ? 'cat' : 'dog';
+                    }
+
+                    return {
+                        id: pet.id || pet.uuid,
+                        name: pet.name || 'Sem nome',
+                        species: especie,
+                        sex: (pet.sex || 'MALE').toUpperCase(),
+                        size: (pet.size || 'MEDIUM').toUpperCase(),
+                        age: idadeFinal,
+                        photo: foto
+                    };
+                });
             } catch (err) {
-                console.warn("Aviso ao carregar API pública:", err.message);
+                console.warn("Aviso ao carregar animais para adoção:", err.message);
+                todosOsAnimais = [];
             }
 
             renderizarAnimais(todosOsAnimais);
         }
+
         function renderizarAnimais(lista) {
             const container = document.getElementById('lista-animais');
             if (!container) return;
@@ -244,10 +220,10 @@
             if (lista.length === 0) {
                 container.innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; background: #fffcf7; border-radius: 12px; border: 1.5px dashed var(--border);">
-                        <i class="fa-solid fa-magnifying-glass" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
-                        <h3 style="color: var(--primary); margin-bottom: 8px;">Nenhum amiguinho encontrado</h3>
-                        <p style="color: var(--text-mid); margin-bottom: 20px;">Não encontramos nenhum animal com os critérios selecionados. Tente outras opções!</p>
-                        <button type="button" class="action-btn primary" onclick="limparFiltros()">Ver todos os animais</button>
+                        <i class="fa-solid fa-paw" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;"></i>
+                        <h3 style="color: var(--primary); margin-bottom: 8px;">Nenhum animal disponível no momento</h3>
+                        <p style="color: var(--text-mid); margin-bottom: 20px;">Não encontramos animais com esses critérios ou aguardando adoção.</p>
+                        <button type="button" class="action-btn primary" onclick="limparFiltros()">Limpar Filtros</button>
                     </div>
                 `;
                 return;
@@ -321,11 +297,11 @@
             renderizarAnimais(todosOsAnimais);
         }
 
-        document.getElementById('form-filtros').addEventListener('submit', aplicarFiltros);
-        document.getElementById('filtro-especie').addEventListener('change', aplicarFiltros);
-        document.getElementById('filtro-sexo').addEventListener('change', aplicarFiltros);
-        document.getElementById('filtro-porte').addEventListener('change', aplicarFiltros);
-        document.getElementById('btn-limpar').addEventListener('click', limparFiltros);
+        document.getElementById('form-filtros')?.addEventListener('submit', aplicarFiltros);
+        document.getElementById('filtro-especie')?.addEventListener('change', aplicarFiltros);
+        document.getElementById('filtro-sexo')?.addEventListener('change', aplicarFiltros);
+        document.getElementById('filtro-porte')?.addEventListener('change', aplicarFiltros);
+        document.getElementById('btn-limpar')?.addEventListener('click', limparFiltros);
 
         document.addEventListener('DOMContentLoaded', carregarTodosOsAnimais);
     </script>

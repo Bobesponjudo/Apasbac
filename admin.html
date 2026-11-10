@@ -9,7 +9,6 @@
     <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .admin-nav-tabs {
             display: flex;
@@ -129,14 +128,14 @@
 
 <body>
 
-    <header class="main-header">
+    <header class="main-header admin-header">
         <div class="header-container">
             <a href="index.html" class="logo-link">
                 <img src="imagens/Logo.webp" alt="Logo da Apasbac" class="logo-img">
             </a>
             <h2 style="font-size: 1.1rem; color: var(--primary);"><i class="fa-solid fa-lock"></i> Área Administrativa
             </h2>
-            <div class="user-actions" style="margin-left: auto;">
+            <div class="user-actions admin-user-actions" style="margin-left: auto;">
                 <span id="user-display" style="font-size: 0.85rem; font-weight: 600; color: var(--text-mid);"></span>
                 <a href="#" id="btnLogout" style="background: #5c0f0f;">Sair</a>
             </div>
@@ -251,16 +250,21 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Categoria *</label>
-                        <select id="event_category" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
-                            <option value="Feira de Adoção">Feira de Adoção</option>
-                            <option value="Campanha de Doação">Campanha de Doação</option>
-                            <option value="Mutirão">Mutirão</option>
-                            <option value="Conscientização">Conscientização</option>
+                        <select id="event_category" required style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                            <option value="">Carregando categorias...</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Data do Evento *</label>
+                        <label>Data de Início *</label>
                         <input type="date" id="event_date" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div class="input-group">
+                        <label>Data de Término (opcional)</label>
+                        <input type="date" id="event_end_date">
+                        <small style="color: #777; font-size: 0.78rem;">Deixe vazio se o evento durar apenas um dia.</small>
                     </div>
                 </div>
 
@@ -297,21 +301,11 @@
         </div>
     </main>
 
-    <!-- Clientes de Integração -->
+    <!-- Cliente da API oficial -->
     <script src="script/api-client.js"></script>
-    <script src="script/supabase-client.js"></script>
 
     <script>
-        // 1. Verificação de Acesso à prova de falhas
         (async function verificarAdmin() {
-            const emailSalvo = (localStorage.getItem('usuario_logado_email') || '').trim().toLowerCase();
-
-            if (emailSalvo === 'apasbac.assis@gmail.com') {
-                const userDisp = document.getElementById("user-display");
-                if (userDisp) userDisp.innerText = "Admin Oficial (apasbac.assis@gmail.com)";
-                return;
-            }
-
             if (!api.isAuthenticated()) {
                 alert("Acesso restrito! Faça login com uma conta de administrador ou staff.");
                 window.location.href = "entrar.html";
@@ -319,37 +313,31 @@
             }
 
             try {
-                let userMe = null;
-                try { userMe = await api.getMe(); } catch (e) { userMe = api.getUser(); }
-
-                const dados = (userMe && userMe.data) ? (userMe.data.user || userMe.data) : (userMe && userMe.user ? userMe.user : (userMe || {}));
-                const userEmail = (dados.email || emailSalvo).toLowerCase();
-                const userRole = (dados.role || '').toUpperCase();
-
-                const isAdmin = emailSalvo === 'apasbac.assis@gmail.com' || userEmail === 'apasbac.assis@gmail.com' || userRole === 'ADMIN' || userRole === 'STAFF';
-
-                if (!isAdmin) {
+                const user = await api.getMe();
+                api.setUser(user);
+                const userRole = (user.role || '').toUpperCase();
+                if (!['ADMIN', 'STAFF'].includes(userRole)) {
                     alert("Acesso negado: Somente administradores podem acessar este painel.");
                     window.location.href = "index.html";
                     return;
                 }
 
                 const userDisp = document.getElementById("user-display");
-                if (userDisp) userDisp.innerText = `Admin (${emailSalvo})`;
+                if (userDisp) userDisp.innerText = `Admin (${user.email})`;
             } catch (err) {
-                if (emailSalvo === 'apasbac.assis@gmail.com') return;
                 api.clearSession();
+                alert(`Não foi possível validar seu acesso ao painel: ${err.message}`);
                 window.location.href = "entrar.html";
             }
         })();
 
-        // Botão de Logout
         document.getElementById('btnLogout')?.addEventListener('click', async (e) => {
             e.preventDefault();
-            if (typeof db !== 'undefined') {
-                try { await db.auth.signOut(); } catch (err) { }
+            try {
+                await api.logout();
+            } catch (err) {
+                alert(`A sessão foi encerrada neste dispositivo, mas a API não confirmou o logout: ${err.message}`);
             }
-            api.logout();
         });
 
         // Alternar Abas
@@ -400,8 +388,9 @@
                 breed: document.getElementById('pet_breed').value.trim(),
                 temperament: document.getElementById('pet_temperament').value.trim(),
                 vaccines: vacinasArray,
-                description: `Idade: ${document.getElementById('pet_age').value.trim()} | Foto URL: ${foto} | ` + document.getElementById('pet_description').value.trim(),
-                escapeTendency: false
+                description: `Idade: ${document.getElementById('pet_age').value.trim()} | ${document.getElementById('pet_description').value.trim()}`,
+                escapeTendency: false,
+                photoUrls: foto ? [foto] : []
             };
 
             try {
@@ -424,13 +413,7 @@
             container.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Carregando animais...</p>';
 
             try {
-                const res = await api.getAnimals({ limit: 100 });
-                let lista = [];
-                if (Array.isArray(res)) lista = res;
-                else if (res?.data && Array.isArray(res.data)) lista = res.data;
-                else if (res?.data?.data && Array.isArray(res.data.data)) lista = res.data.data;
-
-                animaisCache = lista;
+                animaisCache = api.getList(await api.getAnimals({ limit: 100 }));
 
                 if (!animaisCache || animaisCache.length === 0) {
                     container.innerHTML = '<p style="color:#888;">Nenhum animal cadastrado ainda.</p>';
@@ -478,64 +461,95 @@
             }
         }
 
+    let categoriasEventos = [];
+
+    // Data no fuso de Brasília (evita mostrar o dia errado por causa do UTC)
+    function formatarDataBR(iso) {
+        if (!iso) return '';
+        return new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    }
+
+    // Não deixa escolher término antes do início
+    document.getElementById('event_date')?.addEventListener('change', (e) => {
+        const fim = document.getElementById('event_end_date');
+        if (!fim) return;
+        fim.min = e.target.value;
+        if (fim.value && fim.value < e.target.value) fim.value = '';
+    });
+
+    async function carregarCategoriasEventos() {
+        const select = document.getElementById('event_category');
+        if (!select || categoriasEventos.length) return;
+
+        select.innerHTML = '<option value="">Carregando categorias...</option>';
+        try {
+            categoriasEventos = api.getList(await api.getEventCategories());
+            if (!categoriasEventos.length) {
+                select.innerHTML = '<option value="">Nenhuma categoria disponível</option>';
+                return;
+            }
+            select.innerHTML = '<option value="">Selecione uma categoria</option>';
+            categoriasEventos.forEach((categoria) => {
+                const option = document.createElement('option');
+                option.value = categoria.id;
+                option.textContent = categoria.name;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            select.innerHTML = '<option value="">Não foi possível carregar as categorias</option>';
+            console.error('Erro ao carregar categorias de eventos:', error);
+        }
+    }
+
     document.getElementById('formEvento').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSalvarEvento');
             btn.disabled = true;
             btn.innerText = "Publicando...";
 
-            let { data: { session } } = await db.auth.getSession();
-            if (!session) {
-                const senhaSupabase = prompt("Digite a senha do Supabase para autorizar a publicação:");
-                if (!senhaSupabase) {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
-                    return;
+            try {
+                const selectedCategory = document.getElementById('event_category').value;
+                if (!selectedCategory) throw new Error('Selecione uma categoria de evento válida.');
+                const title = document.getElementById('event_title').value.trim();
+                const startDate = document.getElementById('event_date').value;
+                const endDate = document.getElementById('event_end_date').value;
+                const foto = document.getElementById('event_image').value.trim();
+
+                if (endDate && endDate < startDate) {
+                    throw new Error('A data de término não pode ser anterior à data de início.');
                 }
-                const { data: loginData, error: loginErr } = await db.auth.signInWithPassword({
-                    email: 'apasbac.assis@gmail.com',
-                    password: senhaSupabase
+
+                await api.createEvent({
+                    title,
+                    description: document.getElementById('event_desc').value.trim() || title,
+                    categoryId: Number(selectedCategory),
+                    startsAt: new Date(`${startDate}T12:00:00`).toISOString(),
+                    ...(endDate ? { endsAt: new Date(`${endDate}T18:00:00`).toISOString() } : {}),
+                    timezone: 'America/Sao_Paulo',
+                    locationName: document.getElementById('event_location').value.trim(),
+                    status: 'PUBLISHED',
+                    ...(foto ? { coverImageUrl: foto } : {})
                 });
-                if (loginErr) {
-                    alert("Erro de senha do Supabase: " + loginErr.message);
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
-                    return;
-                }
-                session = loginData.session;
-            }
 
-            const foto = document.getElementById('event_image').value.trim() || 'imagens/Logo.webp';
-
-            const { error } = await db.from('events').insert([{
-                title: document.getElementById('event_title').value.trim(),
-                category: document.getElementById('event_category').value,
-                event_date: document.getElementById('event_date').value,
-                location: document.getElementById('event_location').value.trim(),
-                description: document.getElementById('event_desc').value.trim(),
-                image_url: foto,
-                created_at: new Date().toISOString()
-            }]);
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
-
-            if (error) {
-                alert("Erro ao cadastrar evento: " + error.message);
-            } else {
                 alert("Evento publicado com sucesso!");
                 document.getElementById('formEvento').reset();
                 mostrarAba('list-evento');
+            } catch (error) {
+                alert(`Erro ao cadastrar evento: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Publicar Evento';
             }
         });
-        // Listar Eventos do Supabase
+
         async function carregarListaEventos() {
             const container = document.getElementById('lista-eventos-admin');
             container.innerHTML = '<p><i class="fa-solid fa-spinner fa-spin"></i> Carregando eventos...</p>';
 
-            const { data: eventos, error } = await db.from('events').select('*').order('event_date', { ascending: true });
-
-            if (error) {
+            let eventos;
+            try {
+                eventos = api.getList(await api.getEvents({ limit: 100 }, true));
+            } catch (error) {
                 container.innerHTML = `<p style="color: #c0392b;">Erro ao carregar: ${error.message}</p>`;
                 return;
             }
@@ -548,24 +562,24 @@
             container.innerHTML = '';
             eventos.forEach(evt => {
                 const evtId = evt.id;
-                const inicio = evt.event_date ? evt.event_date.split('T')[0].split('-').reverse().join('/') : '';
-                const fim = evt.end_date ? evt.end_date.split('T')[0].split('-').reverse().join('/') : '';
+                const inicio = formatarDataBR(evt.startsAt);
+                const fim = formatarDataBR(evt.endsAt);
                 const periodo = (fim && fim !== inicio) ? `De ${inicio} até ${fim}` : inicio;
 
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 card.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 14px;">
-                        <img src="${evt.image_url || 'imagens/Logo.webp'}" class="item-thumb" alt="Evento" onerror="this.src='imagens/Logo.webp'">
+                        <img src="${evt.coverImageUrl || 'imagens/Logo.webp'}" class="item-thumb" alt="Evento" onerror="this.src='imagens/Logo.webp'">
                         <div>
                             <h4 style="margin: 0; color: var(--primary);">${evt.title}</h4>
                             <p style="margin: 2px 0; font-size: 0.85rem; color: #555;">
-                                ${evt.category} • ${periodo} • ${evt.location}
+                                ${evt.category?.name || 'Sem categoria'} • ${periodo} • ${evt.locationName || 'Local a confirmar'} • ${evt.status}
                             </p>
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn-delete" onclick="excluirEvento('${evtId}', '${evt.title}')">
+                        <button class="btn-delete" onclick="excluirEvento(${evtId}, '${String(evt.title).replace(/'/g, "\\'")}')">
                             <i class="fa-solid fa-trash"></i> Excluir
                         </button>
                     </div>
@@ -576,13 +590,16 @@
 
         async function excluirEvento(id, titulo) {
             if (!confirm(`Deseja excluir o evento "${titulo}"?`)) return;
-            const { error } = await db.from('events').delete().eq('id', id);
-            if (error) alert("Erro ao excluir: " + error.message);
-            else {
+            try {
+                await api.deleteEvent(id);
                 alert("Evento excluído com sucesso!");
                 carregarListaEventos();
+            } catch (error) {
+                alert(`Erro ao excluir: ${error.message}`);
             }
         }
+
+        document.getElementById('btnTabEvento')?.addEventListener('click', carregarCategoriasEventos);
     </script>
 </body>
 

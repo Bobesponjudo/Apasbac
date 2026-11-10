@@ -44,22 +44,11 @@
         <div class="faixa-topo">
             <h1>Bem-vindo ao site da Apasbac! <i class="fa-solid fa-heart"></i></h1>
         </div>
-        <div class="marquee-container">
-            <div class="marquee-content">
-                <div class="marquee-item"><img src="imagens/animal1.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal2.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal3.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal4.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal5.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal6.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/cachorro.jpg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal1.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal2.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal3.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal4.jpeg" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal5.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/animal6.webp" alt=""></div>
-                <div class="marquee-item"><img src="imagens/cachorro.jpg" alt=""></div>
+
+        <!-- CARROSSEL DINÂMICO DOS ANIMAIS -->
+        <div class="marquee-container" style="min-height: 310px;">
+            <div class="marquee-content" id="marquee-animais">
+                
             </div>
         </div>
 
@@ -73,43 +62,7 @@
         </div>
 
         <div class="container-pets" id="lista-animais">
-            <!-- Cards padrão de fallback -->
-            <div class="card-pet">
-                <img src="imagens/animal2.jpeg" alt="Théo Augusto">
-                <div class="info-pet">
-                    <h2>Théo Augusto</h2>
-                    <p><strong>Gênero:</strong> Macho</p>
-                    <p><strong>Idade:</strong> 4 meses</p>
-                    <a href="maisinformacoes.html?pet=theo-augusto"><button><strong>Mais informações</strong></button></a>
-                </div>
-            </div>
-            <div class="card-pet">
-                <img src="imagens/animal1.jpeg" alt="Thor">
-                <div class="info-pet">
-                    <h2>Thor</h2>
-                    <p><strong>Gênero:</strong> Macho</p>
-                    <p><strong>Idade:</strong> 2 anos</p>
-                    <a href="maisinformacoes.html?pet=thor"><button><strong>Mais informações</strong></button></a>
-                </div>
-            </div>
-            <div class="card-pet">
-                <img src="imagens/animal3.jpeg" alt="Duque">
-                <div class="info-pet">
-                    <h2>Duque</h2>
-                    <p><strong>Gênero:</strong> Macho</p>
-                    <p><strong>Idade:</strong> 9 meses</p>
-                    <a href="maisinformacoes.html?pet=duque"><button><strong>Mais informações</strong></button></a>
-                </div>
-            </div>
-            <div class="card-pet">
-                <img src="imagens/animal4.jpeg" alt="Dina">
-                <div class="info-pet">
-                    <h2>Dina</h2>
-                    <p><strong>Gênero:</strong> Fêmea</p>
-                    <p><strong>Idade:</strong> 2 anos e 5 meses</p>
-                    <a href="maisinformacoes.html?pet=dina"><button><strong>Mais informações</strong></button></a>
-                </div>
-            </div>
+           
         </div>
 
         <div class="btn-container">
@@ -142,6 +95,7 @@
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
                     <a href="acoes.html">Nossas Ações</a>
+                    <a href="feedback.html">Avalie nosso site</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -154,14 +108,25 @@
                 </div>
                 <div class="footer-column">
                     <h3>POR QUE ADOTAR?</h3>
-                    <a href="#">Mude uma vida: adote!</a>
+                    <a href="quemsomos.html">Mude uma vida: adote!</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Departamento de meio ambiente</h3>
+                    <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site:
+                        assischateaubriand.pr.gov.br</a>
+                    <a
+                        href="https://mail.google.com/mail/u/0/?hl=pt-BR#inbox?compose=CllgCHrkVQNCxBnJfvxDRjlVqfmqtJCTBpDkGpVddwfdGtGMKnZWHHtMmqPWjMGDHnzFXpgQZkg">
+                        E-mail: depmeioambienteassis@gmail.com</a>
+                    <a href="#">Telefone: (44) 99843-7113</a>
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook"
+                        target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
@@ -176,38 +141,111 @@
     <script src="script/script.js"></script>
 
     <script>
-        // Carrega os 4 últimos animais cadastrados na API
-        async function carregarDestaquesAPI() {
-            try {
-                const response = await api.getAnimals({ isAdopted: false, limit: 4 });
-                const animais = Array.isArray(response) ? response : (response.data || []);
-
-                if (animais && animais.length > 0) {
-                    const container = document.getElementById('lista-animais');
-                    container.innerHTML = "";
-
-                    animais.forEach(pet => {
-                        const foto = (pet.photos && pet.photos[0]) || pet.imageUrl || 'imagens/Logo.webp';
-                        const genero = (pet.sex === 'MALE' || pet.sex === 'male') ? 'Macho' : 'Fêmea';
-
-                        container.innerHTML += `
-                            <div class="card-pet">
-                                <img src="${foto}" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
-                                <div class="info-pet">
-                                    <h2>${pet.name}</h2>
-                                    <p><strong>Gênero:</strong> ${genero}</p>
-                                    <p><strong>Idade:</strong> ${pet.age || 'Não informada'}</p>
-                                    <a href="maisinformacoes.html?id=${pet.id}"><button><strong>Mais informações</strong></button></a>
-                                </div>
-                            </div>
-                        `;
-                    });
+        // Função universal para extrair foto real do banco de dados
+        function extrairFotoAnimal(pet) {
+            if (pet.photo && typeof pet.photo === 'string' && pet.photo.trim()) return pet.photo;
+            if (pet.photos && pet.photos.length > 0) return Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
+            if (pet.imageUrl) return pet.imageUrl;
+            if (pet.image) return pet.image;
+            if (pet.description && pet.description.includes('Foto URL:')) {
+                const matchFoto = pet.description.match(/Foto URL:\s*([^|]+)/);
+                if (matchFoto && matchFoto[1].trim() && matchFoto[1].trim() !== 'imagens/Logo.webp') {
+                    return matchFoto[1].trim();
                 }
-            } catch (e) {
-                console.log("Mantendo animais padrão na home:", e.message);
+            }
+            return 'imagens/Logo.webp';
+        }
+
+        // Busca apenas animais cadastrados e NÃO adotados
+        async function buscarAnimaisDisponiveis() {
+            try {
+                const response = await api.getAnimals({ isAdopted: false, limit: 50 });
+                const lista = api.getList ? api.getList(response) : (Array.isArray(response) ? response : (response?.data?.data || response?.data || []));
+
+                // Garante que só passem os que NÃO foram adotados
+                return lista.filter(pet => pet.isAdopted !== true && pet.adopted !== true && pet.status !== 'ADOPTED');
+            } catch (err) {
+                console.error("Erro ao buscar animais disponíveis:", err);
+                return [];
             }
         }
-        document.addEventListener('DOMContentLoaded', carregarDestaquesAPI);
+
+        // 1. CARROSSEL DINÂMICO
+        function carregarCarrossel(animais) {
+            const marquee = document.getElementById('marquee-animais');
+            if (!marquee) return;
+
+            if (animais.length === 0) {
+                marquee.innerHTML = "<p style='color: #666; padding: 20px; text-align: center;'>Nenhum animal aguardando adoção no momento.</p>";
+                return;
+            }
+
+            // Pega os animais disponíveis mais recentes (até 9)
+            const listaExibicao = animais.slice(0, 9);
+
+            // Garante densidade suficiente para a animação contínua (0% a -50%) não ter saltos
+            let base = [...listaExibicao];
+            while (base.length < 8) {
+                base = base.concat(listaExibicao);
+            }
+            const duplicada = [...base, ...base];
+
+            marquee.innerHTML = duplicada.map(pet => `
+                <div class="marquee-item">
+                    <a href="maisinformacoes.html?id=${encodeURIComponent(pet.id || pet.uuid)}" title="Conheça ${pet.name}">
+                        <img src="${extrairFotoAnimal(pet)}" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        // 2. SEÇÃO 'AMIGOS QUE ACABARAM DE CHEGAR' (ATÉ 4 MAIS RECENTES)
+        function carregarDestaques(animais) {
+            const container = document.getElementById('lista-animais');
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            if (animais.length === 0) {
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--text-mid);'>Nenhum animal aguardando adoção no momento.</p>";
+                return;
+            }
+
+            // Exibe até 4 animais mais recentes cadastrados que estão disponíveis
+            const quatroUltimos = animais.slice(0, 4);
+
+            quatroUltimos.forEach(pet => {
+                const genero = (pet.sex === 'MALE' || pet.sex === 'male' || pet.sex === 'MACHO') ? 'Macho' : 'Fêmea';
+                const foto = extrairFotoAnimal(pet);
+
+                let idade = pet.age || 'Não informada';
+                if (!pet.age && pet.description && pet.description.includes('Idade:')) {
+                    const m = pet.description.match(/Idade:\s*([^|]+)/);
+                    if (m) idade = m[1].trim();
+                }
+
+                container.innerHTML += `
+                    <div class="card-pet">
+                        <img src="${foto}" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
+                        <div class="info-pet">
+                            <h2>${pet.name}</h2>
+                            <p><strong>Gênero:</strong> ${genero}</p>
+                            <p><strong>Idade:</strong> ${idade}</p>
+                            <a href="maisinformacoes.html?id=${encodeURIComponent(pet.id || pet.uuid)}">
+                                <button type="button"><strong>Mais informações</strong></button>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const animais = await buscarAnimaisDisponiveis();
+            carregarCarrossel(animais);
+            carregarDestaques(animais);
+        });
     </script>
 </body>
+
 </html>

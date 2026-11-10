@@ -145,6 +145,7 @@
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
                     <a href="acoes.html">Nossas Ações</a>
+                    <a href="feedback.html">Avalie nosso site</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -155,15 +156,33 @@
                     <a href="entrar.html">Entrar</a>
                     <a href="cadastrarse.html">Cadastre-se</a>
                 </div>
+                <div class="footer-column">
+                    <h3>POR QUE ADOTAR?</h3>
+                    <a href="quemsomos.html">Mude uma vida: adote!</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Departamento de meio ambiente</h3>
+                    <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site:
+                        assischateaubriand.pr.gov.br</a>
+                    <a
+                        href="https://mail.google.com/mail/u/0/?hl=pt-BR#inbox?compose=CllgCHrkVQNCxBnJfvxDRjlVqfmqtJCTBpDkGpVddwfdGtGMKnZWHHtMmqPWjMGDHnzFXpgQZkg">
+                        E-mail: depmeioambienteassis@gmail.com</a>
+                    <a href="#">Telefone: (44) 99843-7113</a>
+
+
+
+                </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook"
+                        target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="footer-logo">
-                    <img src="imagens/Logo.webp" alt="Logo Apasbac">
+                    <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
                 <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
@@ -172,6 +191,7 @@
 
     <!-- Cliente da API Oficial -->
     <script src="script/api-client.js"></script>
+    <script src="script/script.js"></script>
     <script>
         // 1. Alternador do Olhinho para ambos os campos de senha
         document.querySelectorAll('.toggle-password').forEach(icon => {
@@ -211,7 +231,7 @@
                 return;
             }
 
-            const senhaForte = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            const senhaForte = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
             if (!senhaForte.test(password)) {
                 alert("A senha precisa ter no mínimo 8 caracteres, contendo pelo menos 1 letra maiúscula, 1 número e 1 caractere especial (!@#$...).");
                 return;

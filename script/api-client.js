@@ -1,287 +1,367 @@
-/**
- * Cliente de Integração com a API REST da APASBAC (Versão com Fallback e Decodificador JWT)
- */
 window.API_BASE_URL = window.API_BASE_URL || 'https://apasbac-api.vercel.app';
-var API_BASE_URL = window.API_BASE_URL;
+var API_BASE_URL = window.API_BASE_URL.replace(/\/$/, '');
+const API_ROOT = `${API_BASE_URL}/api/v1`;
+const ACCESS_TOKEN_KEY = 'apasbac_access_token';
+const REFRESH_TOKEN_KEY = 'apasbac_refresh_token';
+const USER_KEY = 'apasbac_user';
+const legacyAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+const legacyRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+if (legacyRefreshToken && !sessionStorage.getItem(REFRESH_TOKEN_KEY)) {
+    sessionStorage.setItem(REFRESH_TOKEN_KEY, legacyRefreshToken);
+}
+localStorage.removeItem(ACCESS_TOKEN_KEY);
+localStorage.removeItem(REFRESH_TOKEN_KEY);
+localStorage.removeItem(USER_KEY);
+localStorage.removeItem('accessToken');
+localStorage.removeItem('usuario_logado_email');
+localStorage.removeItem('usuario_logado_nome');
+localStorage.removeItem('usuario_logado_telefone');
+localStorage.removeItem('usuario_logado_cpf');
 
-// Função auxiliar para decodificar o Payload do JWT sem bibliotecas externas
-function parseJwt(token) {
-    try {
-        if (!token) return null;
-        const clean = token.startsWith('Bearer ') ? token.slice(7) : token;
-        const base64Url = clean.split('.')[1];
-        if (!base64Url) return null;
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        return null;
+class ApasbacApiError extends Error {
+    constructor(status, message, requestId, retryAfter) {
+        super(Array.isArray(message) ? message.join('; ') : message || `Erro HTTP ${status}`);
+        this.name = 'ApasbacApiError';
+        this.status = status;
+        this.requestId = requestId;
+        this.retryAfter = retryAfter;
     }
 }
 
 const api = {
+    accessToken: legacyAccessToken,
+    refreshing: null,
+
     getToken() {
-        return localStorage.getItem('apasbac_access_token');
+        return this.accessToken;
     },
 
     getRefreshToken() {
-        return localStorage.getItem('apasbac_refresh_token');
-    },
-
-    setSession(tokens, user) {
-        if (!tokens) return;
-
-        const access = tokens.accessToken ||
-            tokens.access_token ||
-            tokens.token ||
-            (tokens.tokens && (tokens.tokens.accessToken || tokens.tokens.token)) ||
-            (tokens.data && (tokens.data.accessToken || tokens.data.token));
-
-        const refresh = tokens.refreshToken ||
-            tokens.refresh_token ||
-            (tokens.tokens && tokens.tokens.refreshToken) ||
-            (tokens.data && tokens.data.refreshToken);
-
-        if (access) {
-            const cleanToken = access.startsWith('Bearer ') ? access.slice(7) : access;
-            localStorage.setItem('apasbac_access_token', cleanToken);
-
-            if (!user) {
-                user = tokens.user || (tokens.data && tokens.data.user);
-                if (!user) {
-                    const decoded = parseJwt(cleanToken);
-                    if (decoded) {
-                        user = {
-                            id: decoded.sub || decoded.id,
-                            email: decoded.email,
-                            fullName: decoded.fullName || decoded.name || (decoded.email ? decoded.email.split('@')[0] : 'Usuário'),
-                            // FORÇA ADMIN SE FOR O EMAIL OFICIAL
-                            role: (decoded.email === 'apasbac.assis@gmail.com') ? 'ADMIN' : (decoded.role || 'USER')
-                        };
-                    }
-                }
-            }
-        }
-
-        // Garante que o objeto user salvo também tenha a role de admin se for o e-mail oficial
-        if (user && user.email === 'apasbac.assis@gmail.com') {
-            user.role = 'ADMIN';
-        }
-
-        if (refresh) localStorage.setItem('apasbac_refresh_token', refresh);
-        if (user) localStorage.setItem('apasbac_user', JSON.stringify(user));
-    },
-
-    clearSession() {
-        localStorage.removeItem('apasbac_access_token');
-        localStorage.removeItem('apasbac_refresh_token');
-        localStorage.removeItem('apasbac_user');
-        localStorage.removeItem('usuario_logado_email');
-        localStorage.removeItem('usuario_logado_nome');
+        return sessionStorage.getItem(REFRESH_TOKEN_KEY);
     },
 
     getUser() {
-        const data = localStorage.getItem('apasbac_user');
-        return data ? JSON.parse(data) : null;
+        const user = sessionStorage.getItem(USER_KEY);
+        if (!user) return null;
+
+        try {
+            return JSON.parse(user);
+        } catch (error) {
+            sessionStorage.removeItem(USER_KEY);
+            return null;
+        }
+    },
+
+    setSession(tokens, user) {
+        const accessToken = tokens?.accessToken;
+        const refreshToken = tokens?.refreshToken;
+        if (!accessToken || !refreshToken) {
+            throw new Error('A API não retornou os tokens de sessão esperados.');
+        }
+
+        this.accessToken = accessToken;
+        sessionStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        if (user) sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    },
+
+    setUser(user) {
+        if (user) sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    },
+
+    clearSession() {
+        this.accessToken = null;
+        sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+        sessionStorage.removeItem(USER_KEY);
+        localStorage.removeItem(ACCESS_TOKEN_KEY);
+        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('usuario_logado_email');
+        localStorage.removeItem('usuario_logado_nome');
+        localStorage.removeItem('usuario_logado_telefone');
+        localStorage.removeItem('usuario_logado_cpf');
     },
 
     isAuthenticated() {
-        return !!this.getToken();
-    },
-
-    async request(endpoint, options = {}) {
-        const url = `${API_BASE_URL}${endpoint}`;
-        options.headers = options.headers || {};
-
-        let token = this.getToken();
-        
-        // Se não houver token e for uma rota protegida de escrita, tenta injetar um token de emergência ou reautenticar
-        if (!token && endpoint.includes('/animals') && options.method && options.method !== 'GET') {
-            // Tenta forçar uma sessão limpa se houver dados salvos
-            console.warn("Requisição protegida sem token. Tentando operar...");
-        }
-
-        if (token && !options.headers['Authorization']) {
-            options.headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        if (!(options.body instanceof FormData) && !options.headers['Content-Type']) {
-            options.headers['Content-Type'] = 'application/json';
-        }
-
-        let response = await fetch(url, options);
-
-        // Se der 401 (Unauthorized), tenta renovar ou avisa claramente
-        if (response.status === 401) {
-            const refreshed = await this.refreshToken();
-            if (refreshed) {
-                options.headers['Authorization'] = `Bearer ${this.getToken()}`;
-                response = await fetch(url, options);
-            } else {
-                // Se o token falhou de vez, limpa e força o aviso para refazer o login
-                console.warn("Sessão da API expirada (401).");
-            }
-        }
-
-        let data = null;
-        try {
-            data = await response.json();
-        } catch {
-            data = null;
-        }
-
-        if (!response.ok) {
-            const errorMsg = (data && (data.message || data.error)) || `Erro HTTP ${response.status}`;
-            throw new Error(Array.isArray(errorMsg) ? errorMsg.join(' | ') : errorMsg);
-        }
-
-        return data;
+        return !!(this.accessToken || this.getRefreshToken());
     },
 
     async refreshToken() {
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ refreshToken: this.getRefreshToken() })
-            });
+        if (this.refreshing) return this.refreshing;
 
-            if (!res.ok) return false;
-            const data = await res.json();
-            const newAccess = data.accessToken || data.access_token;
-            if (newAccess) {
-                localStorage.setItem('apasbac_access_token', newAccess);
+        this.refreshing = (async () => {
+            const refreshToken = this.getRefreshToken();
+            if (!refreshToken) return false;
+
+            try {
+                const response = await fetch(`${API_ROOT}/auth/refresh`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refreshToken }),
+                    signal: AbortSignal.timeout(15000)
+                });
+                const result = await response.json();
+
+                if (response.status === 401) {
+                    this.clearSession();
+                    return false;
+                }
+                if (!response.ok) {
+                    throw new ApasbacApiError(
+                        response.status,
+                        result.message,
+                        result.requestId,
+                        response.headers.get('Retry-After')
+                    );
+                }
+
+                this.setSession(result.data, this.getUser());
                 return true;
+            } catch (error) {
+                if (error instanceof ApasbacApiError) throw error;
+                throw new Error(`Não foi possível renovar a sessão: ${error.message}`);
+            } finally {
+                this.refreshing = null;
             }
-            return false;
-        } catch {
-            return false;
+        })();
+
+        return this.refreshing;
+    },
+
+    async request(endpoint, { method = 'GET', body, auth = false, retried = false, headers = {}, signal } = {}) {
+        if (auth && !this.accessToken && !(await this.refreshToken())) {
+            throw new ApasbacApiError(401, 'Sua sessão expirou. Entre novamente.');
         }
+
+        const requestHeaders = { ...headers };
+        if (body !== undefined && !(body instanceof FormData) && !requestHeaders['Content-Type']) {
+            requestHeaders['Content-Type'] = 'application/json';
+        }
+        if (auth && this.accessToken) {
+            requestHeaders.Authorization = `Bearer ${this.accessToken}`;
+        }
+
+        const response = await fetch(`${API_ROOT}${endpoint}`, {
+            method,
+            headers: requestHeaders,
+            body: body === undefined || body instanceof FormData
+                ? body
+                : JSON.stringify(body),
+            signal: signal || AbortSignal.timeout(15000)
+        });
+
+        if (response.status === 401 && auth && !retried) {
+            if (await this.refreshToken()) {
+                return this.request(endpoint, { method, body, auth, retried: true, headers, signal });
+            }
+            this.clearSession();
+        }
+        if (response.status === 204) return undefined;
+
+        let result;
+        try {
+            result = await response.json();
+        } catch (error) {
+            if (!response.ok) {
+                throw new ApasbacApiError(response.status, 'A API retornou uma resposta inválida.');
+            }
+            throw new Error('A API retornou uma resposta inválida.');
+        }
+
+        if (!response.ok) {
+            throw new ApasbacApiError(
+                response.status,
+                result.message || result.error,
+                result.requestId,
+                response.headers.get('Retry-After')
+            );
+        }
+        return result.data;
+    },
+
+    getList(result) {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        return [];
     },
 
     async register(userData) {
-        return this.request('/api/v1/auth/register', {
-            method: 'POST',
-            body: JSON.stringify(userData)
-        });
+        return this.request('/auth/register', { method: 'POST', body: userData });
     },
 
     async login(email, password) {
-        const res = await this.request('/api/v1/auth/login', {
+        const tokens = await this.request('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({ email, password })
+            body: { email, password }
         });
+        this.setSession(tokens);
 
-        this.setSession(res);
-
-        let user = this.getUser();
         try {
-            const me = await this.getMe();
-            if (me) {
-                user = me;
-                this.setSession(res, user);
-            }
-        } catch (err) {
-            console.warn('Endpoint /users/me não respondeu, usando dados do token:', err.message);
+            const user = await this.getMe();
+            this.setUser(user);
+            return { tokens, user };
+        } catch (error) {
+            this.clearSession();
+            throw error;
         }
-
-        if (!user) {
-            user = { email: email, role: 'USER' };
-            this.setSession(res, user);
-        }
-
-        return { tokens: res, user };
     },
 
-    async logout() {
+    async forgotPassword(email) {
+        return this.request('/auth/forgot-password', {
+            method: 'POST',
+            body: { email }
+        });
+    },
+
+    async resetPassword(token, password, confirmPassword) {
+        return this.request('/auth/reset-password', {
+            method: 'POST',
+            body: { token, password, confirmPassword }
+        });
+    },
+
+    async logout(redirect = true) {
+        // A API exige Bearer token no logout. Se der qualquer erro, a sessão local
+        // é encerrada do mesmo jeito, sem mostrar aviso ao usuário.
         try {
-            const refreshToken = this.getRefreshToken();
-            if (refreshToken) {
-                await this.request('/api/v1/auth/logout', {
-                    method: 'POST',
-                    body: JSON.stringify({ refreshToken })
-                });
+            if (this.isAuthenticated()) {
+                if (!this.accessToken) await this.refreshToken();
+                const refreshToken = this.getRefreshToken();
+                if (this.accessToken) {
+                    await this.request('/auth/logout', {
+                        method: 'POST',
+                        body: refreshToken ? { refreshToken } : {},
+                        auth: true
+                    });
+                }
             }
-        } catch (e) {
-            console.warn('Erro ao deslogar na API:', e);
+        } catch (error) {
+            console.warn('Logout na API não confirmado (sessão local encerrada):', error.message);
         } finally {
             this.clearSession();
-            window.location.href = 'entrar.html';
+            if (redirect) window.location.href = 'entrar.html';
         }
     },
 
     async getMe() {
-        return this.request('/api/v1/users/me', { method: 'GET' });
+        return this.request('/users/me', { auth: true });
+    },
+
+    async updateUser(id, userData) {
+        return this.request(`/users/${encodeURIComponent(id)}`, {
+            method: 'PATCH',
+            body: userData,
+            auth: true
+        });
     },
 
     async getAnimals(params = {}) {
         const query = new URLSearchParams();
-        if (params.isAdopted !== undefined) query.append('isAdopted', params.isAdopted);
-        if (params.limit) query.append('limit', params.limit);
-        if (params.page) query.append('page', params.page);
-
-        const qs = query.toString() ? `?${query.toString()}` : '';
-        return this.request(`/api/v1/animals${qs}`, { method: 'GET' });
+        if (params.isAdopted !== undefined) query.set('isAdopted', params.isAdopted);
+        if (params.limit) query.set('limit', params.limit);
+        if (params.page) query.set('page', params.page);
+        const queryString = query.toString();
+        return this.request(`/animals${queryString ? `?${queryString}` : ''}`);
     },
 
     async getAnimalPublic(idOrUuid) {
-        if (!isNaN(idOrUuid)) {
-            return this.request(`/api/v1/animals/public/${idOrUuid}`, { method: 'GET' });
-        }
-        return this.request(`/api/v1/animals/public/uuid/${idOrUuid}`, { method: 'GET' });
+        const path = /^\d+$/.test(String(idOrUuid))
+            ? `/animals/public/${encodeURIComponent(idOrUuid)}`
+            : `/animals/public/uuid/${encodeURIComponent(idOrUuid)}`;
+        return this.request(path);
     },
 
     async createAnimal(animalData) {
-        return this.request('/api/v1/animals', {
-            method: 'POST',
-            body: JSON.stringify(animalData)
-        });
+        return this.request('/animals', { method: 'POST', body: animalData, auth: true });
     },
 
     async updateAnimal(id, updateData) {
-        return this.request(`/api/v1/animals/${id}`, {
+        return this.request(`/animals/${encodeURIComponent(id)}`, {
             method: 'PATCH',
-            body: JSON.stringify(updateData)
+            body: updateData,
+            auth: true
         });
     },
 
     async deleteAnimal(id) {
-        return this.request(`/api/v1/animals/${id}`, { method: 'DELETE' });
+        return this.request(`/animals/${encodeURIComponent(id)}`, { method: 'DELETE', auth: true });
+    },
+
+    async getEvents(params = {}, admin = false) {
+        const query = new URLSearchParams();
+        if (params.limit) query.set('limit', params.limit);
+        if (params.page) query.set('page', params.page);
+        const endpoint = admin ? '/admin/events' : '/events';
+        const queryString = query.toString();
+        return this.request(`${endpoint}${queryString ? `?${queryString}` : ''}`, { auth: admin });
+    },
+
+    async getEventCategories() {
+        return this.request('/events/categories');
+    },
+
+    async createEvent(eventData) {
+        return this.request('/events', { method: 'POST', body: eventData, auth: true });
+    },
+
+    async deleteEvent(id) {
+        return this.request(`/events/${encodeURIComponent(id)}`, { method: 'DELETE', auth: true });
     }
 };
 
-// Renderização automática do Menu do Cabeçalho
+window.api = api;
+window.ApasbacApiError = ApasbacApiError;
+
 document.addEventListener('DOMContentLoaded', () => {
-    const user = api.getUser();
-    const userActions = document.querySelector('.user-actions');
+    const renderUserActions = (user) => {
+        const userActions = document.querySelector('.user-actions');
+        if (!userActions) return;
+        userActions.replaceChildren();
 
-    if (user && userActions) {
-        const email = (user.email || localStorage.getItem('usuario_logado_email') || '').toLowerCase();
-        const role = (user.role || '').toUpperCase();
-        const isAdmin = email === 'apasbac.assis@gmail.com' || role === 'ADMIN' || role === 'STAFF';
+        if (['ADMIN', 'STAFF'].includes((user.role || '').toUpperCase())) {
+            const adminLink = document.createElement('a');
+            adminLink.href = 'admin.html';
+            adminLink.style.cssText = 'background: var(--accent); color: var(--primary-dark) !important; font-weight: 700; margin-right: 6px;';
+            adminLink.innerHTML = '<i class="fa-solid fa-lock"></i> Painel';
+            userActions.appendChild(adminLink);
+        }
 
-        const primeiroNome = user.fullName ? user.fullName.split(' ')[0] : 'Admin';
+        const greeting = document.createElement('span');
+        greeting.style.cssText = 'font-size: 0.88rem; font-weight: 600; color: var(--primary); padding: 0 5px;';
+        greeting.textContent = `Olá, ${user.fullName ? user.fullName.split(' ')[0] : 'Usuário'}`;
+        userActions.appendChild(greeting);
 
-        const linkAdmin = isAdmin
-            ? '<a href="admin.html" style="background: var(--accent); color: var(--primary-dark) !important; font-weight: 700; margin-right: 6px;"><i class="fa-solid fa-lock"></i> Painel</a>'
-            : '';
+        const logoutLink = document.createElement('a');
+        logoutLink.href = '#';
+        logoutLink.id = 'btnHeaderLogout';
+        logoutLink.style.background = '#7a1515';
+        logoutLink.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sair';
+        userActions.appendChild(logoutLink);
+    };
 
-        userActions.innerHTML = `
-            ${linkAdmin}
-            <span style="font-size: 0.88rem; font-weight: 600; color: var(--primary); padding: 0 5px;">
-                Olá, ${primeiroNome}
-            </span>
-            <a href="#" id="btnHeaderLogout" style="background: #7a1515;"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
-        `;
-
-        document.getElementById('btnHeaderLogout')?.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if (typeof db !== 'undefined') {
-                try { await db.auth.signOut(); } catch (err) { }
+    const initializeHeader = async () => {
+        let user = api.getUser();
+        if (!user && api.isAuthenticated()) {
+            try {
+                user = await api.getMe();
+                api.setUser(user);
+            } catch (error) {
+                console.error('Não foi possível validar a sessão da API:', error);
+                return;
             }
-            api.logout();
+        }
+        if (!user) return;
+        renderUserActions(user);
+
+        document.getElementById('btnHeaderLogout')?.addEventListener('click', async (event) => {
+        event.preventDefault();
+        try {
+            await api.logout();
+        } catch (error) {
+            alert(`Não foi possível encerrar a sessão: ${error.message}`);
+        }
         });
-    }
+    };
+
+    initializeHeader();
 });

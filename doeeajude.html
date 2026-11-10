@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doações</title>
+    <title>Doações - Apasbac</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="imagens/Logo.webp" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,134 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Card moderno para o Pix */
+        .pix-card-container {
+            background: #fffcf7;
+            border: 1.5px solid var(--border, #dec8b0);
+            border-radius: 20px;
+            padding: 36px 28px;
+            max-width: 540px;
+            width: 100%;
+            margin: 20px auto 30px;
+            box-shadow: 0 8px 30px rgba(139, 26, 26, 0.08);
+            text-align: center;
+        }
+
+        .pix-qrcode-wrapper {
+            background: white;
+            padding: 16px;
+            border-radius: 14px;
+            display: inline-block;
+            border: 1.5px solid var(--border, #dec8b0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .pix-qrcode-wrapper img {
+            width: 220px;
+            height: 220px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .pix-copia-cola-box {
+            display: flex;
+            align-items: center;
+            background: #f7ede0;
+            border: 1.5px dashed var(--primary, #8b1a1a);
+            border-radius: 12px;
+            padding: 8px 12px;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .pix-chave-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            font-family: 'Poppins', monospace, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-dark, #5c0f0f);
+            outline: none;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .btn-copiar-pix {
+            background: linear-gradient(135deg, var(--primary-light, #c0392b), var(--primary, #8b1a1a));
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 999px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            box-shadow: 0 3px 12px rgba(139, 26, 26, 0.25);
+            white-space: nowrap;
+        }
+
+        .btn-copiar-pix:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 18px rgba(139, 26, 26, 0.35);
+        }
+
+        .btn-copiar-pix.copiado {
+            background: #2e7d32 !important;
+            box-shadow: 0 3px 12px rgba(46, 125, 50, 0.3) !important;
+        }
+
+        .pix-detalhes-titular {
+            text-align: left;
+            background: #fff5e1;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--text-mid, #4a3333);
+            margin-top: 18px;
+            border-left: 4px solid var(--accent, #d4a017);
+        }
+
+        .pix-detalhes-titular p {
+            margin: 4px 0 !important;
+            text-align: left !important;
+            font-size: 0.84rem !important;
+        }
+
+        .pix-toast-msg {
+            display: none;
+            color: #2e7d32;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .pix-copia-cola-box {
+                flex-direction: column;
+            }
+            .btn-copiar-pix {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -39,21 +167,58 @@
             </div>
         </div>
     </header>
+
     <main>
         <div class="faixa-topo">
-        <h1>Sua doação transforma vidas.</h1>
-        <p>Com a sua ajuda, podemos levar esperança, cuidado e um futuro melhor para centenas de animais. Cada contribuição faz uma enorme diferença.</p>
-    </div>
+            <h1>Sua doação transforma vidas. <i class="fa-solid fa-heart"></i></h1>
+            <p>Com a sua ajuda, podemos levar ração, tratamento veterinário e um futuro melhor para dezenas de animais resgatados.</p>
+        </div>
 
-        <main class="donation-main">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Link_pra_pagina_principal_da_Wikipedia-PT_em_codigo_QR_b.svg" alt="">
-            <br>
-            <h2>Escaneie o Qrcode e doe para a APASBAC</h2><br>
-            <p>A associação necessita da sua ajuda para o bem-estar dos animais</p>
-        </main>
-    </div>
+        <section class="donation-main">
+            <div class="pix-card-container">
+                <h2 style="font-size: 1.5rem; color: var(--primary); margin-bottom: 6px;">
+                    <i class="fa-brands fa-pix" style="color: #32bcad;"></i> Doe com Pix
+                </h2>
+                <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 20px;">
+                    Escaneie o QR Code abaixo ou copie a chave Pix para colar no app do seu banco:
+                </p>
+
+                <!-- QR CODE -->
+                <div class="pix-qrcode-wrapper">
+                    <!-- Substitua pela imagem oficial do QR Code do banco da ONG se desejar -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Link_pra_pagina_principal_da_Wikipedia-PT_em_codigo_QR_b.svg" alt="QR Code Pix Apasbac">
+                </div>
+
+                <!-- CAMPO COPIA E COLA -->
+                <div class="pix-copia-cola-box">
+                    <!-- CNPJ oficial da APASBAC -->
+                    <input type="text" id="pixChave" class="pix-chave-input" value="15.778.930/0001-48" readonly>
+                    <button type="button" id="btnCopiarPix" class="btn-copiar-pix" title="Clique para copiar">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copiar Chave</span>
+                    </button>
+                </div>
+
+                <div id="toastPix" class="pix-toast-msg">
+                    <i class="fa-solid fa-circle-check"></i> Chave Pix copiada com sucesso! Abra o aplicativo do seu banco para colar.
+                </div>
+
+                <!-- DADOS DO TITULAR PARA CONFERÊNCIA -->
+                <div class="pix-detalhes-titular">
+                    <p><strong><i class="fa-solid fa-shield-halved"></i> Dados para conferência no banco:</strong></p>
+                    <p><strong>Beneficiário:</strong> Associação de Proteção Animal Socorro Bicho (APASBAC)</p>
+                    <p><strong>CNPJ:</strong> 15.778.930/0001-48</p>
+                    <p><strong>Tipo de Chave:</strong> CNPJ</p>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-light); max-width: 600px; line-height: 1.6;">
+                As doações via Pix vão direto para a conta oficial da associação e são integralmente destinadas à compra de medicamentos, ração e despesas veterinárias dos animais acolhidos.
+            </p>
+        </section>
     </main>
-     <footer class="site-footer">
+
+    <footer class="site-footer">
         <div class="footer-content-wrapper">
             <div class="footer-columns">
                 <div class="footer-column">
@@ -66,6 +231,7 @@
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
                     <a href="acoes.html">Nossas Ações</a>
+                    <a href="feedback.html">Avalie nosso site</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -78,7 +244,13 @@
                 </div>
                 <div class="footer-column">
                     <h3>POR QUE ADOTAR?</h3>
-                    <a href="#">Mude uma vida: adote!</a>
+                    <a href="quemsomos.html">Mude uma vida: adote!</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Departamento de meio ambiente</h3>
+                    <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site: assischateaubriand.pr.gov.br</a>
+                    <a href="mailto:depmeioambienteassis@gmail.com">E-mail: depmeioambienteassis@gmail.com</a>
+                    <a href="#">Telefone: (44) 99843-7113</a>
                 </div>
             </div>
 
@@ -90,11 +262,62 @@
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
                 </div>
-                    <p class="copyright-text">Todos os direitos reservados.</p>
+                <p class="copyright-text">Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
+
+    <script src="script/api-client.js"></script>
     <script src="script/script.js"></script>
+
+    <!-- SCRIPT DE CÓPIA DO PIX -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnCopiar = document.getElementById('btnCopiarPix');
+            const inputChave = document.getElementById('pixChave');
+            const toast = document.getElementById('toastPix');
+
+            if (!btnCopiar || !inputChave) return;
+
+            btnCopiar.addEventListener('click', async () => {
+                const textoChave = inputChave.value;
+
+                try {
+                    // Método moderno (Área de transferência)
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(textoChave);
+                    } else {
+                        // Fallback compatível com celulares mais antigos
+                        inputChave.select();
+                        inputChave.setSelectionRange(0, 99999);
+                        document.execCommand('copy');
+                    }
+
+                    // Feedback visual no botão
+                    btnCopiar.classList.add('copiado');
+                    btnCopiar.innerHTML = '<i class="fa-solid fa-check"></i> <span>Chave Copiada!</span>';
+                    
+                    if (toast) {
+                        toast.style.display = 'block';
+                    }
+
+                    // Restaura o botão após 3 segundos
+                    setTimeout(() => {
+                        btnCopiar.classList.remove('copiado');
+                        btnCopiar.innerHTML = '<i class="fa-regular fa-copy"></i> <span>Copiar Chave</span>';
+                        if (toast) {
+                            toast.style.display = 'none';
+                        }
+                    }, 3500);
+
+                } catch (err) {
+                    // Em caso de bloqueio no navegador, seleciona o texto para cópia manual
+                    inputChave.select();
+                    alert("Selecione e copie a chave manualmente: " + textoChave);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -55,10 +55,6 @@
                     <div class="select-wrapper">
                         <select name="action-category">
                             <option value="">Todas as categorias</option>
-                            <option value="Feira de Adoção">Feira de Adoção</option>
-                            <option value="Campanha de Doação">Campanha de Doação</option>
-                            <option value="Conscientização">Conscientização</option>
-                            <option value="Mutirão">Mutirão de Voluntários</option>
                         </select>
                     </div>
                     <div class="select-wrapper">
@@ -67,6 +63,7 @@
                             <option value="upcoming">Próximos Eventos</option>
                             <option value="ongoing">Em andamento</option>
                             <option value="completed">Concluídos</option>
+                            <option value="cancelled">Cancelados</option>
                         </select>
                     </div>
                     <button type="submit" class="search-button">Filtrar</button>
@@ -92,6 +89,7 @@
                     <a href="doeeajude.html">Doe e ajude</a>
                     <a href="queroservoluntario.html">Seja voluntário</a>
                     <a href="acoes.html">Nossas Ações</a>
+                    <a href="feedback.html">Avalie nosso site</a>
                 </div>
                 <div class="footer-column">
                     <h3>SOBRE A APASBAC</h3>
@@ -104,14 +102,28 @@
                 </div>
                 <div class="footer-column">
                     <h3>POR QUE ADOTAR?</h3>
-                    <a href="#">Mude uma vida: adote!</a>
+                    <a href="quemsomos.html">Mude uma vida: adote!</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Departamento de meio ambiente</h3>
+                    <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site:
+                        assischateaubriand.pr.gov.br</a>
+                    <a
+                        href="https://mail.google.com/mail/u/0/?hl=pt-BR#inbox?compose=CllgCHrkVQNCxBnJfvxDRjlVqfmqtJCTBpDkGpVddwfdGtGMKnZWHHtMmqPWjMGDHnzFXpgQZkg">
+                        E-mail: depmeioambienteassis@gmail.com</a>
+                    <a href="#">Telefone: (44) 99843-7113</a>
+
+
+
                 </div>
             </div>
 
             <div class="footer-bottom">
                 <div class="social-icons">
-                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/apasbac/" aria-label="Instagram" target="_blank"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/pages/Apasbac/226212191252399/#" aria-label="Facebook"
+                        target="_blank"><i class="fab fa-facebook-f"></i></a>
                 </div>
                 <div class="footer-logo">
                     <img src="imagens/Logo.webp" alt="Logo Amigo não se compra">
@@ -120,14 +132,14 @@
             </div>
         </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="script/supabase-client.js"></script>
     <script src="script/api-client.js"></script>
     <script src="script/script.js"></script>
     <script>
+        const FUSO = 'America/Sao_Paulo';
+        let listaEventosCache = [];
+
         function protegerTexto(str) {
-            if (!str) return '';
+            if (str === null || str === undefined) return '';
             return String(str)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -136,39 +148,101 @@
                 .replace(/'/g, '&#039;');
         }
 
-        let listaEventosCache = [];
+        // ---------- Datas (sempre no fuso de Brasília, formato AAAA-MM-DD) ----------
+        function diaYMD(iso) {
+            return iso ? new Date(iso).toLocaleDateString('en-CA', { timeZone: FUSO }) : '';
+        }
+
+        function hojeYMD() {
+            return new Date().toLocaleDateString('en-CA', { timeZone: FUSO });
+        }
+
+        function ymdParaBR(ymd) {
+            const [a, m, d] = ymd.split('-');
+            return `${d}/${m}/${a}`;
+        }
+
+        function textoPeriodo(evt) {
+            const inicio = diaYMD(evt.startsAt);
+            const fim = diaYMD(evt.endsAt) || inicio;
+            if (!inicio) return 'A definir';
+            return fim !== inicio ? `${ymdParaBR(inicio)} a ${ymdParaBR(fim)}` : ymdParaBR(inicio);
+        }
+
+        // upcoming = começa depois de hoje | ongoing = hoje está entre início e término
+        // completed = término já passou (ou status FINISHED) | cancelled = status CANCELLED
+        function situacaoEvento(evt) {
+            if (evt.status === 'CANCELLED') return 'cancelled';
+            const inicio = diaYMD(evt.startsAt);
+            const fim = diaYMD(evt.endsAt) || inicio;
+            const hoje = hojeYMD();
+            if (evt.status === 'FINISHED' || (fim && fim < hoje)) return 'completed';
+            if (inicio > hoje) return 'upcoming';
+            return 'ongoing';
+        }
+
+        const ROTULOS = {
+            upcoming:  { texto: 'Em breve',     cor: '#8a6d00', fundo: '#fff3d4' },
+            ongoing:   { texto: 'Em andamento', cor: '#1b5e20', fundo: '#e8f5e9' },
+            completed: { texto: 'Encerrado',    cor: '#555',    fundo: '#eeeeee' },
+            cancelled: { texto: 'Cancelado',    cor: '#8b1a1a', fundo: '#fdecea' }
+        };
+
+        // ---------- Carregamento ----------
+        async function buscarTodosEventos() {
+            // A API aceita no máximo 50 por página, então busca página por página
+            const primeira = await api.getEvents({ limit: 50, page: 1 });
+            let lista = api.getList(primeira);
+            const totalPaginas = Math.min(primeira?.totalPages || 1, 10);
+            for (let pagina = 2; pagina <= totalPaginas; pagina++) {
+                lista = lista.concat(api.getList(await api.getEvents({ limit: 50, page: pagina })));
+            }
+            return lista;
+        }
+
+        function preencherCategorias(categorias) {
+            const select = document.querySelector('select[name="action-category"]');
+            if (!select) return;
+            select.innerHTML = '<option value="">Todas as categorias</option>' +
+                categorias.map(c => `<option value="${protegerTexto(c.id)}">${protegerTexto(c.name)}</option>`).join('');
+        }
+
+        async function carregarCategorias() {
+            try {
+                const categorias = api.getList(await api.getEventCategories());
+                if (categorias.length) preencherCategorias(categorias);
+            } catch (err) {
+                console.warn('Não foi possível carregar as categorias:', err.message);
+            }
+        }
 
         async function carregarEventos() {
             const container = document.getElementById('lista-eventos');
             if (!container) return;
 
             try {
-                const { data: eventos, error } = await db
-                    .from('events')
-                    .select('*')
-                    .order('event_date', { ascending: true });
+                listaEventosCache = await buscarTodosEventos();
 
-                if (error) throw error;
+                // Plano B: se a lista de categorias falhou, monta com as dos eventos
+                const select = document.querySelector('select[name="action-category"]');
+                if (select && select.options.length <= 1) {
+                    const unicas = new Map();
+                    listaEventosCache.forEach(e => { if (e.category) unicas.set(e.category.id, e.category); });
+                    preencherCategorias([...unicas.values()]);
+                }
 
-                if (!eventos || eventos.length === 0) {
+                if (listaEventosCache.length === 0) {
                     container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Nenhum evento agendado no momento.</p>";
                     return;
                 }
-
-                listaEventosCache = eventos;
-                renderizarEventos(listaEventosCache);
+                aplicarFiltros();
             } catch (err) {
                 console.error("Erro ao carregar eventos:", err);
-                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--primary);'>Erro ao carregar os eventos do banco.</p>";
+                container.innerHTML = `<p style='grid-column: 1/-1; text-align: center; color: var(--primary);'>Erro ao carregar os eventos: ${protegerTexto(err.message)}</p>`;
             }
         }
 
-        function formatarDataSimples(dataStr) {
-            if (!dataStr) return '';
-            const partes = dataStr.split('T')[0].split('-');
-            return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : dataStr;
-        }
-
+        // ---------- Exibição ----------
         function renderizarEventos(eventos) {
             const container = document.getElementById('lista-eventos');
             if (!container) return;
@@ -178,60 +252,53 @@
                 return;
             }
 
-            container.innerHTML = "";
-            eventos.forEach(evt => {
-                const dataFmt = formatarDataSimples(evt.event_date);
+            container.innerHTML = eventos.map(evt => {
+                const rotulo = ROTULOS[situacaoEvento(evt)];
+                const motivo = evt.status === 'CANCELLED' && evt.cancellationReason
+                    ? `<p style="font-size: 0.85rem; color: #8b1a1a;"><strong>Motivo:</strong> ${protegerTexto(evt.cancellationReason)}</p>`
+                    : '';
 
-                container.innerHTML += `
+                return `
                     <div class="card-pet">
-                        <img src="${protegerTexto(evt.image_url) || 'imagens/Logo.webp'}" alt="${protegerTexto(evt.title)}" onerror="this.src='imagens/Logo.webp'">
+                        <img src="${protegerTexto(evt.coverImageUrl) || 'imagens/Logo.webp'}" alt="${protegerTexto(evt.title)}" onerror="this.src='imagens/Logo.webp'">
                         <div class="info-pet">
+                            <span style="display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 6px; color: ${rotulo.cor}; background: ${rotulo.fundo};">${rotulo.texto}</span>
                             <h3>${protegerTexto(evt.title)}</h3>
-                            <p><strong>Categoria:</strong> ${protegerTexto(evt.category)}</p>
-                            <p><strong>Data:</strong> ${dataFmt}</p>
-                            <p><strong>Local:</strong> ${protegerTexto(evt.location)}</p>
+                            <p><strong>Categoria:</strong> ${protegerTexto(evt.category?.name)}</p>
+                            <p><strong>Data:</strong> ${textoPeriodo(evt)}</p>
+                            <p><strong>Local:</strong> ${protegerTexto(evt.locationName || 'A confirmar')}</p>
+                            ${motivo}
                             <p style="margin-top: 6px; font-size: 0.85rem;">${protegerTexto(evt.description || '')}</p>
                         </div>
                     </div>
                 `;
-            });
+            }).join('');
         }
 
-        // Lógica dos Filtros (Categoria + Status por Data Atual)
-        document.querySelector('.search-filters')?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
+        function aplicarFiltros(e) {
+            if (e) e.preventDefault();
+
             const categoriaFiltro = document.querySelector('select[name="action-category"]').value;
             const statusFiltro = document.querySelector('select[name="action-status"]').value;
-            
-            const hoje = new Date().toISOString().split('T')[0]; // Data de hoje (YYYY-MM-DD)
 
             const filtrados = listaEventosCache.filter(evt => {
-                // 1. Filtro por Categoria
-                if (categoriaFiltro && evt.category !== categoriaFiltro) {
-                    return false;
-                }
-
-                // 2. Filtro por Status
-                if (statusFiltro) {
-                    const dataEvt = evt.event_date ? evt.event_date.split('T')[0] : '';
-                    
-                    if (statusFiltro === 'upcoming' && dataEvt <= hoje) {
-                        return false; // Próximos (precisa ser maior que hoje)
-                    }
-                    if (statusFiltro === 'ongoing' && dataEvt !== hoje) {
-                        return false; // Em andamento (precisa ser exatamente hoje)
-                    }
-                    if (statusFiltro === 'completed' && dataEvt >= hoje) {
-                        return false; // Concluídos (precisa ser menor que hoje)
-                    }
-                }
-
+                if (categoriaFiltro && String(evt.category?.id) !== categoriaFiltro) return false;
+                if (statusFiltro && situacaoEvento(evt) !== statusFiltro) return false;
                 return true;
             });
 
             renderizarEventos(filtrados);
-        });
+        }
 
-        document.addEventListener('DOMContentLoaded', carregarEventos);
+        document.querySelector('.search-filters')?.addEventListener('submit', aplicarFiltros);
+        document.querySelector('select[name="action-category"]')?.addEventListener('change', () => aplicarFiltros());
+        document.querySelector('select[name="action-status"]')?.addEventListener('change', () => aplicarFiltros());
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarCategorias();
+            carregarEventos();
+        });
     </script>
+</body>
+
+</html>
