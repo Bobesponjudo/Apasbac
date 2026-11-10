@@ -548,7 +548,7 @@
 
             let eventos;
             try {
-                eventos = api.getList(await api.getEvents({ limit: 100 }, true));
+                eventos = api.getList(await api.getEvents({ limit: 50 }, true));
             } catch (error) {
                 container.innerHTML = `<p style="color: #c0392b;">Erro ao carregar: ${error.message}</p>`;
                 return;

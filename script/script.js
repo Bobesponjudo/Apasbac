@@ -366,7 +366,7 @@ function criarModalPerfil() {
 
     const modalHtml = `
         <div id="modalMeuPerfil" class="modal-overlay" style="display: none;">
-            <div class="modal-box" style="max-width: 480px; background: #fffcf7; border: 1.5px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-lg); position: relative;">
+            <div class="modal-box" style="max-width: 480px; background: #fffcf7; border: 1.5px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-lg); position: relative; width: 100%; box-sizing: border-box; max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow-y: auto; -webkit-overflow-scrolling: touch;">
                 <button type="button" class="modal-close" id="btnFecharPerfil" style="position: absolute; top: 16px; right: 20px; font-size: 1.8rem; border: none; background: none; cursor: pointer; color: var(--text-light);">&times;</button>
                 
                 <div style="text-align: center; margin-bottom: 22px;">

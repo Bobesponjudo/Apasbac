@@ -2940,3 +2940,302 @@ body {
     padding: 10px 14px;
   }
 }
+/* ==========================================================================
+   RESPONSIVIDADE COMPLETA  (bloco final: tem prioridade sobre as regras acima)
+   Breakpoints: 1100 (menu hambúrguer) | 900 | 768 | 640 | 480 | 360
+   ========================================================================== */
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+img, video, svg { max-width: 100%; }
+body { overflow-x: hidden; }
+main { width: 100%; }
+
+/* Faixas que usavam 100vw (causava rolagem lateral) */
+.page-title, .main-title { width: 100%; margin-left: 0; margin-right: 0; }
+
+/* Carrossel da home: itens com largura própria, sem espaço vazio */
+.marquee-container { min-height: 0; }
+.marquee-item { flex: 0 0 auto; }
+.marquee-item img { width: auto; height: 250px; max-width: none; aspect-ratio: 4 / 5; }
+
+/* Grade de animais/eventos: nunca estoura em telas estreitas */
+.container-pets { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr)); }
+
+/* Rodapé: textos longos (e-mail, site) quebram em vez de estourar */
+.footer-column a { overflow-wrap: anywhere; }
+
+/* Telas sem mouse: sem "pulo" de hover nos cards */
+@media (hover: none) {
+  .card-pet:hover { transform: none; }
+  .card-pet:hover img { transform: none; }
+  .about-image-wrapper:hover { transform: none; }
+}
+
+/* ---------- Menu hambúrguer a partir de 1100px (antes só 768px) ----------
+   Entre 769 e 1100px o menu completo + doação + login não cabia na linha. */
+@media (max-width: 1100px) {
+  .main-header:not(.admin-header) { background: #fff3d4 !important; }
+
+  .main-header:not(.admin-header) .header-container {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 80px;
+    align-items: center;
+    padding: 0 20px !important;
+    height: auto !important;
+    max-height: 80px;
+    overflow: hidden;
+    gap: 0 12px;
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  .main-header:not(.admin-header) .logo-link { grid-column: 1; grid-row: 1; }
+  .main-header:not(.admin-header) .logo-img { height: 56px !important; }
+
+  .main-header:not(.admin-header) .menu-toggle {
+    display: block !important;
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .main-header:not(.admin-header) .main-nav,
+  .main-header:not(.admin-header) .btn-donate,
+  .main-header:not(.admin-header) .user-actions { display: none !important; }
+
+  /* Menu aberto: rola dentro do cabeçalho se a tela for baixa (celular deitado) */
+  .main-header.menu-open:not(.admin-header) .header-container {
+    grid-template-rows: 80px auto auto auto;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 12px !important;
+  }
+
+  .main-header.menu-open:not(.admin-header) .main-nav {
+    display: flex !important;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    margin: 6px 0 0;
+  }
+
+  .main-header.menu-open:not(.admin-header) .main-nav ul {
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100%;
+    align-items: stretch !important;
+  }
+
+  .main-header.menu-open:not(.admin-header) .main-nav a {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .main-header.menu-open:not(.admin-header) .btn-donate {
+    display: inline-flex !important;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    width: 100%;
+    margin: 10px 0 0 !important;
+    justify-content: center;
+    padding: 12px !important;
+    font-size: 0.9rem;
+  }
+
+  .main-header.menu-open:not(.admin-header) .user-actions {
+    display: flex !important;
+    flex-wrap: wrap;
+    grid-column: 1 / -1;
+    grid-row: 4;
+    width: 100%;
+    margin: 14px 0 8px !important;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .main-header.menu-open:not(.admin-header) .user-actions a {
+    flex: 1 1 130px;
+    justify-content: center;
+    text-align: center;
+    padding: 11px 14px;
+  }
+
+  .main-header.menu-open:not(.admin-header) .user-actions span {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .footer-columns { gap: 32px 24px; }
+}
+
+/* ---------- Tablet (até 900px) ---------- */
+@media (max-width: 900px) {
+  .page-container { padding: 36px 20px; }
+  .container-pets { gap: 24px; padding: 24px 20px; margin-top: 24px; }
+  .search-filters { padding: 22px 20px; }
+  .footer-content-wrapper { padding: 0 24px; }
+  .footer-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .footer-column { min-width: 0; }
+  .btn-container { width: calc(100% - 32px); }
+  .form-container { width: calc(100% - 24px); }
+  .admin-form-box { padding: 24px !important; }
+}
+
+/* ---------- Celular grande / tablet pequeno (até 768px) ---------- */
+@media (max-width: 768px) {
+  /* Evita o zoom automático do iOS ao focar campos */
+  input, select, textarea { font-size: 16px !important; }
+  input[type="checkbox"], input[type="radio"] { font-size: inherit !important; }
+
+  .faixa-topo { padding: 48px 16px; }
+  .faixa-topo p { font-size: 0.95rem !important; }
+
+  main .amigos { padding: 48px 16px; margin: 24px 0; }
+  .marquee-container { padding: 18px 0; }
+  .marquee-item img { height: 170px !important; }
+  .marquee-content { gap: 12px; }
+
+  .actions-section { padding: 28px 16px; }
+  .intro-modern { padding: 44px 16px !important; }
+
+  .content-container {
+    text-align: left;
+    padding: 28px 20px !important;
+    margin: 24px 12px !important;
+    max-width: none;
+  }
+
+  .about-image-wrapper img { max-height: 320px; }
+
+  /* Detalhes do pet */
+  .pet-details-container { padding: 16px 0 32px; }
+  .pet-image-side { min-height: 0; height: min(75vw, 380px); flex: none; }
+  .pet-info-side { padding: 24px 20px; flex: none; }
+  .pet-info-side h1 { font-size: clamp(1.8rem, 7vw, 2.3rem); overflow-wrap: anywhere; }
+  .pet-tags { flex-wrap: wrap; }
+  .pet-actions .action-btn { display: block; text-align: center; width: 100%; }
+
+  /* Formulários */
+  .volunteer-form-modern { padding: 28px 18px; }
+  .section-title { font-size: 1.15rem; flex-wrap: wrap; }
+  .input-grid { grid-template-columns: 1fr; }
+  .input-group.full-width { grid-column: auto; }
+  .tag-item, .pill-item { max-width: 100%; }
+  .tag-item span, .pill-item span { white-space: normal; padding: 10px 16px; }
+
+  /* Grades inline do painel admin (2 colunas) viram 1 coluna */
+  div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Admin */
+  .admin-nav-tabs { gap: 10px !important; }
+  .tab-btn { flex: 1 1 calc(50% - 10px); padding: 11px 12px !important; font-size: 0.88rem !important; }
+  .item-card { flex-wrap: wrap; }
+  .item-card > div:first-child { flex: 1 1 220px; min-width: 0; }
+  .item-card h4, .item-card p { overflow-wrap: anywhere; }
+  .modal-box { padding: 20px 16px; max-height: 92vh; }
+  .modal-box-reset { padding: 28px 20px; }
+
+  /* Doação (Pix) */
+  .donation-main .pix-card-container { padding: 26px 18px; border-radius: 16px; }
+  .donation-main .pix-qrcode-wrapper { padding: 12px; }
+  .donation-main .pix-qrcode-wrapper img { width: 200px !important; max-width: 100% !important; }
+  .pix-detalhes-titular { overflow-wrap: anywhere; }
+}
+
+/* ---------- Celular (até 640px) ---------- */
+@media (max-width: 640px) {
+  .page-container { padding: 28px 16px; }
+  .container-pets { padding: 16px; gap: 20px; }
+  .card-pet img { height: 220px; }
+
+  .search-filters { padding: 18px 14px; margin-bottom: 24px; }
+  .filter-grid { grid-template-columns: 1fr; gap: 12px; }
+  .filter-grid .search-button,
+  .filter-grid .action-btn { width: 100%; text-align: center; }
+
+  .actions-section { flex-direction: column; align-items: stretch; }
+  .actions-section .action-btn { text-align: center; padding: 14px 20px; }
+
+  .btn-pesquisar { padding: 12px 28px; }
+  .btn-container { padding: 32px 0 24px; margin: 24px auto; }
+
+  .footer-content-wrapper { padding: 0 20px; }
+  .footer-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; padding-bottom: 28px; }
+  .footer-column:last-child { grid-column: 1 / -1; }
+  .footer-bottom { gap: 16px; }
+  .footer-logo img { height: 60px; }
+
+  .auth-warning-card { padding: 32px 18px !important; }
+  .auth-warning-card .action-btn { width: 100%; text-align: center; }
+
+  .success-container { padding: 40px 20px; }
+  .success-icon { font-size: 3.5rem; }
+
+  /* Cadastro / login */
+  .login-card, .signup-card { border-radius: var(--radius-md); }
+  .login-container, .signup-container { padding: 20px 12px; }
+  .form-options { flex-wrap: wrap; gap: 8px; }
+  .social-login { flex-direction: column; }
+
+  .tab-btn { flex: 1 1 100%; }
+  .item-card { padding: 12px !important; }
+  .item-card > div:last-child { width: 100%; }
+  .item-card > div:last-child button { flex: 1; }
+}
+
+/* ---------- Celular pequeno (até 480px) ---------- */
+@media (max-width: 480px) {
+  .header-container { padding: 0 14px !important; }
+  .main-header:not(.admin-header) .header-container { padding: 0 14px !important; }
+  .logo-img { height: 48px !important; }
+  .faixa-topo { padding: 40px 14px; }
+  .faixa-topo h1 { font-size: 1.7rem; }
+  main .amigos h1 { font-size: 1.5rem; }
+  .intro-modern h1 { font-size: 1.55rem !important; }
+  .intro-modern p { font-size: 0.95rem !important; }
+  .marquee-item img { height: 140px !important; }
+
+  .content-container { padding: 22px 16px !important; margin: 18px 10px !important; }
+  .sub-title { font-size: 1.25rem; }
+
+  .volunteer-form-modern { padding: 22px 14px; }
+  .form-container { width: calc(100% - 16px); }
+  .rating-stars { font-size: 1.6rem; gap: 8px; }
+
+  .login-form, .signup-form { padding: 22px 18px 14px; }
+  .login-header, .signup-header { padding: 24px 18px 20px; }
+  .separator, .social-login { padding-left: 18px; padding-right: 18px; margin-left: 0; margin-right: 0; }
+  .login-footer, .signup-footer { padding: 14px 18px 22px; }
+
+  .admin-form-box { padding: 18px 14px !important; border-radius: 12px !important; }
+  .pet-info-side { padding: 20px 16px; }
+  .pet-vaccines-box { margin: 14px 0 !important; }
+}
+
+/* ---------- Telas muito pequenas (até 360px) ---------- */
+@media (max-width: 360px) {
+  .footer-columns { grid-template-columns: 1fr; }
+  .btn-pesquisar, .action-btn { padding-left: 18px; padding-right: 18px; }
+  .info-pet { padding: 14px; }
+  .tag-item span, .pill-item span { font-size: 0.8rem; padding: 9px 12px; }
+  .donation-main .pix-qrcode-wrapper img { width: 170px !important; }
+}
+
+/* ---------- Celular deitado (pouca altura) ---------- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .faixa-topo { padding: 32px 16px; }
+  .login-container, .signup-container { min-height: auto; padding: 20px 12px; }
+}
+
+/* ---------- Acessibilidade: respeita "reduzir movimento" ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-content { animation: none; }
+  .marquee-container { overflow-x: auto; }
+  .card-pet, .success-container { animation: none; }
+  html { scroll-behavior: auto; }
+}
