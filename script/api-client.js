@@ -304,6 +304,14 @@ const api = {
         return this.request('/events', { method: 'POST', body: eventData, auth: true });
     },
 
+    async updateEvent(id, eventData) {
+        return this.request(`/events/${encodeURIComponent(id)}`, {
+            method: 'PATCH',
+            body: eventData,
+            auth: true
+        });
+    },
+
     async deleteEvent(id) {
         return this.request(`/events/${encodeURIComponent(id)}`, { method: 'DELETE', auth: true });
     }

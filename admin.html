@@ -301,6 +301,123 @@
         </div>
     </main>
 
+    <!-- MODAL: EDITAR ANIMAL -->
+    <div id="modalEditarAnimal" class="modal-overlay">
+        <div class="modal-box">
+            <button type="button" class="modal-close" onclick="fecharModal('modalEditarAnimal')">&times;</button>
+            <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-pen"></i> Editar Animal</h2>
+            <form id="formEditarAnimal">
+                <input type="hidden" id="edit_pet_id">
+                <div class="input-group">
+                    <label>Nome do Pet *</label>
+                    <input type="text" id="edit_pet_name" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Sexo *</label>
+                        <select id="edit_pet_sex" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                            <option value="MALE">Macho</option>
+                            <option value="FEMALE">Fêmea</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Porte *</label>
+                        <select id="edit_pet_size" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                            <option value="SMALL">Pequeno</option>
+                            <option value="MEDIUM">Médio</option>
+                            <option value="LARGE">Grande</option>
+                            <option value="EXTRA_LARGE">Porte Gigante</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Raça *</label>
+                        <input type="text" id="edit_pet_breed" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Idade Estimada *</label>
+                        <input type="text" id="edit_pet_age" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Link da Foto do Pet (URL)</label>
+                    <input type="url" id="edit_pet_photo" placeholder="https://...">
+                </div>
+                <div class="input-group">
+                    <label>Temperamento</label>
+                    <input type="text" id="edit_pet_temperament">
+                </div>
+                <div class="input-group">
+                    <label>História / Descrição do Animal</label>
+                    <textarea id="edit_pet_description" rows="3" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Vacinas já aplicadas</label>
+                    <input type="text" id="edit_pet_vaccines" placeholder="Ex: V10, Antirrábica...">
+                </div>
+
+                <button type="submit" class="submit-btn-modern" id="btnSalvarEdicaoAnimal">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EDITAR EVENTO -->
+    <div id="modalEditarEvento" class="modal-overlay">
+        <div class="modal-box">
+            <button type="button" class="modal-close" onclick="fecharModal('modalEditarEvento')">&times;</button>
+            <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-pen"></i> Editar Evento</h2>
+            <form id="formEditarEvento">
+                <input type="hidden" id="edit_event_id">
+                <div class="input-group">
+                    <label>Título do Evento *</label>
+                    <input type="text" id="edit_event_title" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Categoria *</label>
+                        <select id="edit_event_category" required style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></select>
+                    </div>
+                    <div class="input-group">
+                        <label>Data de Início *</label>
+                        <input type="date" id="edit_event_date" required>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Data de Término (opcional)</label>
+                    <input type="date" id="edit_event_end_date">
+                    <small style="color: #777; font-size: 0.78rem;">Deixe vazio se o evento durar apenas um dia.</small>
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Localização / Onde vai ser *</label>
+                    <input type="text" id="edit_event_location" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Link de Imagem (opcional)</label>
+                    <input type="url" id="edit_event_image" placeholder="https://...">
+                </div>
+
+                <div class="input-group">
+                    <label>Descrição do Evento</label>
+                    <textarea id="edit_event_desc" rows="3" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn-modern" id="btnSalvarEdicaoEvento">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Cliente da API oficial -->
     <script src="script/api-client.js"></script>
 
@@ -438,6 +555,9 @@
                             </div>
                         </div>
                         <div style="display: flex; gap: 8px;">
+                            <button class="btn-edit" onclick="abrirEdicaoAnimal(${petId})">
+                                <i class="fa-solid fa-pen"></i> Editar
+                            </button>
                             <button class="btn-delete" onclick="excluirAnimal(${petId}, '${pet.name}')">
                                 <i class="fa-solid fa-trash"></i> Excluir
                             </button>
@@ -549,6 +669,7 @@
             let eventos;
             try {
                 eventos = api.getList(await api.getEvents({ limit: 50 }, true));
+                eventosCache = eventos;
             } catch (error) {
                 container.innerHTML = `<p style="color: #c0392b;">Erro ao carregar: ${error.message}</p>`;
                 return;
@@ -579,6 +700,9 @@
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px;">
+                        <button class="btn-edit" onclick="abrirEdicaoEvento(${evtId})">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </button>
                         <button class="btn-delete" onclick="excluirEvento(${evtId}, '${String(evt.title).replace(/'/g, "\\'")}')">
                             <i class="fa-solid fa-trash"></i> Excluir
                         </button>
@@ -598,6 +722,189 @@
                 alert(`Erro ao excluir: ${error.message}`);
             }
         }
+
+        // ==================== EDIÇÃO DE ANIMAIS ====================
+        // A descrição é salva como "Idade: X | texto" (mesmo formato do cadastro)
+        function separarDescricao(desc) {
+            const m = String(desc || '').match(/^Idade:\s*([^|]*)\|?\s*([\s\S]*)$/);
+            return m ? { idade: m[1].trim(), texto: m[2].trim() } : { idade: '', texto: String(desc || '') };
+        }
+
+        function urlOuVazio(valor) {
+            return (typeof valor === 'string' && /^https?:\/\//i.test(valor.trim())) ? valor.trim() : '';
+        }
+
+        async function abrirEdicaoAnimal(id) {
+            let pet = animaisCache.find(p => String(p.id) === String(id));
+            try {
+                const completo = await api.getAnimalPublic(id);
+                if (completo) pet = { ...(pet || {}), ...completo };
+            } catch (err) {
+                console.warn('Não foi possível buscar os dados completos do animal:', err.message);
+            }
+            if (!pet) {
+                alert('Animal não encontrado. Atualize a lista e tente novamente.');
+                return;
+            }
+
+            const desc = separarDescricao(pet.description);
+            const vacinas = Array.isArray(pet.vaccines) ? pet.vaccines.join(', ') : (pet.vaccines || '');
+            const foto = urlOuVazio((pet.photos && pet.photos[0]) || pet.imageUrl || '');
+
+            document.getElementById('edit_pet_id').value = id;
+            document.getElementById('edit_pet_name').value = pet.name || '';
+            document.getElementById('edit_pet_sex').value = pet.sex === 'FEMALE' ? 'FEMALE' : 'MALE';
+            document.getElementById('edit_pet_size').value = ['SMALL', 'MEDIUM', 'LARGE', 'EXTRA_LARGE'].includes(pet.size) ? pet.size : 'MEDIUM';
+            document.getElementById('edit_pet_breed').value = pet.breed || '';
+            document.getElementById('edit_pet_age').value = desc.idade || pet.age || '';
+            document.getElementById('edit_pet_photo').value = foto;
+            document.getElementById('edit_pet_temperament').value = pet.temperament || '';
+            document.getElementById('edit_pet_description').value = desc.texto;
+            document.getElementById('edit_pet_vaccines').value = vacinas;
+
+            document.getElementById('modalEditarAnimal').style.display = 'flex';
+        }
+
+        document.getElementById('formEditarAnimal').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSalvarEdicaoAnimal');
+            btn.disabled = true;
+            btn.innerText = 'Salvando...';
+
+            const id = document.getElementById('edit_pet_id').value;
+            const temperamento = document.getElementById('edit_pet_temperament').value.trim();
+            const vacinas = document.getElementById('edit_pet_vaccines').value.split(',').map(v => v.trim()).filter(Boolean);
+            const foto = document.getElementById('edit_pet_photo').value.trim();
+
+            const payload = {
+                name: document.getElementById('edit_pet_name').value.trim(),
+                sex: document.getElementById('edit_pet_sex').value,
+                size: document.getElementById('edit_pet_size').value,
+                breed: document.getElementById('edit_pet_breed').value.trim(),
+                description: `Idade: ${document.getElementById('edit_pet_age').value.trim()} | ${document.getElementById('edit_pet_description').value.trim()}`
+            };
+            // Campos em branco não são enviados, para não apagar o que já está salvo
+            if (temperamento) payload.temperament = temperamento;
+            if (vacinas.length) payload.vaccines = vacinas;
+            if (foto) payload.photoUrls = [foto];
+
+            try {
+                await api.updateAnimal(id, payload);
+                alert('Animal atualizado com sucesso!');
+                fecharModal('modalEditarAnimal');
+                carregarListaAnimais();
+            } catch (err) {
+                alert('Erro ao atualizar animal: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Alterações';
+            }
+        });
+
+        // ==================== EDIÇÃO DE EVENTOS ====================
+        let eventosCache = [];
+        let categoriasEdicao = [];
+
+        function diaParaInput(iso) {
+            return iso ? new Date(iso).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }) : '';
+        }
+
+        async function preencherCategoriasEdicao(categoriaAtual) {
+            const select = document.getElementById('edit_event_category');
+            if (!categoriasEdicao.length) {
+                try {
+                    categoriasEdicao = api.getList(await api.getEventCategories());
+                } catch (err) {
+                    console.warn('Não foi possível carregar as categorias:', err.message);
+                }
+            }
+            // Se a lista falhar, pelo menos a categoria atual do evento aparece
+            const lista = categoriasEdicao.length ? categoriasEdicao : (categoriaAtual ? [categoriaAtual] : []);
+            select.innerHTML = '';
+            lista.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.id;
+                option.textContent = c.name;
+                select.appendChild(option);
+            });
+            if (categoriaAtual) select.value = categoriaAtual.id;
+        }
+
+        async function abrirEdicaoEvento(id) {
+            const evt = eventosCache.find(x => String(x.id) === String(id));
+            if (!evt) {
+                alert('Evento não encontrado. Atualize a lista e tente novamente.');
+                return;
+            }
+
+            await preencherCategoriasEdicao(evt.category);
+
+            document.getElementById('edit_event_id').value = id;
+            document.getElementById('edit_event_title').value = evt.title || '';
+            document.getElementById('edit_event_date').value = diaParaInput(evt.startsAt);
+            document.getElementById('edit_event_end_date').value = diaParaInput(evt.endsAt);
+            document.getElementById('edit_event_end_date').min = diaParaInput(evt.startsAt);
+            document.getElementById('edit_event_location').value = evt.locationName || '';
+            document.getElementById('edit_event_image').value = urlOuVazio(evt.coverImageUrl);
+            document.getElementById('edit_event_desc').value = evt.description || '';
+
+            document.getElementById('modalEditarEvento').style.display = 'flex';
+        }
+
+        document.getElementById('edit_event_date')?.addEventListener('change', (e) => {
+            const fim = document.getElementById('edit_event_end_date');
+            fim.min = e.target.value;
+            if (fim.value && fim.value < e.target.value) fim.value = '';
+        });
+
+        document.getElementById('formEditarEvento').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSalvarEdicaoEvento');
+            btn.disabled = true;
+            btn.innerText = 'Salvando...';
+
+            try {
+                const id = document.getElementById('edit_event_id').value;
+                const original = eventosCache.find(x => String(x.id) === String(id));
+                const categoria = document.getElementById('edit_event_category').value;
+                if (!categoria) throw new Error('Selecione uma categoria de evento válida.');
+
+                const title = document.getElementById('edit_event_title').value.trim();
+                const startDate = document.getElementById('edit_event_date').value;
+                const endDate = document.getElementById('edit_event_end_date').value;
+                const foto = document.getElementById('edit_event_image').value.trim();
+
+                if (endDate && endDate < startDate) {
+                    throw new Error('A data de término não pode ser anterior à data de início.');
+                }
+
+                const payload = {
+                    title,
+                    description: document.getElementById('edit_event_desc').value.trim() || title,
+                    categoryId: Number(categoria),
+                    startsAt: new Date(`${startDate}T12:00:00`).toISOString(),
+                    timezone: 'America/Sao_Paulo',
+                    locationName: document.getElementById('edit_event_location').value.trim()
+                };
+                if (endDate) {
+                    payload.endsAt = new Date(`${endDate}T18:00:00`).toISOString();
+                } else if (original?.endsAt) {
+                    // Término apagado: evento de um dia só (término no mesmo dia do início)
+                    payload.endsAt = new Date(`${startDate}T18:00:00`).toISOString();
+                }
+                if (foto) payload.coverImageUrl = foto;
+
+                await api.updateEvent(id, payload);
+                alert('Evento atualizado com sucesso!');
+                fecharModal('modalEditarEvento');
+                carregarListaEventos();
+            } catch (err) {
+                alert('Erro ao atualizar evento: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Alterações';
+            }
+        });
 
         document.getElementById('btnTabEvento')?.addEventListener('click', carregarCategoriasEventos);
     </script>
