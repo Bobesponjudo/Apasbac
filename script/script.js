@@ -196,6 +196,7 @@ async function carregarAnimaisDaAPI() {
                     <div class="info-pet">
                         <h2>${pet.name}</h2>
                         <p><strong>Gênero:</strong> ${genero}</p>
+                        ${pet.species ? `<p><strong>Espécie:</strong> ${pet.species}</p>` : ''}
                         <p><strong>Raça:</strong> ${pet.breed || 'SRD'}</p>
                         <a href="maisinformacoes.html?id=${pet.id}">
                             <button><strong>Mais informações</strong></button>

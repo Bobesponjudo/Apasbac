@@ -192,6 +192,16 @@
                     </div>
                 </div>
 
+                    <div class="input-group">
+                        <label>Espécie *</label>
+                        <select id="pet_species" required style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                            <option value="">Selecione...</option>
+                            <option value="Cachorro">Cachorro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Raça *</label>
@@ -204,8 +214,11 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Link da Foto do Pet (URL)</label>
-                    <input type="url" id="pet_photo" placeholder="https://imgur.com/... ou link de imagem">
+                    <label>Foto do Pet (JPEG, PNG ou WebP, até 8 MB)</label>
+                    <input type="file" id="pet_photo_file" accept="image/jpeg,image/png,image/webp">
+                    <input type="url" id="pet_photo" style="display: none;">
+                    <img id="pet_photo_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
+                    <small id="pet_photo_status" style="display: block; margin-top: 4px;"></small>
                 </div>
                 <div class="input-group">
                     <label>Temperamento *</label>
@@ -274,8 +287,11 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Link de Imagem (opcional)</label>
-                    <input type="url" id="event_image" placeholder="Deixe vazio para usar a logo padrão">
+                    <label>Imagem de capa (opcional, JPEG, PNG ou WebP, até 8 MB)</label>
+                    <input type="file" id="event_image_file" accept="image/jpeg,image/png,image/webp">
+                    <input type="url" id="event_image" style="display: none;">
+                    <img id="event_image_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
+                    <small id="event_image_status" style="display: block; margin-top: 4px;"></small>
                 </div>
 
                 <div class="input-group">
@@ -332,6 +348,16 @@
                     </div>
                 </div>
 
+                    <div class="input-group">
+                        <label>Espécie *</label>
+                        <select id="edit_pet_species" required style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);">
+                            <option value="">Selecione...</option>
+                            <option value="Cachorro">Cachorro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Raça *</label>
@@ -344,8 +370,11 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Link da Foto do Pet (URL)</label>
-                    <input type="url" id="edit_pet_photo" placeholder="https://...">
+                    <label>Foto do Pet (envie outra para trocar)</label>
+                    <input type="file" id="edit_pet_photo_file" accept="image/jpeg,image/png,image/webp">
+                    <input type="url" id="edit_pet_photo" style="display: none;">
+                    <img id="edit_pet_photo_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
+                    <small id="edit_pet_photo_status" style="display: block; margin-top: 4px;"></small>
                 </div>
                 <div class="input-group">
                     <label>Temperamento</label>
@@ -402,8 +431,11 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Link de Imagem (opcional)</label>
-                    <input type="url" id="edit_event_image" placeholder="https://...">
+                    <label>Imagem de capa (envie outra para trocar)</label>
+                    <input type="file" id="edit_event_image_file" accept="image/jpeg,image/png,image/webp">
+                    <input type="url" id="edit_event_image" style="display: none;">
+                    <img id="edit_event_image_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
+                    <small id="edit_event_image_status" style="display: block; margin-top: 4px;"></small>
                 </div>
 
                 <div class="input-group">
@@ -494,7 +526,17 @@
             btn.disabled = true;
             btn.innerText = "Salvando na API...";
 
-            const foto = document.getElementById('pet_photo').value.trim() || 'imagens/Logo.webp';
+            let foto;
+            try {
+                btn.innerText = "Enviando imagem...";
+                foto = await resolverImagem('pet_photo', 'animals/photos');
+            } catch (err) {
+                alert("Erro ao enviar a imagem: " + err.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Salvar Animal na API';
+                return;
+            }
+            btn.innerText = "Salvando na API...";
             const vacinasTexto = document.getElementById('pet_vaccines').value;
             const vacinasArray = vacinasTexto.split(',').map(v => v.trim()).filter(Boolean);
 
@@ -502,6 +544,7 @@
                 name: document.getElementById('pet_name').value.trim(),
                 sex: document.getElementById('pet_sex').value,
                 size: document.getElementById('pet_size').value,
+                species: document.getElementById('pet_species').value,
                 breed: document.getElementById('pet_breed').value.trim(),
                 temperament: document.getElementById('pet_temperament').value.trim(),
                 vaccines: vacinasArray,
@@ -550,7 +593,7 @@
                             <div>
                                 <h4 style="margin: 0; color: var(--primary);">${pet.name || 'Sem nome'}</h4>
                                 <p style="margin: 2px 0; font-size: 0.85rem; color: #555;">
-                                    ${pet.breed || 'SRD'} • ${pet.sex === 'MALE' ? 'Macho' : 'Fêmea'} • ID: ${pet.id}
+                                    ${pet.species ? pet.species + ' • ' : ''}${pet.breed || 'SRD'} • ${pet.sex === 'MALE' ? 'Macho' : 'Fêmea'} • ID: ${pet.id}
                                 </p>
                             </div>
                         </div>
@@ -633,7 +676,7 @@
                 const title = document.getElementById('event_title').value.trim();
                 const startDate = document.getElementById('event_date').value;
                 const endDate = document.getElementById('event_end_date').value;
-                const foto = document.getElementById('event_image').value.trim();
+                const foto = await resolverImagem('event_image', 'events/covers');
 
                 if (endDate && endDate < startDate) {
                     throw new Error('A data de término não pode ser anterior à data de início.');
@@ -730,6 +773,108 @@
             return m ? { idade: m[1].trim(), texto: m[2].trim() } : { idade: '', texto: String(desc || '') };
         }
 
+        // ===== Upload de imagens: envio direto ao Cloudinary com assinatura da API =====
+        const IMAGENS_TIPOS_OK = ['image/jpeg', 'image/png', 'image/webp'];
+        const IMAGEM_MAX_BYTES = 8 * 1024 * 1024;
+
+        async function enviarImagem(arquivo, pasta) {
+            if (!IMAGENS_TIPOS_OK.includes(arquivo.type)) {
+                throw new Error('Formato inválido. Envie uma imagem JPEG, PNG ou WebP.');
+            }
+            if (arquivo.size > IMAGEM_MAX_BYTES) {
+                throw new Error('A imagem passa de 8 MB. Escolha uma menor.');
+            }
+            // 1) pede a assinatura à API (exige login de ADMIN/STAFF)
+            const sig = await api.request('/storage/signed-upload', {
+                method: 'POST',
+                auth: true,
+                body: { folder: pasta, resource_type: 'image' }
+            });
+            // 2) envia o arquivo direto ao Cloudinary, SEM o token da APASBAC
+            const form = new FormData();
+            Object.entries(sig.form_fields).forEach(([k, v]) => form.append(k, String(v)));
+            form.append('file', arquivo);
+            const resp = await fetch(sig.upload_url, {
+                method: 'POST',
+                body: form,
+                signal: AbortSignal.timeout(60000)
+            });
+            const dados = await resp.json().catch(() => ({}));
+            if (!resp.ok || !dados.secure_url) {
+                throw new Error((dados.error && dados.error.message) || 'Falha ao enviar a imagem.');
+            }
+            // 3) esta URL é a que vai para a API ao salvar o animal/evento
+            return dados.secure_url;
+        }
+
+        function sincronizarPreview(urlId) {
+            const url = urlOuVazio(document.getElementById(urlId).value);
+            const img = document.getElementById(urlId + '_preview');
+            img.src = url;
+            img.style.display = url ? 'block' : 'none';
+            document.getElementById(urlId + '_status').textContent = '';
+            document.getElementById(urlId + '_file').value = '';
+        }
+
+        // Ao escolher o arquivo: só mostra a pré-visualização (nada é enviado ainda)
+        function configurarUploadImagem(urlId) {
+            const inputArquivo = document.getElementById(urlId + '_file');
+            const status = document.getElementById(urlId + '_status');
+            const img = document.getElementById(urlId + '_preview');
+            const form = inputArquivo.closest('form');
+            let previewLocal = null;
+
+            inputArquivo.addEventListener('change', () => {
+                if (previewLocal) { URL.revokeObjectURL(previewLocal); previewLocal = null; }
+                const arquivo = inputArquivo.files[0];
+                status.style.color = '';
+
+                if (!arquivo) { // cancelou a escolha: volta a mostrar a imagem atual (se houver)
+                    sincronizarPreview(urlId);
+                    return;
+                }
+                if (!IMAGENS_TIPOS_OK.includes(arquivo.type)) {
+                    inputArquivo.value = '';
+                    status.style.color = '#c0392b';
+                    status.textContent = 'Formato inválido. Envie uma imagem JPEG, PNG ou WebP.';
+                    return;
+                }
+                if (arquivo.size > IMAGEM_MAX_BYTES) {
+                    inputArquivo.value = '';
+                    status.style.color = '#c0392b';
+                    status.textContent = 'A imagem passa de 8 MB. Escolha uma menor.';
+                    return;
+                }
+                previewLocal = URL.createObjectURL(arquivo);
+                img.src = previewLocal;
+                img.style.display = 'block';
+                status.textContent = 'Imagem selecionada. Ela será enviada quando você salvar.';
+            });
+
+            form.addEventListener('reset', () => setTimeout(() => sincronizarPreview(urlId), 0));
+        }
+
+        // Chamada ao SALVAR: se há arquivo escolhido, envia agora e devolve a URL final.
+        // Sem arquivo novo, devolve a URL que já existia (ou vazio).
+        async function resolverImagem(urlId, pasta) {
+            const inputArquivo = document.getElementById(urlId + '_file');
+            const inputUrl = document.getElementById(urlId);
+            const arquivo = inputArquivo.files[0];
+            if (!arquivo) return inputUrl.value.trim();
+
+            const url = await enviarImagem(arquivo, pasta);
+            // Guarda a URL e limpa o arquivo: se o salvamento falhar e a pessoa tentar de novo, não reenvia.
+            inputUrl.value = url;
+            inputArquivo.value = '';
+            document.getElementById(urlId + '_status').textContent = 'Imagem enviada.';
+            return url;
+        }
+
+        configurarUploadImagem('pet_photo');
+        configurarUploadImagem('edit_pet_photo');
+        configurarUploadImagem('event_image');
+        configurarUploadImagem('edit_event_image');
+
         function urlOuVazio(valor) {
             return (typeof valor === 'string' && /^https?:\/\//i.test(valor.trim())) ? valor.trim() : '';
         }
@@ -755,9 +900,11 @@
             document.getElementById('edit_pet_name').value = pet.name || '';
             document.getElementById('edit_pet_sex').value = pet.sex === 'FEMALE' ? 'FEMALE' : 'MALE';
             document.getElementById('edit_pet_size').value = ['SMALL', 'MEDIUM', 'LARGE', 'EXTRA_LARGE'].includes(pet.size) ? pet.size : 'MEDIUM';
+            document.getElementById('edit_pet_species').value = ['Cachorro', 'Gato', 'Outro'].includes(pet.species) ? pet.species : '';
             document.getElementById('edit_pet_breed').value = pet.breed || '';
             document.getElementById('edit_pet_age').value = desc.idade || pet.age || '';
             document.getElementById('edit_pet_photo').value = foto;
+            sincronizarPreview('edit_pet_photo');
             document.getElementById('edit_pet_temperament').value = pet.temperament || '';
             document.getElementById('edit_pet_description').value = desc.texto;
             document.getElementById('edit_pet_vaccines').value = vacinas;
@@ -774,12 +921,23 @@
             const id = document.getElementById('edit_pet_id').value;
             const temperamento = document.getElementById('edit_pet_temperament').value.trim();
             const vacinas = document.getElementById('edit_pet_vaccines').value.split(',').map(v => v.trim()).filter(Boolean);
-            const foto = document.getElementById('edit_pet_photo').value.trim();
+            let foto;
+            try {
+                btn.innerText = 'Enviando imagem...';
+                foto = await resolverImagem('edit_pet_photo', 'animals/photos');
+            } catch (err) {
+                alert('Erro ao enviar a imagem: ' + err.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Alterações';
+                return;
+            }
+            btn.innerText = 'Salvando...';
 
             const payload = {
                 name: document.getElementById('edit_pet_name').value.trim(),
                 sex: document.getElementById('edit_pet_sex').value,
                 size: document.getElementById('edit_pet_size').value,
+                species: document.getElementById('edit_pet_species').value,
                 breed: document.getElementById('edit_pet_breed').value.trim(),
                 description: `Idade: ${document.getElementById('edit_pet_age').value.trim()} | ${document.getElementById('edit_pet_description').value.trim()}`
             };
@@ -846,6 +1004,7 @@
             document.getElementById('edit_event_end_date').min = diaParaInput(evt.startsAt);
             document.getElementById('edit_event_location').value = evt.locationName || '';
             document.getElementById('edit_event_image').value = urlOuVazio(evt.coverImageUrl);
+            sincronizarPreview('edit_event_image');
             document.getElementById('edit_event_desc').value = evt.description || '';
 
             document.getElementById('modalEditarEvento').style.display = 'flex';
@@ -872,7 +1031,7 @@
                 const title = document.getElementById('edit_event_title').value.trim();
                 const startDate = document.getElementById('edit_event_date').value;
                 const endDate = document.getElementById('edit_event_end_date').value;
-                const foto = document.getElementById('edit_event_image').value.trim();
+                const foto = await resolverImagem('edit_event_image', 'events/covers');
 
                 if (endDate && endDate < startDate) {
                     throw new Error('A data de término não pode ser anterior à data de início.');
