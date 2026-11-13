@@ -222,23 +222,23 @@ async function carregarDadosDoPet() {
         const pet = await api.getAnimalPublic(petId);
         const nomeEl = document.getElementById('pet-name');
         if (nomeEl) nomeEl.innerText = pet.name;
-        
+       
         const imgEl = document.getElementById('pet-img');
         if (imgEl) imgEl.src = (pet.photos && pet.photos.length > 0) ? pet.photos[0] : 'imagens/Logo.webp';
-        
+       
         const genEl = document.getElementById('pet-gender');
         if (genEl) genEl.innerText = pet.sex === 'MALE' ? 'Macho' : 'Fêmea';
-        
+       
         const ageEl = document.getElementById('pet-age');
         const ageInDescription = pet.description?.match(/(?:^|\|\s*)Idade:\s*([^|]+)/i)?.[1]?.trim();
         if (ageEl) ageEl.innerText = pet.age || ageInDescription || "Não informada";
-        
+       
         const sizeEl = document.getElementById('pet-size');
         if (sizeEl) sizeEl.innerText = pet.size;
-        
+       
         const descEl = document.getElementById('pet-desc');
         if (descEl) descEl.innerText = pet.description;
-        
+       
         document.title = `Conheça o ${pet.name} - Apasbac`;
     } catch (error) {
         console.error("Erro ao carregar detalhes:", error);
@@ -279,6 +279,8 @@ function configurarEnvioFormulario() {
     const form = document.querySelector('.volunteer-form-modern');
     const container = document.querySelector('.form-container');
     if (!form || !container) return;
+    // Formulários com envio próprio (ex.: adoção) não usam este tratamento genérico
+    if (form.hasAttribute('data-envio-proprio')) return;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -301,7 +303,14 @@ function configurarEnvioFormulario() {
                 }
             });
 
-            if (response.ok) {
+            const data = await response.json().catch(() => ({}));
+            const mensagem = String(data.message || '').toLowerCase();
+
+            if (mensagem.includes('activate')) {
+                throw new Error('Formulário aguardando ativação no e-mail da Apasbac');
+            }
+
+            if (response.ok && data.success !== 'false' && data.success !== false) {
                 container.innerHTML = `
                     <div class="success-container">
                         <div class="success-icon">
@@ -369,7 +378,7 @@ function criarModalPerfil() {
         <div id="modalMeuPerfil" class="modal-overlay" style="display: none;">
             <div class="modal-box" style="max-width: 480px; background: #fffcf7; border: 1.5px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: var(--shadow-lg); position: relative; width: 100%; box-sizing: border-box; max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow-y: auto; -webkit-overflow-scrolling: touch;">
                 <button type="button" class="modal-close" id="btnFecharPerfil" style="position: absolute; top: 16px; right: 20px; font-size: 1.8rem; border: none; background: none; cursor: pointer; color: var(--text-light);">&times;</button>
-                
+               
                 <div style="text-align: center; margin-bottom: 22px;">
                     <div style="width: 72px; height: 72px; border-radius: 50%; background: #fff1cf; color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2.4rem; margin: 0 auto 12px; border: 2px solid var(--border);">
                         <i class="fa-solid fa-user"></i>
@@ -519,7 +528,7 @@ async function deslogarUsuario() {
 
 // Inicializador de carregamento
 document.addEventListener('DOMContentLoaded', () => {
-    iniciarMenuHamburguer(); 
+    iniciarMenuHamburguer();
     configurarEnvioFormulario();
     iniciarGerenciadorPerfil();
 });

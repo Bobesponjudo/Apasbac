@@ -45,7 +45,7 @@
         </div>
 
         <div class="form-container" style="margin-top: 35px; margin-bottom: 50px;">
-            <form action="https://formsubmit.co/ajax/apasbac.assis@gmail.com" method="POST" class="volunteer-form-modern" id="formAdocao">
+            <form action="https://formsubmit.co/ajax/apasbac.assis@gmail.com" method="POST" class="volunteer-form-modern" id="formAdocao" data-envio-proprio>
                 
                 <!-- Configurações do FormSubmit -->
                 <input type="hidden" name="_subject" id="emailSubject" value="Novo Pedido de Adoção - APASBAC">
@@ -242,10 +242,8 @@
                     <h3>Departamento de meio ambiente</h3>
                     <a href="https://www.assischateaubriand.pr.gov.br/index.php?sessao=b05460336896b0&id=430">Site:
                         assischateaubriand.pr.gov.br</a>
-                    <a
-                        href="https://mail.google.com/mail/u/0/?hl=pt-BR#inbox?compose=CllgCHrkVQNCxBnJfvxDRjlVqfmqtJCTBpDkGpVddwfdGtGMKnZWHHtMmqPWjMGDHnzFXpgQZkg">
-                        E-mail: depmeioambienteassis@gmail.com</a>
-                    <a href="#">Telefone: (44) 99843-7113</a>
+                    <span class="footer-info">E-mail: depmeioambienteassis@gmail.com</span>
+                    <span class="footer-info">Telefone: (44) 99843-7113</span>
 
 
 
@@ -296,6 +294,7 @@
                 submitBtn.innerHTML = '<span>Enviando proposta...</span> <i class="fas fa-spinner fa-spin"></i>';
 
                 const formData = new FormData(form);
+                const petInformado = document.getElementById('pet_interesse').value || 'seu futuro amigo';
 
                 try {
                     const response = await fetch("https://formsubmit.co/ajax/apasbac.assis@gmail.com", {
@@ -330,13 +329,6 @@
                     }
 
                     if (response.ok && data.success !== "false") {
-                        const petInformado = document.getElementById('pet_interesse').value || 'seu futuro amigo';
-                        const nomeAdotante = document.getElementById('adopter_name').value || '';
-                        const whatsAdotante = document.getElementById('adopter_phone').value || '';
-
-                        // Mensagem formatada caso queira mandar uma cópia no WhatsApp da ONG
-                        const msgWhats = encodeURIComponent(`Olá, Apasbac! Acabei de enviar minha ficha de adoção no site para o pet *${petInformado}*.\nMeu nome é *${nomeAdotante}*.`);
-
                         container.innerHTML = `
                             <div class="success-container" style="padding: 50px 30px;">
                                 <div class="success-icon">

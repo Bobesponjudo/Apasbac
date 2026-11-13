@@ -3239,3 +3239,61 @@ main { width: 100%; }
   .card-pet, .success-container { animation: none; }
   html { scroll-behavior: auto; }
 }
+/* Contatos do rodapé que aparecem como texto (sem link), com o mesmo visual dos links */
+.footer-column .footer-info {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+/* Detalhes do pet: foto responsiva e com proporção estável */
+.pet-image-side {
+  position: relative;
+  flex: 1 1 50%;
+  min-width: 0;
+  min-height: 450px;
+  background: var(--cream-dark, #f1ebe2);
+}
+.pet-image-side img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+.pet-image-side img.sem-foto {
+  object-fit: contain;
+  padding: 48px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .pet-image-side {
+    flex: none;
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Detalhes do pet: botão de adoção e etiquetas */
+.pet-actions .action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 24px;
+  text-align: center;
+  line-height: 1.3;
+}
+.pet-tags {
+  flex-wrap: wrap;
+}
+.pet-tags span {
+  white-space: nowrap;
+}
