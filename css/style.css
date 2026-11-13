@@ -3297,3 +3297,54 @@ main { width: 100%; }
 .pet-tags span {
   white-space: nowrap;
 }
+
+/* ===== Fotos dos animais: sempre aparecem inteiras (sem cortar) ===== */
+
+/* Cards da lista de adoção */
+.card-pet img {
+  height: 220px;
+  object-fit: contain;
+  object-position: center;
+  background: #fdf1cf;
+}
+
+/* Página "Mais informações": foto inteira com fundo desfocado da própria foto */
+.pet-image-side {
+  overflow: hidden;
+}
+.pet-image-side::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  background-image: var(--foto-pet, none);
+  background-size: cover;
+  background-position: center;
+  filter: blur(22px) brightness(0.95);
+  opacity: 0.55;
+}
+.pet-image-side img,
+.pet-image-side img.sem-foto {
+  object-fit: contain;
+  object-position: center;
+  padding: 0;
+  z-index: 1;
+}
+.pet-image-side img.sem-foto {
+  padding: 48px;
+}
+
+/* Detalhes do pet: informações mais largas no desktop */
+@media (min-width: 769px) {
+  .pet-details-card { max-width: 1100px; }
+  .pet-image-side { flex: 0 0 450px; min-height: 480px; }
+  .pet-info-side { flex: 1 1 0; min-width: 0; padding: 48px 52px; }
+}
+
+/* Detalhes do pet no celular: foto quadrada, inteira */
+@media (max-width: 768px) {
+  .pet-image-side { aspect-ratio: 1 / 1; max-height: 460px; width: 100%; }
+  .pet-info-side { min-width: 0; }
+}
+
+/* Textos longos (e-mails, links) nunca estouram a tela */
+main a, main p, main li { overflow-wrap: anywhere; }

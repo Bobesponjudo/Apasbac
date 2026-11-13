@@ -54,6 +54,7 @@
                             <option value="">Todas as espécies</option>
                             <option value="dog">Cachorros</option>
                             <option value="cat">Gatos</option>
+                            <option value="other">Outros</option>
                         </select>
                     </div>
 
@@ -185,9 +186,15 @@
                         if (matchIdade) idadeFinal = matchIdade[1].trim();
                     }
 
-                    let especie = (pet.species || '').toLowerCase();
-                    if (!especie) {
-                        const texto = `${pet.breed || ''} ${pet.description || ''}`.toLowerCase();
+                    // Normaliza a espécie (o admin salva "Cachorro", "Gato", "Outro"; o filtro usa dog/cat/other)
+                    const normalizar = (t) => (t || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+                    let especieBruta = normalizar(pet.species);
+                    let especie;
+                    if (['cachorro', 'cao', 'dog', 'canino'].includes(especieBruta)) especie = 'dog';
+                    else if (['gato', 'gata', 'cat', 'felino'].includes(especieBruta)) especie = 'cat';
+                    else if (especieBruta) especie = 'other';
+                    else {
+                        const texto = normalizar(`${pet.breed || ''} ${pet.description || ''}`);
                         especie = (texto.includes('gato') || texto.includes('gata') || texto.includes('felin')) ? 'cat' : 'dog';
                     }
 

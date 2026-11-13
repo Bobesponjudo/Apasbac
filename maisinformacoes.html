@@ -224,6 +224,7 @@
 
             const imgEl = document.getElementById('pet-img');
             imgEl.src = foto;
+            imgEl.parentElement.style.setProperty('--foto-pet', /Logo\.webp$/.test(foto) ? 'none' : `url("${encodeURI(foto)}")`);
             imgEl.classList.toggle('sem-foto', /Logo\.webp$/.test(foto));
             imgEl.onerror = () => { imgEl.src = 'imagens/Logo.webp'; imgEl.classList.add('sem-foto'); };
 
