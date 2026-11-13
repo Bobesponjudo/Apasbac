@@ -89,6 +89,48 @@
             filter: brightness(1.1);
         }
 
+        /* Status de adoção dos animais (somente no painel) */
+        .pet-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 12px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        .pet-status-badge.adotado {
+            background: #e3f4e8;
+            color: #1e7a3c;
+            border: 1px solid #a9dbb8;
+        }
+        .pet-status-badge.disponivel {
+            background: #fff3d4;
+            color: #8a6100;
+            border: 1px solid #f0d48a;
+        }
+        .item-card.pet-adotado {
+            border-left: 5px solid #2e9d57;
+            background: #f6fbf7;
+        }
+        .item-card.pet-adotado .item-thumb {
+            filter: grayscale(0.35);
+        }
+        .item-card.pet-disponivel {
+            border-left: 5px solid #d4a017;
+        }
+        .pet-status-resumo {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            font-size: 0.85rem;
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -581,17 +623,35 @@
                 }
 
                 container.innerHTML = '';
+
+                // Mesmo critério usado no site público (queroadotar.html)
+                const foiAdotado = (pet) => pet.isAdopted === true || pet.adopted === true || pet.status === 'ADOPTED';
+                const totalAdotados = animaisCache.filter(foiAdotado).length;
+                const totalDisponiveis = animaisCache.length - totalAdotados;
+
+                const resumo = document.createElement('div');
+                resumo.className = 'pet-status-resumo';
+                resumo.innerHTML = `
+                    <span class="pet-status-badge disponivel"><i class="fa-solid fa-paw"></i> ${totalDisponiveis} aguardando adoção</span>
+                    <span class="pet-status-badge adotado"><i class="fa-solid fa-heart"></i> ${totalAdotados} adotado${totalAdotados === 1 ? '' : 's'}</span>
+                `;
+                container.appendChild(resumo);
+
                 animaisCache.forEach(pet => {
                     const petId = pet.id;
+                    const adotado = foiAdotado(pet);
+                    const statusBadge = adotado
+                        ? '<span class="pet-status-badge adotado"><i class="fa-solid fa-circle-check"></i> Adotado</span>'
+                        : '<span class="pet-status-badge disponivel"><i class="fa-solid fa-hourglass-half"></i> Aguardando adoção</span>';
                     const foto = (pet.photos && pet.photos[0]) || pet.imageUrl || 'imagens/Logo.webp';
 
                     const card = document.createElement('div');
-                    card.className = 'item-card';
+                    card.className = 'item-card ' + (adotado ? 'pet-adotado' : 'pet-disponivel');
                     card.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 14px;">
                             <img src="${foto}" class="item-thumb" alt="${pet.name}" onerror="this.src='imagens/Logo.webp'">
                             <div>
-                                <h4 style="margin: 0; color: var(--primary);">${pet.name || 'Sem nome'}</h4>
+                                <h4 style="margin: 0 0 4px; color: var(--primary); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">${pet.name || 'Sem nome'} ${statusBadge}</h4>
                                 <p style="margin: 2px 0; font-size: 0.85rem; color: #555;">
                                     ${pet.species ? pet.species + ' • ' : ''}${pet.breed || 'SRD'} • ${pet.sex === 'MALE' ? 'Macho' : 'Fêmea'} • ID: ${pet.id}
                                 </p>
