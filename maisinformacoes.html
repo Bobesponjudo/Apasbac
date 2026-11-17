@@ -43,6 +43,14 @@
             <div class="pet-details-card">
                 <div class="pet-image-side">
                     <img id="pet-img" class="sem-foto" src="imagens/Logo.webp" alt="Foto do Pet">
+                    <button type="button" class="pet-nav pet-nav-prev" id="pet-prev" aria-label="Foto anterior" hidden>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="pet-nav pet-nav-next" id="pet-next" aria-label="Próxima foto" hidden>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <span class="pet-contador" id="pet-contador" hidden></span>
+                    <div class="pet-dots" id="pet-dots" hidden></div>
                 </div>
                 <div class="pet-info-side">
                     <a href="queroadotar.html" class="back-link"><i class="fas fa-arrow-left"></i> Voltar para a
@@ -130,7 +138,6 @@
         </div>
     </footer>
 
-    <!-- Cliente da API Oficial -->
     <script src="script/api-client.js"></script>
     <script src="script/script.js"></script>
     <script>
@@ -173,6 +180,63 @@
             }
         };
 
+        function configurarGaleria(fotos) {
+            const imgEl = document.getElementById('pet-img');
+            const lado = imgEl.parentElement;
+            const btnPrev = document.getElementById('pet-prev');
+            const btnNext = document.getElementById('pet-next');
+            const dots = document.getElementById('pet-dots');
+            const contador = document.getElementById('pet-contador');
+            let atual = 0;
+
+            function mostrar(indice) {
+                atual = (indice + fotos.length) % fotos.length;
+                const foto = fotos[atual];
+                const semFoto = /Logo\.webp$/.test(foto);
+
+                imgEl.src = foto;
+                imgEl.alt = `Foto ${atual + 1} de ${fotos.length}`;
+                imgEl.classList.toggle('sem-foto', semFoto);
+                lado.style.setProperty('--foto-pet', semFoto ? 'none' : `url("${encodeURI(foto)}")`);
+                contador.textContent = `${atual + 1} / ${fotos.length}`;
+                dots.querySelectorAll('button').forEach((d, n) => d.classList.toggle('ativo', n === atual));
+
+                if (fotos.length > 1) new Image().src = fotos[(atual + 1) % fotos.length];
+            }
+
+            imgEl.onerror = () => { imgEl.src = 'imagens/Logo.webp'; imgEl.classList.add('sem-foto'); };
+            mostrar(0);
+
+            if (fotos.length < 2) return;
+
+            fotos.forEach((_, n) => {
+                const d = document.createElement('button');
+                d.type = 'button';
+                d.setAttribute('aria-label', `Ir para a foto ${n + 1}`);
+                d.addEventListener('click', () => mostrar(n));
+                dots.appendChild(d);
+            });
+            mostrar(0);
+
+            [btnPrev, btnNext, dots, contador].forEach(el => { el.hidden = false; });
+            btnPrev.addEventListener('click', () => mostrar(atual - 1));
+            btnNext.addEventListener('click', () => mostrar(atual + 1));
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') mostrar(atual - 1);
+                else if (e.key === 'ArrowRight') mostrar(atual + 1);
+            });
+
+            let inicioX = null;
+            lado.addEventListener('touchstart', (e) => { inicioX = e.touches[0].clientX; }, { passive: true });
+            lado.addEventListener('touchend', (e) => {
+                if (inicioX === null) return;
+                const dx = e.changedTouches[0].clientX - inicioX;
+                inicioX = null;
+                if (Math.abs(dx) > 40) mostrar(atual + (dx < 0 ? 1 : -1));
+            });
+        }
+
         async function carregarDetalhesAnimal() {
             const params = new URLSearchParams(window.location.search);
             const petParam = params.get('id') || params.get('pet');
@@ -199,12 +263,9 @@
                 return;
             }
 
-            let foto = 'imagens/Logo.webp';
-            if (pet.photos && pet.photos.length > 0) {
-                foto = Array.isArray(pet.photos) ? pet.photos[0] : pet.photos;
-            } else if (pet.imageUrl) {
-                foto = pet.imageUrl;
-            }
+            let fotos = [].concat(pet.photos && pet.photos.length ? pet.photos : (pet.imageUrl ? [pet.imageUrl] : []))
+                .filter(f => typeof f === 'string' && f.trim());
+            if (!fotos.length) fotos = ['imagens/Logo.webp'];
 
             const generoFormatado = (pet.sex === 'MALE' || pet.sex === 'male' || pet.sex === 'Macho') ? 'Macho' : 'Fêmea';
             
@@ -222,11 +283,7 @@
                 }
             }
 
-            const imgEl = document.getElementById('pet-img');
-            imgEl.src = foto;
-            imgEl.parentElement.style.setProperty('--foto-pet', /Logo\.webp$/.test(foto) ? 'none' : `url("${encodeURI(foto)}")`);
-            imgEl.classList.toggle('sem-foto', /Logo\.webp$/.test(foto));
-            imgEl.onerror = () => { imgEl.src = 'imagens/Logo.webp'; imgEl.classList.add('sem-foto'); };
+            configurarGaleria(fotos);
 
             document.getElementById('pet-name').innerText = pet.name || 'Sem nome';
             document.getElementById('pet-gender').innerText = generoFormatado;

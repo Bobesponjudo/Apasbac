@@ -89,7 +89,6 @@
             filter: brightness(1.1);
         }
 
-        /* Status de adoção dos animais (somente no painel) */
         .pet-status-badge {
             display: inline-flex;
             align-items: center;
@@ -165,6 +164,262 @@
             font-size: 1.4rem;
             cursor: pointer;
         }
+
+        .fotos-uploader {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .foto-slot {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: fotoEntrada 0.25s ease;
+        }
+
+        @keyframes fotoEntrada {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: none; }
+        }
+
+        .foto-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+        }
+
+        .foto-slot.vazio {
+            border: 2px dashed var(--border);
+            background: #fafafa;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .foto-slot.vazio:hover {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .foto-slot.vazio.bloqueado {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .foto-slot label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 6px;
+        }
+
+        .foto-slot label i {
+            font-size: 1.6rem;
+        }
+
+        .foto-slot input[type="file"] {
+            display: none;
+        }
+
+        .foto-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+        }
+
+        .foto-remover {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 26px;
+            height: 26px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .foto-remover:hover {
+            background: #c0392b;
+        }
+
+        .fotos-info {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.78rem;
+            color: #777;
+        }
+
+        .fotos-info.erro {
+            color: #c0392b;
+        }
+
+        @media (max-width: 600px) {
+            .fotos-uploader {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .capa-uploader input[type="file"] {
+            display: none;
+        }
+
+        .capa-area {
+            position: relative;
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            background: #fafafa;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .capa-area:hover,
+        .capa-area.arrastando {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .capa-vazio {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        .capa-vazio i {
+            font-size: 2rem;
+        }
+
+        .capa-vazio span {
+            font-size: 0.78rem;
+            font-weight: 400;
+            color: #888;
+        }
+
+        .capa-area img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .capa-trocar {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .capa-area img[style*="display: block"] ~ .capa-trocar {
+            opacity: 1;
+        }
+
+        .capa-area:has(img[style*="display: block"]) {
+            border-style: solid;
+            border-color: var(--primary);
+        }
+
+        .capa-status {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.78rem;
+            color: #777;
+        }
+
+        .cancelar-evento-box {
+            margin: 18px 0 6px;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            background: #fafafa;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .cancelar-evento-box.ativo {
+            border-color: #c0392b;
+            background: #fdf0ee;
+        }
+
+        .cancelar-evento-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #8b1a1a;
+        }
+
+        .cancelar-evento-check input {
+            width: 18px;
+            height: 18px;
+            accent-color: #c0392b;
+        }
+
+        #cancelar-evento-motivo {
+            margin-top: 12px;
+        }
+
+        #cancelar-evento-motivo label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        #cancelar-evento-motivo input {
+            width: 100%;
+        }
+
+        #cancelar-evento-motivo small {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.78rem;
+            color: #777;
+        }
     </style>
 </head>
 
@@ -190,7 +445,6 @@
             <p>Gerencie animais pela API REST e eventos em tempo real.</p>
         </div>
 
-        <!-- ABAS DE NAVEGAÇÃO -->
         <div class="admin-nav-tabs">
             <button class="tab-btn active" id="btnTabAnimal" onclick="mostrarAba('animal')">
                 <i class="fa-solid fa-plus"></i> Cadastrar Animal
@@ -206,7 +460,6 @@
             </button>
         </div>
 
-        <!-- 1. FORMULÁRIO: CADASTRAR ANIMAL -->
         <div id="aba-animal" class="admin-form-box">
             <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-dog"></i> Informações do Animal</h2>
             <form id="formAnimal">
@@ -256,11 +509,8 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Foto do Pet (JPEG, PNG ou WebP, até 8 MB)</label>
-                    <input type="file" id="pet_photo_file" accept="image/jpeg,image/png,image/webp">
-                    <input type="url" id="pet_photo" style="display: none;">
-                    <img id="pet_photo_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
-                    <small id="pet_photo_status" style="display: block; margin-top: 4px;"></small>
+                    <label>Fotos do Pet (de 1 a 3 · JPEG, PNG ou WebP, até 8 MB cada)</label>
+                    <div id="pet_photos" class="fotos-uploader"></div>
                 </div>
                 <div class="input-group">
                     <label>Temperamento *</label>
@@ -281,7 +531,6 @@
             </form>
         </div>
 
-        <!-- 2. LISTA DE ANIMAIS -->
         <div id="aba-list-animal" class="admin-form-box" style="display: none; max-width: 850px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="color: var(--primary); margin: 0;"><i class="fa-solid fa-paw"></i> Animais Cadastrados</h2>
@@ -292,8 +541,6 @@
             <div id="lista-animais-admin"><p>Carregando animais...</p></div>
         </div>
 
-        <!-- 3. FORMULÁRIO: CADASTRAR EVENTO (Com Data Inicial e Término) -->
-        <!-- FORMULÁRIO: CADASTRAR EVENTO -->
         <div id="aba-evento" class="admin-form-box" style="display: none;">
             <h2 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-bullhorn"></i> Informações do Evento</h2>
             <form id="formEvento">
@@ -329,11 +576,21 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Imagem de capa (opcional, JPEG, PNG ou WebP, até 8 MB)</label>
-                    <input type="file" id="event_image_file" accept="image/jpeg,image/png,image/webp">
-                    <input type="url" id="event_image" style="display: none;">
-                    <img id="event_image_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
-                    <small id="event_image_status" style="display: block; margin-top: 4px;"></small>
+                    <label>Imagem de capa (opcional)</label>
+                    <div class="capa-uploader">
+                        <input type="file" id="event_image_file" accept="image/jpeg,image/png,image/webp">
+                        <label for="event_image_file" class="capa-area">
+                            <div class="capa-vazio">
+                                <i class="fa-solid fa-image"></i>
+                                <strong>Clique ou arraste a imagem aqui</strong>
+                                <span>JPEG, PNG ou WebP · até 8 MB</span>
+                            </div>
+                            <img id="event_image_preview" alt="Pré-visualização" style="display: none;">
+                            <span class="capa-trocar"><i class="fa-solid fa-camera"></i> Trocar imagem</span>
+                        </label>
+                        <input type="url" id="event_image" style="display: none;">
+                        <small id="event_image_status" class="capa-status"></small>
+                    </div>
                 </div>
 
                 <div class="input-group">
@@ -347,7 +604,6 @@
             </form>
         </div>
 
-        <!-- 4. LISTA DE EVENTOS -->
         <div id="aba-list-evento" class="admin-form-box" style="display: none; max-width: 850px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="color: var(--primary); margin: 0;"><i class="fa-solid fa-calendar-days"></i> Eventos Cadastrados</h2>
@@ -359,7 +615,6 @@
         </div>
     </main>
 
-    <!-- MODAL: EDITAR ANIMAL -->
     <div id="modalEditarAnimal" class="modal-overlay">
         <div class="modal-box">
             <button type="button" class="modal-close" onclick="fecharModal('modalEditarAnimal')">&times;</button>
@@ -412,11 +667,8 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Foto do Pet (envie outra para trocar)</label>
-                    <input type="file" id="edit_pet_photo_file" accept="image/jpeg,image/png,image/webp">
-                    <input type="url" id="edit_pet_photo" style="display: none;">
-                    <img id="edit_pet_photo_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
-                    <small id="edit_pet_photo_status" style="display: block; margin-top: 4px;"></small>
+                    <label>Fotos do Pet (até 3 · remova ou adicione para trocar)</label>
+                    <div id="edit_pet_photos" class="fotos-uploader"></div>
                 </div>
                 <div class="input-group">
                     <label>Temperamento</label>
@@ -438,7 +690,6 @@
         </div>
     </div>
 
-    <!-- MODAL: EDITAR EVENTO -->
     <div id="modalEditarEvento" class="modal-overlay">
         <div class="modal-box">
             <button type="button" class="modal-close" onclick="fecharModal('modalEditarEvento')">&times;</button>
@@ -474,15 +725,37 @@
 
                 <div class="input-group">
                     <label>Imagem de capa (envie outra para trocar)</label>
-                    <input type="file" id="edit_event_image_file" accept="image/jpeg,image/png,image/webp">
-                    <input type="url" id="edit_event_image" style="display: none;">
-                    <img id="edit_event_image_preview" alt="Pré-visualização" style="display: none; max-height: 120px; margin-top: 8px; border-radius: 6px;">
-                    <small id="edit_event_image_status" style="display: block; margin-top: 4px;"></small>
+                    <div class="capa-uploader">
+                        <input type="file" id="edit_event_image_file" accept="image/jpeg,image/png,image/webp">
+                        <label for="edit_event_image_file" class="capa-area">
+                            <div class="capa-vazio">
+                                <i class="fa-solid fa-image"></i>
+                                <strong>Clique ou arraste a imagem aqui</strong>
+                                <span>JPEG, PNG ou WebP · até 8 MB</span>
+                            </div>
+                            <img id="edit_event_image_preview" alt="Pré-visualização" style="display: none;">
+                            <span class="capa-trocar"><i class="fa-solid fa-camera"></i> Trocar imagem</span>
+                        </label>
+                        <input type="url" id="edit_event_image" style="display: none;">
+                        <small id="edit_event_image_status" class="capa-status"></small>
+                    </div>
                 </div>
 
                 <div class="input-group">
                     <label>Descrição do Evento</label>
                     <textarea id="edit_event_desc" rows="3" style="width: 100%; padding: 12px; border-radius: 6px; border: 1.5px solid var(--border);"></textarea>
+                </div>
+
+                <div class="cancelar-evento-box">
+                    <label class="cancelar-evento-check">
+                        <input type="checkbox" id="edit_event_cancelado">
+                        <span><i class="fa-solid fa-ban"></i> Este evento foi cancelado</span>
+                    </label>
+                    <div id="cancelar-evento-motivo" style="display: none;">
+                        <label for="edit_event_cancel_reason">Motivo do cancelamento (opcional)</label>
+                        <input type="text" id="edit_event_cancel_reason" maxlength="200" placeholder="Ex: Chuva forte, evento adiado">
+                        <small>Aparece no card do evento na página de ações. Desmarque para reativar o evento.</small>
+                    </div>
                 </div>
 
                 <button type="submit" class="submit-btn-modern" id="btnSalvarEdicaoEvento">
@@ -492,7 +765,6 @@
         </div>
     </div>
 
-    <!-- Cliente da API oficial -->
     <script src="script/api-client.js"></script>
 
     <script>
@@ -531,7 +803,6 @@
             }
         });
 
-        // Alternar Abas
         function mostrarAba(tipo) {
             document.getElementById('aba-animal').style.display = 'none';
             document.getElementById('aba-evento').style.display = 'none';
@@ -561,17 +832,20 @@
             document.getElementById(id).style.display = 'none';
         }
 
-        // Formulário de Animais
         document.getElementById('formAnimal').addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (!temFotosAnimal('pet_photos')) {
+                alert("Adicione pelo menos 1 foto do animal.");
+                return;
+            }
             const btn = document.getElementById('btnSalvarAnimal');
             btn.disabled = true;
             btn.innerText = "Salvando na API...";
 
-            let foto;
+            let fotos;
             try {
-                btn.innerText = "Enviando imagem...";
-                foto = await resolverImagem('pet_photo', 'animals/photos');
+                btn.innerText = "Enviando imagens...";
+                fotos = await resolverFotosAnimal('pet_photos');
             } catch (err) {
                 alert("Erro ao enviar a imagem: " + err.message);
                 btn.disabled = false;
@@ -592,7 +866,7 @@
                 vaccines: vacinasArray,
                 description: `Idade: ${document.getElementById('pet_age').value.trim()} | ${document.getElementById('pet_description').value.trim()}`,
                 escapeTendency: false,
-                photoUrls: foto ? [foto] : []
+                photoUrls: fotos
             };
 
             try {
@@ -608,7 +882,6 @@
             }
         });
 
-        // Listar Animais
         let animaisCache = [];
         async function carregarListaAnimais() {
             const container = document.getElementById('lista-animais-admin');
@@ -692,7 +965,6 @@
         return new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     }
 
-    // Não deixa escolher término antes do início
     document.getElementById('event_date')?.addEventListener('change', (e) => {
         const fim = document.getElementById('event_end_date');
         if (!fim) return;
@@ -826,7 +1098,6 @@
             }
         }
 
-        // ==================== EDIÇÃO DE ANIMAIS ====================
         // A descrição é salva como "Idade: X | texto" (mesmo formato do cadastro)
         function separarDescricao(desc) {
             const m = String(desc || '').match(/^Idade:\s*([^|]*)\|?\s*([\s\S]*)$/);
@@ -889,7 +1160,7 @@
                 const arquivo = inputArquivo.files[0];
                 status.style.color = '';
 
-                if (!arquivo) { // cancelou a escolha: volta a mostrar a imagem atual (se houver)
+                if (!arquivo) {
                     sincronizarPreview(urlId);
                     return;
                 }
@@ -930,10 +1201,147 @@
             return url;
         }
 
-        configurarUploadImagem('pet_photo');
-        configurarUploadImagem('edit_pet_photo');
+        // ===== Fotos do animal: de 1 a 3 (limite da API) =====
+        const FOTOS_MAX = 3;
+        const fotosAnimal = {};
+
+        function iniciarFotosAnimal(id) {
+            const raiz = document.getElementById(id);
+            const estado = { slots: [], info: document.createElement('small'), raiz };
+            estado.info.className = 'fotos-info';
+            fotosAnimal[id] = estado;
+            raiz.insertAdjacentElement('afterend', estado.info);
+            raiz.closest('form').addEventListener('reset', () => setTimeout(() => definirFotosAnimal(id, []), 0));
+            desenharFotosAnimal(id);
+        }
+
+        function mensagemFotosAnimal(id, texto, erro) {
+            const { info } = fotosAnimal[id];
+            info.textContent = texto;
+            info.classList.toggle('erro', !!erro);
+        }
+
+        function adicionarArquivosFotos(id, arquivos) {
+            const estado = fotosAnimal[id];
+            let aviso = '';
+            for (const arquivo of arquivos) {
+                if (estado.slots.length >= FOTOS_MAX) {
+                    aviso = `Limite de ${FOTOS_MAX} fotos. As demais foram ignoradas.`;
+                    break;
+                }
+                if (!IMAGENS_TIPOS_OK.includes(arquivo.type)) {
+                    aviso = 'Formato inválido. Envie imagens JPEG, PNG ou WebP.';
+                    continue;
+                }
+                if (arquivo.size > IMAGEM_MAX_BYTES) {
+                    aviso = 'Uma das imagens passa de 8 MB e foi ignorada.';
+                    continue;
+                }
+                estado.slots.push({ file: arquivo, preview: URL.createObjectURL(arquivo) });
+            }
+            desenharFotosAnimal(id);
+            if (aviso) mensagemFotosAnimal(id, aviso, true);
+        }
+
+        function removerFotoAnimal(id, indice) {
+            const estado = fotosAnimal[id];
+            const [removida] = estado.slots.splice(indice, 1);
+            if (removida && removida.preview) URL.revokeObjectURL(removida.preview);
+            desenharFotosAnimal(id);
+        }
+
+        function desenharFotosAnimal(id) {
+            const { slots, raiz } = fotosAnimal[id];
+            raiz.innerHTML = '';
+
+            for (let i = 0; i < FOTOS_MAX; i++) {
+                const slot = document.createElement('div');
+                const dados = slots[i];
+
+                if (dados) {
+                    slot.className = 'foto-slot';
+                    const img = document.createElement('img');
+                    img.src = dados.preview || dados.url;
+                    img.alt = `Foto ${i + 1}`;
+                    img.onerror = () => { img.src = 'imagens/Logo.webp'; };
+
+                    const badge = document.createElement('span');
+                    badge.className = 'foto-badge';
+                    badge.textContent = i === 0 ? 'Principal' : `Foto ${i + 1}`;
+
+                    const remover = document.createElement('button');
+                    remover.type = 'button';
+                    remover.className = 'foto-remover';
+                    remover.title = 'Remover foto';
+                    remover.innerHTML = '&times;';
+                    remover.addEventListener('click', () => removerFotoAnimal(id, i));
+
+                    slot.append(img, badge, remover);
+                } else {
+                    slot.className = 'foto-slot vazio' + (i > slots.length ? ' bloqueado' : '');
+                    const label = document.createElement('label');
+                    label.innerHTML = `<i class="fa-solid fa-camera"></i><span>${i === 0 ? 'Foto principal' : 'Adicionar foto'}</span>`;
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.multiple = true;
+                    input.accept = 'image/jpeg,image/png,image/webp';
+                    input.addEventListener('change', () => adicionarArquivosFotos(id, [...input.files]));
+                    label.appendChild(input);
+                    slot.appendChild(label);
+                }
+                raiz.appendChild(slot);
+            }
+            mensagemFotosAnimal(id, `${slots.length} de ${FOTOS_MAX} fotos. A primeira é a principal.`, false);
+        }
+
+        function definirFotosAnimal(id, urls) {
+            const estado = fotosAnimal[id];
+            estado.slots.forEach(s => { if (s.preview) URL.revokeObjectURL(s.preview); });
+            estado.slots = urls.slice(0, FOTOS_MAX).map(url => ({ url }));
+            desenharFotosAnimal(id);
+        }
+
+        function temFotosAnimal(id) {
+            return fotosAnimal[id].slots.length > 0;
+        }
+
+        // Envia só as fotos novas; as que já têm URL são mantidas. Mantém a ordem escolhida.
+        async function resolverFotosAnimal(id) {
+            const estado = fotosAnimal[id];
+            const urls = [];
+            for (const slot of estado.slots) {
+                if (slot.file) {
+                    slot.url = await enviarImagem(slot.file, 'animals/photos');
+                    URL.revokeObjectURL(slot.preview);
+                    delete slot.file;
+                    delete slot.preview;
+                }
+                urls.push(slot.url);
+            }
+            return urls;
+        }
+
+        iniciarFotosAnimal('pet_photos');
+        iniciarFotosAnimal('edit_pet_photos');
         configurarUploadImagem('event_image');
         configurarUploadImagem('edit_event_image');
+
+        document.querySelectorAll('.capa-area').forEach((area) => {
+            const input = document.getElementById(area.getAttribute('for'));
+            ['dragenter', 'dragover'].forEach(ev => area.addEventListener(ev, (e) => {
+                e.preventDefault();
+                area.classList.add('arrastando');
+            }));
+            ['dragleave', 'drop'].forEach(ev => area.addEventListener(ev, (e) => {
+                e.preventDefault();
+                area.classList.remove('arrastando');
+            }));
+            area.addEventListener('drop', (e) => {
+                if (!e.dataTransfer.files.length) return;
+                input.files = e.dataTransfer.files;
+                input.dispatchEvent(new Event('change'));
+            });
+        });
 
         function urlOuVazio(valor) {
             return (typeof valor === 'string' && /^https?:\/\//i.test(valor.trim())) ? valor.trim() : '';
@@ -954,7 +1362,7 @@
 
             const desc = separarDescricao(pet.description);
             const vacinas = Array.isArray(pet.vaccines) ? pet.vaccines.join(', ') : (pet.vaccines || '');
-            const foto = urlOuVazio((pet.photos && pet.photos[0]) || pet.imageUrl || '');
+            const fotos = (Array.isArray(pet.photos) && pet.photos.length ? pet.photos : [pet.imageUrl]).map(urlOuVazio).filter(Boolean);
 
             document.getElementById('edit_pet_id').value = id;
             document.getElementById('edit_pet_name').value = pet.name || '';
@@ -963,8 +1371,7 @@
             document.getElementById('edit_pet_species').value = ['Cachorro', 'Gato', 'Outro'].includes(pet.species) ? pet.species : '';
             document.getElementById('edit_pet_breed').value = pet.breed || '';
             document.getElementById('edit_pet_age').value = desc.idade || pet.age || '';
-            document.getElementById('edit_pet_photo').value = foto;
-            sincronizarPreview('edit_pet_photo');
+            definirFotosAnimal('edit_pet_photos', fotos);
             document.getElementById('edit_pet_temperament').value = pet.temperament || '';
             document.getElementById('edit_pet_description').value = desc.texto;
             document.getElementById('edit_pet_vaccines').value = vacinas;
@@ -981,10 +1388,10 @@
             const id = document.getElementById('edit_pet_id').value;
             const temperamento = document.getElementById('edit_pet_temperament').value.trim();
             const vacinas = document.getElementById('edit_pet_vaccines').value.split(',').map(v => v.trim()).filter(Boolean);
-            let foto;
+            let fotos;
             try {
-                btn.innerText = 'Enviando imagem...';
-                foto = await resolverImagem('edit_pet_photo', 'animals/photos');
+                btn.innerText = 'Enviando imagens...';
+                fotos = await resolverFotosAnimal('edit_pet_photos');
             } catch (err) {
                 alert('Erro ao enviar a imagem: ' + err.message);
                 btn.disabled = false;
@@ -1004,7 +1411,7 @@
             // Campos em branco não são enviados, para não apagar o que já está salvo
             if (temperamento) payload.temperament = temperamento;
             if (vacinas.length) payload.vaccines = vacinas;
-            if (foto) payload.photoUrls = [foto];
+            if (fotos.length) payload.photoUrls = fotos;
 
             try {
                 await api.updateAnimal(id, payload);
@@ -1019,7 +1426,6 @@
             }
         });
 
-        // ==================== EDIÇÃO DE EVENTOS ====================
         let eventosCache = [];
         let categoriasEdicao = [];
 
@@ -1066,9 +1472,19 @@
             document.getElementById('edit_event_image').value = urlOuVazio(evt.coverImageUrl);
             sincronizarPreview('edit_event_image');
             document.getElementById('edit_event_desc').value = evt.description || '';
+            document.getElementById('edit_event_cancelado').checked = evt.status === 'CANCELLED';
+            document.getElementById('edit_event_cancel_reason').value = evt.cancellationReason || '';
+            atualizarCampoCancelamento();
 
             document.getElementById('modalEditarEvento').style.display = 'flex';
         }
+
+        function atualizarCampoCancelamento() {
+            const marcado = document.getElementById('edit_event_cancelado').checked;
+            document.getElementById('cancelar-evento-motivo').style.display = marcado ? 'block' : 'none';
+            document.querySelector('.cancelar-evento-box').classList.toggle('ativo', marcado);
+        }
+        document.getElementById('edit_event_cancelado').addEventListener('change', atualizarCampoCancelamento);
 
         document.getElementById('edit_event_date')?.addEventListener('change', (e) => {
             const fim = document.getElementById('edit_event_end_date');
@@ -1112,6 +1528,14 @@
                     payload.endsAt = new Date(`${startDate}T18:00:00`).toISOString();
                 }
                 if (foto) payload.coverImageUrl = foto;
+
+                const cancelado = document.getElementById('edit_event_cancelado').checked;
+                if (cancelado) {
+                    payload.status = 'CANCELLED';
+                    payload.cancellationReason = document.getElementById('edit_event_cancel_reason').value.trim();
+                } else if (original?.status === 'CANCELLED') {
+                    payload.status = 'PUBLISHED';
+                }
 
                 await api.updateEvent(id, payload);
                 alert('Evento atualizado com sucesso!');

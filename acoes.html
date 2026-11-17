@@ -41,7 +41,6 @@
     </header>
 
     <main>
-        <!-- Faixa de Topo Padronizada -->
         <div class="faixa-topo">
             <h1>Ações e Eventos <i class="fa-solid fa-bullhorn"></i></h1>
             <p>Acompanhe de perto as nossas campanhas, mutirões, feiras de adoção e conquistas na comunidade.</p>
@@ -49,7 +48,6 @@
 
         <div class="page-container">
             
-            <!-- Filtros de Busca adaptados para Ações -->
             <form class="search-filters">
                 <div class="filter-grid">
                     <div class="select-wrapper">
@@ -186,7 +184,6 @@
             cancelled: { texto: 'Cancelado',    cor: '#8b1a1a', fundo: '#fdecea' }
         };
 
-        // ---------- Carregamento ----------
         async function buscarTodosEventos() {
             // A API aceita no máximo 50 por página, então busca página por página
             const primeira = await api.getEvents({ limit: 50, page: 1 });
@@ -240,7 +237,6 @@
             }
         }
 
-        // ---------- Exibição ----------
         function renderizarEventos(eventos) {
             const container = document.getElementById('lista-eventos');
             if (!container) return;
@@ -253,11 +249,13 @@
             container.innerHTML = eventos.map(evt => {
                 const rotulo = ROTULOS[situacaoEvento(evt)];
                 const motivo = evt.status === 'CANCELLED' && evt.cancellationReason
-                    ? `<p style="font-size: 0.85rem; color: #8b1a1a;"><strong>Motivo:</strong> ${protegerTexto(evt.cancellationReason)}</p>`
+                    ? `<p style="font-size: 0.85rem; color: #8b1a1a;"><strong>Motivo do cancelamento:</strong> ${protegerTexto(evt.cancellationReason)}</p>`
                     : '';
 
+                const descricao = (evt.description || '').trim();
+
                 return `
-                    <div class="card-pet">
+                    <div class="card-pet card-evento${descricao ? ' tem-descricao' : ''}"${descricao ? ' role="button" tabindex="0" aria-expanded="false"' : ''}>
                         <img src="${protegerTexto(evt.coverImageUrl) || 'imagens/Logo.webp'}" alt="${protegerTexto(evt.title)}" onerror="this.src='imagens/Logo.webp'">
                         <div class="info-pet">
                             <span style="display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 6px; color: ${rotulo.cor}; background: ${rotulo.fundo};">${rotulo.texto}</span>
@@ -266,7 +264,13 @@
                             <p><strong>Data:</strong> ${textoPeriodo(evt)}</p>
                             <p><strong>Local:</strong> ${protegerTexto(evt.locationName || 'A confirmar')}</p>
                             ${motivo}
-                            <p style="margin-top: 6px; font-size: 0.85rem;">${protegerTexto(evt.description || '')}</p>
+                            ${descricao ? `
+                            <div class="evento-descricao"><div><p>${protegerTexto(descricao)}</p></div></div>
+                            <p class="evento-dica">
+                                <i class="fa-solid fa-hand-pointer"></i>
+                                <span class="dica-abrir">Clique para ver mais informações</span>
+                                <span class="dica-fechar">Clique para recolher</span>
+                            </p>` : ''}
                         </div>
                     </div>
                 `;
@@ -287,6 +291,31 @@
 
             renderizarEventos(filtrados);
         }
+
+        function alternarEvento(card) {
+            const abrir = !card.classList.contains('aberto');
+            document.querySelectorAll('#lista-eventos .card-evento.aberto').forEach(outro => {
+                outro.classList.remove('aberto');
+                outro.setAttribute('aria-expanded', 'false');
+            });
+            if (abrir) {
+                card.classList.add('aberto');
+                card.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        const listaEventos = document.getElementById('lista-eventos');
+        listaEventos?.addEventListener('click', (e) => {
+            const card = e.target.closest('.card-evento.tem-descricao');
+            if (card) alternarEvento(card);
+        });
+        listaEventos?.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            const card = e.target.closest('.card-evento.tem-descricao');
+            if (!card) return;
+            e.preventDefault();
+            alternarEvento(card);
+        });
 
         document.querySelector('.search-filters')?.addEventListener('submit', aplicarFiltros);
         document.querySelector('select[name="action-category"]')?.addEventListener('change', () => aplicarFiltros());

@@ -2292,36 +2292,28 @@ body {
   transform: scale(1.08);
 }
 
-/* Breakpoint para Celulares e Tablets (telas de até 768px) */
 @media (max-width: 768px) {
 
-  /* Configuração do cabeçalho para servir de grid */
   .main-header {
     position: sticky;
     top: 0;
     z-index: 1000;
     background: #fff3d4  !important;
-    /* Mantém o fundo sólido */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
-  /* Organiza o cabeçalho em grid expansível */
   .header-container {
     display: grid !important;
     grid-template-columns: auto 1fr auto;
     grid-template-rows: 80px;
-    /* Linha inicial do topo (Logo e botão) */
     align-items: center;
     padding: 0 20px !important;
     height: auto !important;
-    /* Permite expansão vertical natural */
     max-height: 80px;
-    /* Altura padrão quando fechado */
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
   }
 
-  /* Posiciona o Logo na primeira linha */
   .logo-link {
     grid-column: 1;
     grid-row: 1;
@@ -2331,7 +2323,6 @@ body {
     height: 56px !important;
   }
 
-  /* Posiciona o botão hambúrguer no lado oposto na primeira linha */
   .menu-toggle {
     display: block !important;
     grid-column: 3;
@@ -2339,23 +2330,19 @@ body {
     justify-self: end;
   }
 
-  /* Mantém itens ocultados por padrão */
   .main-nav,
   .btn-donate,
   .user-actions {
     display: none !important;
   }
 
-  /* ESTADO DE MENU ABERTO (Quando o cabeçalho ganha a classe .menu-open) */
   .main-header.menu-open .header-container {
     grid-template-rows: 80px auto auto auto;
     height: auto !important;
     max-height: 600px !important;
     overflow: visible;
-    /* Limite de altura máxima expandida */
   }
 
-  /* Exibe e posiciona a lista de páginas */
   .main-header.menu-open .main-nav {
     display: flex !important;
     grid-column: 1 / span 3;
@@ -2379,7 +2366,6 @@ body {
     font-size: 0.95rem !important;
   }
 
-  /* Exibe e posiciona o botão de doação */
   .main-header.menu-open .btn-donate {
     display: inline-flex !important;
     grid-column: 1 / span 3;
@@ -2391,14 +2377,12 @@ body {
     padding: 11px !important;
   }
 
-  /* Exibe e posiciona os botões de entrar/cadastrar */
   .main-header.menu-open .user-actions {
     display: flex !important;
     grid-column: 1 / span 3;
     grid-row: 4;
     width: 90%;
     margin: 16px auto 20px !important;
-    /* Margem inferior de segurança */
     gap: 12px;
     justify-content: center;
   }
@@ -2411,7 +2395,6 @@ body {
     padding: 10px 14px;
   }
 
-  /* Ajustes extras de usabilidade para celular */
   .marquee-item img {
     height: 160px !important;
   }
@@ -2444,7 +2427,6 @@ body {
   width: 100%;
 }
 
-/* Círculo decorativo superior direito */
 .faixa-topo::before {
   content: "";
   position: absolute;
@@ -2457,7 +2439,6 @@ body {
   pointer-events: none;
 }
 
-/* Círculo decorativo inferior esquerdo */
 .faixa-topo::after {
   content: "";
   position: absolute;
@@ -2501,9 +2482,6 @@ body {
   }
 }
 
-/* ==========================================================================
-   ESTILOS DO FORMULÁRIO DE VOLUNTÁRIO MODERNIZADO
-   ========================================================================== */
 .form-container {
   background: var(--white) !important;
   border-radius: var(--radius-lg);
@@ -2516,7 +2494,7 @@ body {
 
 .volunteer-form-modern {
   padding: 50px 60px;
-  background: #fffcf7; /* Fundo creme suave muito agradável */
+  background: #fffcf7;
 }
 
 .form-section {
@@ -2545,7 +2523,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* Estrutura de grid para os campos de texto */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2587,7 +2564,6 @@ body {
   box-shadow: 0 0 0 4px rgba(139, 26, 26, 0.08);
 }
 
-/* Grupo de botões estilo Tags e Pills */
 .tag-selection-group,
 .radio-pill-group {
   display: flex;
@@ -2596,20 +2572,18 @@ body {
   margin-top: 8px;
 }
 
-/* Oculta o checkbox e o radio nativo do navegador */
 .tag-item input,
 .pill-item input {
   display: none !important;
 }
 
-/* Elemento visual do botão simulado */
 .tag-item span,
 .pill-item span {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: #faecd8; /* Fundo bege compatível */
+  background: #faecd8;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-pill);
   font-size: 0.85rem;
@@ -2625,7 +2599,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* Efeito ao Clicar / Selecionar (Active) */
 .tag-item input:checked + span,
 .pill-item input:checked + span {
   background: var(--primary) !important;
@@ -2639,7 +2612,6 @@ body {
   color: var(--accent-light);
 }
 
-/* Botão de Envio com Efeito Moderno */
 .submit-btn-modern {
   width: 100%;
   padding: 16px;
@@ -2675,26 +2647,22 @@ body {
   transform: translateX(4px);
 }
 
-/* Adaptação Responsiva para Celulares */
 @media (max-width: 768px) {
   .volunteer-form-modern {
     padding: 30px 20px;
   }
   .input-grid {
-    grid-template-columns: 1fr; /* Transforma em coluna única no celular */
+    grid-template-columns: 1fr;
   }
   .input-group.full-width {
     grid-column: span 1;
   }
 }
 
-/* ==========================================================================
-   CARD DE CONFIRMAÇÃO DE ENVIO COM SUCESSO
-   ========================================================================== */
 .success-container {
   text-align: center;
   padding: 60px 40px;
-  background: #f4faf6; /* Fundo verde ecológico extremamente sutil */
+  background: #f4faf6;
   border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
@@ -2706,7 +2674,7 @@ body {
 
 .success-icon {
   font-size: 4.5rem;
-  color: #810000; /* Verde folha de sucesso */
+  color: #810000;
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
@@ -2752,7 +2720,6 @@ body {
     grid-template-columns: 1fr !important;
   }
 }
-/* Botão de Perfil do Usuário Logado */
 .btn-user-profile {
   display: inline-flex;
   align-items: center;
@@ -2781,7 +2748,6 @@ body {
   color: var(--accent-light);
 }
 
-/* Modal Overlay Global */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -2872,9 +2838,6 @@ body {
   }
 }
 
-/* ==========================================================================
-   CARD DA IMAGEM NA PÁGINA QUEM SOMOS
-   ========================================================================== */
 .about-image-wrapper {
   margin: 36px 0;
   border-radius: var(--radius-lg);
@@ -2940,10 +2903,6 @@ body {
     padding: 10px 14px;
   }
 }
-/* ==========================================================================
-   RESPONSIVIDADE COMPLETA  (bloco final: tem prioridade sobre as regras acima)
-   Breakpoints: 1100 (menu hambúrguer) | 900 | 768 | 640 | 480 | 360
-   ========================================================================== */
 
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 img, video, svg { max-width: 100%; }
@@ -3073,7 +3032,6 @@ main { width: 100%; }
   .footer-columns { gap: 32px 24px; }
 }
 
-/* ---------- Tablet (até 900px) ---------- */
 @media (max-width: 900px) {
   .page-container { padding: 36px 20px; }
   .container-pets { gap: 24px; padding: 24px 20px; margin-top: 24px; }
@@ -3086,7 +3044,6 @@ main { width: 100%; }
   .admin-form-box { padding: 24px !important; }
 }
 
-/* ---------- Celular grande / tablet pequeno (até 768px) ---------- */
 @media (max-width: 768px) {
   /* Evita o zoom automático do iOS ao focar campos */
   input, select, textarea { font-size: 16px !important; }
@@ -3112,7 +3069,6 @@ main { width: 100%; }
 
   .about-image-wrapper img { max-height: 320px; }
 
-  /* Detalhes do pet */
   .pet-details-container { padding: 16px 0 32px; }
   .pet-image-side { min-height: 0; height: min(75vw, 380px); flex: none; }
   .pet-info-side { padding: 24px 20px; flex: none; }
@@ -3120,7 +3076,6 @@ main { width: 100%; }
   .pet-tags { flex-wrap: wrap; }
   .pet-actions .action-btn { display: block; text-align: center; width: 100%; }
 
-  /* Formulários */
   .volunteer-form-modern { padding: 28px 18px; }
   .section-title { font-size: 1.15rem; flex-wrap: wrap; }
   .input-grid { grid-template-columns: 1fr; }
@@ -3131,7 +3086,6 @@ main { width: 100%; }
   /* Grades inline do painel admin (2 colunas) viram 1 coluna */
   div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
 
-  /* Admin */
   .admin-nav-tabs { gap: 10px !important; }
   .tab-btn { flex: 1 1 calc(50% - 10px); padding: 11px 12px !important; font-size: 0.88rem !important; }
   .item-card { flex-wrap: wrap; }
@@ -3140,14 +3094,12 @@ main { width: 100%; }
   .modal-box { padding: 20px 16px; max-height: 92vh; }
   .modal-box-reset { padding: 28px 20px; }
 
-  /* Doação (Pix) */
   .donation-main .pix-card-container { padding: 26px 18px; border-radius: 16px; }
   .donation-main .pix-qrcode-wrapper { padding: 12px; }
   .donation-main .pix-qrcode-wrapper img { width: 200px !important; max-width: 100% !important; }
   .pix-detalhes-titular { overflow-wrap: anywhere; }
 }
 
-/* ---------- Celular (até 640px) ---------- */
 @media (max-width: 640px) {
   .page-container { padding: 28px 16px; }
   .container-pets { padding: 16px; gap: 20px; }
@@ -3176,7 +3128,6 @@ main { width: 100%; }
   .success-container { padding: 40px 20px; }
   .success-icon { font-size: 3.5rem; }
 
-  /* Cadastro / login */
   .login-card, .signup-card { border-radius: var(--radius-md); }
   .login-container, .signup-container { padding: 20px 12px; }
   .form-options { flex-wrap: wrap; gap: 8px; }
@@ -3188,7 +3139,6 @@ main { width: 100%; }
   .item-card > div:last-child button { flex: 1; }
 }
 
-/* ---------- Celular pequeno (até 480px) ---------- */
 @media (max-width: 480px) {
   .header-container { padding: 0 14px !important; }
   .main-header:not(.admin-header) .header-container { padding: 0 14px !important; }
@@ -3217,7 +3167,6 @@ main { width: 100%; }
   .pet-vaccines-box { margin: 14px 0 !important; }
 }
 
-/* ---------- Telas muito pequenas (até 360px) ---------- */
 @media (max-width: 360px) {
   .footer-columns { grid-template-columns: 1fr; }
   .btn-pesquisar, .action-btn { padding-left: 18px; padding-right: 18px; }
@@ -3226,20 +3175,17 @@ main { width: 100%; }
   .donation-main .pix-qrcode-wrapper img { width: 170px !important; }
 }
 
-/* ---------- Celular deitado (pouca altura) ---------- */
 @media (max-height: 480px) and (orientation: landscape) {
   .faixa-topo { padding: 32px 16px; }
   .login-container, .signup-container { min-height: auto; padding: 20px 12px; }
 }
 
-/* ---------- Acessibilidade: respeita "reduzir movimento" ---------- */
 @media (prefers-reduced-motion: reduce) {
   .marquee-content { animation: none; }
   .marquee-container { overflow-x: auto; }
   .card-pet, .success-container { animation: none; }
   html { scroll-behavior: auto; }
 }
-/* Contatos do rodapé que aparecem como texto (sem link), com o mesmo visual dos links */
 .footer-column .footer-info {
   display: block;
   color: #ccc;
@@ -3249,7 +3195,6 @@ main { width: 100%; }
   overflow-wrap: anywhere;
 }
 
-/* Detalhes do pet: foto responsiva e com proporção estável */
 .pet-image-side {
   position: relative;
   flex: 1 1 50%;
@@ -3280,7 +3225,6 @@ main { width: 100%; }
   }
 }
 
-/* Detalhes do pet: botão de adoção e etiquetas */
 .pet-actions .action-btn {
   display: flex;
   align-items: center;
@@ -3333,7 +3277,6 @@ main { width: 100%; }
   padding: 48px;
 }
 
-/* Detalhes do pet: informações mais largas no desktop */
 @media (min-width: 769px) {
   .pet-details-card { max-width: 1100px; }
   .pet-image-side { flex: 0 0 450px; min-height: 480px; }
@@ -3346,5 +3289,115 @@ main { width: 100%; }
   .pet-info-side { min-width: 0; }
 }
 
-/* Textos longos (e-mails, links) nunca estouram a tela */
 main a, main p, main li { overflow-wrap: anywhere; }
+
+.pet-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--primary);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  transition: background 0.2s, transform 0.2s;
+}
+.pet-nav[hidden] { display: none; }
+.pet-nav:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+.pet-nav-prev { left: 12px; }
+.pet-nav-next { right: 12px; }
+
+.pet-contador {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+.pet-contador[hidden] { display: none; }
+
+.pet-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.pet-dots[hidden] { display: none; }
+.pet-dots button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.pet-dots button.ativo {
+  background: var(--primary);
+  transform: scale(1.25);
+}
+
+@media (max-width: 768px) {
+  .pet-nav { width: 36px; height: 36px; }
+  .pet-nav-prev { left: 8px; }
+  .pet-nav-next { right: 8px; }
+}
+
+#lista-eventos { align-items: start; }
+
+.card-evento:not(.tem-descricao) { cursor: default; }
+
+.evento-descricao {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.35s ease, opacity 0.3s ease;
+}
+.evento-descricao > div { overflow: hidden; }
+.evento-descricao p {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  white-space: pre-line;
+}
+.card-evento.aberto .evento-descricao {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.info-pet .evento-dica {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.evento-dica .dica-fechar { display: none; }
+.card-evento.aberto .evento-dica .dica-abrir { display: none; }
+.card-evento.aberto .evento-dica .dica-fechar { display: inline; }
+.card-evento.tem-descricao:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .evento-descricao { transition: none; }
+}
