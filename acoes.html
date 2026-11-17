@@ -24,9 +24,9 @@
             </a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="quemsomos.html">Quem somos?</a></li>
-                    <li><a href="queroadotar.html">Quero adotar!</a></li>
-                    <li><a href="queroservoluntario.html">Quero ser voluntário</a></li>
+                    <li><a href="quemsomos.html">Quem Somos?</a></li>
+                    <li><a href="queroadotar.html">Quero Adotar!</a></li>
+                    <li><a href="queroservoluntario.html">Quero Ser voluntário</a></li>
                     <li><a href="acoes.html">Nossas Ações</a></li>
                 </ul>
             </nav>
@@ -185,7 +185,7 @@
         };
 
         async function buscarTodosEventos() {
-            // A API aceita no máximo 50 por página, então busca página por página
+            
             const primeira = await api.getEvents({ limit: 50, page: 1 });
             let lista = api.getList(primeira);
             const totalPaginas = Math.min(primeira?.totalPages || 1, 10);
@@ -218,7 +218,7 @@
             try {
                 listaEventosCache = await buscarTodosEventos();
 
-                // Plano B: se a lista de categorias falhou, monta com as dos eventos
+                // Se a lista de categorias falhou, monta com as dos eventos
                 const select = document.querySelector('select[name="action-category"]');
                 if (select && select.options.length <= 1) {
                     const unicas = new Map();

@@ -897,7 +897,6 @@
 
                 container.innerHTML = '';
 
-                // Mesmo critério usado no site público (queroadotar.html)
                 const foiAdotado = (pet) => pet.isAdopted === true || pet.adopted === true || pet.status === 'ADOPTED';
                 const totalAdotados = animaisCache.filter(foiAdotado).length;
                 const totalDisponiveis = animaisCache.length - totalAdotados;
@@ -959,7 +958,7 @@
 
     let categoriasEventos = [];
 
-    // Data no fuso de Brasília (evita mostrar o dia errado por causa do UTC)
+    // Data no fuso de Brasília
     function formatarDataBR(iso) {
         if (!iso) return '';
         return new Date(iso).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
@@ -1098,13 +1097,12 @@
             }
         }
 
-        // A descrição é salva como "Idade: X | texto" (mesmo formato do cadastro)
         function separarDescricao(desc) {
             const m = String(desc || '').match(/^Idade:\s*([^|]*)\|?\s*([\s\S]*)$/);
             return m ? { idade: m[1].trim(), texto: m[2].trim() } : { idade: '', texto: String(desc || '') };
         }
 
-        // ===== Upload de imagens: envio direto ao Cloudinary com assinatura da API =====
+        // ===== Upload de imagens: envio direto ao Cloudinary =====
         const IMAGENS_TIPOS_OK = ['image/jpeg', 'image/png', 'image/webp'];
         const IMAGEM_MAX_BYTES = 8 * 1024 * 1024;
 
@@ -1115,13 +1113,13 @@
             if (arquivo.size > IMAGEM_MAX_BYTES) {
                 throw new Error('A imagem passa de 8 MB. Escolha uma menor.');
             }
-            // 1) pede a assinatura à API (exige login de ADMIN/STAFF)
+            // exige login de ADMIN/STAFF
             const sig = await api.request('/storage/signed-upload', {
                 method: 'POST',
                 auth: true,
                 body: { folder: pasta, resource_type: 'image' }
             });
-            // 2) envia o arquivo direto ao Cloudinary, SEM o token da APASBAC
+            // envia o arquivo direto ao Cloudinary, SEM o token da APASBAC
             const form = new FormData();
             Object.entries(sig.form_fields).forEach(([k, v]) => form.append(k, String(v)));
             form.append('file', arquivo);
@@ -1134,7 +1132,7 @@
             if (!resp.ok || !dados.secure_url) {
                 throw new Error((dados.error && dados.error.message) || 'Falha ao enviar a imagem.');
             }
-            // 3) esta URL é a que vai para a API ao salvar o animal/evento
+            // esta URL vai para a API ao salvar o animal/evento
             return dados.secure_url;
         }
 
@@ -1147,7 +1145,6 @@
             document.getElementById(urlId + '_file').value = '';
         }
 
-        // Ao escolher o arquivo: só mostra a pré-visualização (nada é enviado ainda)
         function configurarUploadImagem(urlId) {
             const inputArquivo = document.getElementById(urlId + '_file');
             const status = document.getElementById(urlId + '_status');
@@ -1201,7 +1198,7 @@
             return url;
         }
 
-        // ===== Fotos do animal: de 1 a 3 (limite da API) =====
+        // ===== Fotos do animal de 1 a 3 (limite da API) =====
         const FOTOS_MAX = 3;
         const fotosAnimal = {};
 
@@ -1305,7 +1302,7 @@
             return fotosAnimal[id].slots.length > 0;
         }
 
-        // Envia só as fotos novas; as que já têm URL são mantidas. Mantém a ordem escolhida.
+        // Envia só as fotos novas e as que já têm URL são mantidas. Mantém a ordem escolhida.
         async function resolverFotosAnimal(id) {
             const estado = fotosAnimal[id];
             const urls = [];
